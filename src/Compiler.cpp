@@ -1,9 +1,40 @@
 #include "Compiler.hpp"
 
 #include <bitset>
+#include <iostream>
 #include "Grammar.hpp"
 
 using namespace std;
+
+string condToString(Instruction instruction) {
+  string cond = "";
+  for (auto t : instruction.cond) {
+    if (t.value != "") {
+      cond += t.value;
+    } else {
+      try {
+        auto keyword = Grammar::legalKeyword.at(t.token);
+        cond += keyword;
+      } catch(const out_of_range e) {
+        throw invalid_argument("Compiler error: Invalid keyword in condition of C instruction");
+      }
+    }
+  }
+  return cond;
+}
+
+void Compiler::debug(Instructions instructions) {
+  for (auto instruction : instructions) {
+    if (instruction.type == AInstruction) {
+      cout << "@" << instruction.address << endl;
+    } else if (instruction.type == CInstruction) {
+      cout << (instruction.dest.value.empty() ? "" : instruction.dest.value + "=")
+           << condToString(instruction)
+           << (instruction.jump.value.empty() ? "" : ";" + instruction.jump.value)
+           << endl;
+    }
+  }
+}
 
 string Compiler::compile(Instructions instructions) {
   string output = "";
@@ -16,20 +47,7 @@ string Compiler::compile(Instructions instructions) {
       output += "111";
 
       // cond
-      string cond = "";
-      for (auto t : instruction.cond) {
-        if (t.value != "") {
-          cond += t.value;
-        } else {
-          try {
-            auto keyword = Grammar::legalKeyword.at(t.token);
-            cond += keyword;
-          } catch(const out_of_range e) {
-            throw invalid_argument("Compiler error: Invalid keyword in condition of C instruction");
-          }
-        }
-      }
-
+      auto cond = condToString(instruction);
       try {
         auto bits = Grammar::legalCond.at(cond);
         output += bitset<7>(bits).to_string();

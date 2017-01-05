@@ -7,6 +7,7 @@
 class Compiler {
 public:
   static std::string compile(Instructions instructions);
+  static void debug(Instructions instructions);
 
 private:
   Compiler() {}
