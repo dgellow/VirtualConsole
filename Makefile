@@ -25,6 +25,9 @@ build-directory:
 run: game
 	$(buildDir)/game
 
+run-compile: game
+	$(buildDir)/game compile test.asm test.hack
+
 debug: game
 	lldb $(buildDir)/game
 
