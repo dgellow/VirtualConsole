@@ -16,7 +16,9 @@ string condToString(Instruction instruction) {
         auto keyword = Grammar::legalKeyword.at(t.token);
         cond += keyword;
       } catch(const out_of_range e) {
-        throw invalid_argument("Compiler error: Invalid keyword in condition of C instruction");
+        throw invalid_argument(string("Compiler error at line ") + to_string(t.line)
+                               + ", position " + to_string(t.position)
+                               + ": Invalid keyword in condition of C instruction");
       }
     }
   }
@@ -52,7 +54,9 @@ string Compiler::compile(Instructions instructions) {
         auto bits = Grammar::legalCond.at(cond);
         output += bitset<7>(bits).to_string();
       } catch(const out_of_range e) {
-        throw invalid_argument("Compiler error: Invalid condition in C instruction");
+        throw invalid_argument(string("Compiler error at line ") + to_string(instruction.line)
+                               + ", position " + to_string(instruction.position)
+                               + ": Invalid condition in C instruction");
       }
 
       // dest
@@ -61,7 +65,9 @@ string Compiler::compile(Instructions instructions) {
         output += instruction.dest.value.find(Grammar::legalDest[1]) != string::npos ? "1" : "0";
         output += instruction.dest.value.find(Grammar::legalDest[2]) != string::npos ? "1" : "0";
       } else {
-        throw invalid_argument("Compiler error: Invalid destination in C instruction");
+        throw invalid_argument(string("Compiler error at line ") + to_string(instruction.line)
+                               + ", position " + to_string(instruction.position)
+                               + ": Invalid destination in C instruction");
       }
 
       // jump
@@ -69,7 +75,9 @@ string Compiler::compile(Instructions instructions) {
         auto jump = Grammar::legalJump.at(instruction.jump.value);
         output += bitset<3>(jump).to_string();
       } catch(const out_of_range e) {
-        throw invalid_argument("Compiler error: Invalid jump in C instruction");
+        throw invalid_argument(string("Compiler error at line ") + to_string(instruction.line)
+                               + ", position " + to_string(instruction.position)
+                               + ": Invalid jump in C instruction");
       }
     }
 

@@ -28,7 +28,9 @@ SymMap Parser::collectSymbols(TokensList tokensList) {
       if (symbols.count(tokens.front().value) == 0) {
         symbols.emplace(tokens.front().value, i);
       } else {
-        throw std::invalid_argument("Parsing error: The label " + tokens.front().value + " already exists");
+        throw std::invalid_argument(string("Parsing error at line ") + to_string(tokens.front().line)
+                                    + ", position " + to_string(tokens.front().position)
+                                    + ": The label " + tokens.front().value + " already exists");
       }
     } else {
       i++;
@@ -75,7 +77,7 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
     }
 
     if (tokens.front().token == VARIABLE) {
-      auto ainstr = Instruction();
+      auto ainstr = Instruction(tokens.front().position, tokens.front().line);
       try {
         ainstr.make_A(symbols.at(tokens.front().value));
       } catch(const std::out_of_range e) {
@@ -86,7 +88,7 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
     }
 
     // C instruction
-    auto cinstr = Instruction();
+    auto cinstr = Instruction(tokens.front().position, tokens.front().line);
     cinstr.type = CInstruction;
     auto eqpos = find_if(tokens.begin(), tokens.end(),
                          [](const Token & t) -> bool {return t.token == EQ_SYM;});
@@ -98,7 +100,9 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
       auto token = tokens.front();
       cinstr.dest = token;
     } else if (eqpos != tokens.end()) {
-      throw invalid_argument("Parsing error: '=' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
+      throw invalid_argument(string("Parsing error at line ") + to_string(eqpos->line)
+                             + ", position " + to_string(eqpos->position)
+                             + ": '=' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
 
     // jump
@@ -106,7 +110,9 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
       auto token = tokens.back();
       cinstr.jump = token;
     } else if (semicolonpos != tokens.end()) {
-      throw invalid_argument("Parsing error: ';' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
+      throw invalid_argument(string("Parsing error at line ") + to_string(semicolonpos->line)
+                             + " position " + to_string(semicolonpos->position)
+                             + ": ';' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
 
     // cond

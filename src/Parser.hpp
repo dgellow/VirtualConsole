@@ -16,7 +16,7 @@ enum InstructionTypes {
 };
 
 struct Instruction {
-  Instruction() {};
+  Instruction(uint32_t position, uint32_t line) : position(position), line(line) {};
   ~Instruction() {};
 
   void make_A(uint32_t address) {
@@ -31,7 +31,6 @@ struct Instruction {
     this->jump = jump;
   }
 
-
   InstructionTypes type;
 
   uint32_t address = 0; // <- A
@@ -39,6 +38,8 @@ struct Instruction {
   Token dest; // <- C
   vector<Token> cond; // <- C
   Token jump; // <- C
+  uint32_t position;
+  uint32_t line;
 };
 
 using Instructions = vector<Instruction>;

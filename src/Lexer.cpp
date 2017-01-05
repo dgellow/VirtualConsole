@@ -196,12 +196,12 @@ TokensList Lexer::eval(LexemesList lexemesList) {
 
     auto v = std::vector<Token>();
     if (label) {
-      v.push_back(Token(LABEL, value));
+      v.push_back(Token(lexemes.front().position, lexemes.front().line, LABEL, value));
     } else if (variable) {
-      v.push_back(Token(VARIABLE, value));
+      v.push_back(Token(lexemes.front().position, lexemes.front().line, VARIABLE, value));
     } else {
       for (auto lexeme : lexemes) {
-        v.push_back(Token(lexeme.token, lexeme.value));
+        v.push_back(Token(lexeme.position, lexeme.line, lexeme.token, lexeme.value));
       }
     }
     tokens.push_back(v);

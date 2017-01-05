@@ -9,11 +9,8 @@ using namespace Grammar;
 
 struct Lexeme {
   Lexeme(uint32_t position, uint32_t line,
-         Tokens token, std::string value="")  {
-    this->position = position;
-    this->line = line;
-    this->token = token;
-    this->value = value;
+         Tokens token, std::string value="")
+    : token(token), value(value), position(position), line(line) {
   }
 
   ~Lexeme() {}
@@ -28,17 +25,20 @@ struct Token {
   Token() {
     token = UNASSIGNED;
     value = "";
+    position = -1;
+    line = -1;
   }
 
-  Token(Tokens token, std::string value="")  {
-    this->token = token;
-    this->value = value;
+  Token(uint32_t position, uint32_t line, Tokens token, std::string value="")
+    : token(token), value(value), position(position), line(line) {
   }
 
   ~Token() {}
 
   Tokens token;
   std::string value;
+  uint32_t position;
+  uint32_t line;
 };
 
 using LexemesList = std::vector<std::vector<Lexeme>>;
