@@ -9,8 +9,7 @@
 
 using namespace std;
 
-int main (int argc, char *argv[]) {
-  if (argc < 2) {
+void printUsage() {
     cout << "OVERVIEW: Sam's Virtual Console" << endl;
     cout << endl;
     cout << "USAGE: samvirtcons COMMAND [options]" << endl;
@@ -18,10 +17,21 @@ int main (int argc, char *argv[]) {
     cout << "COMMANDS:" << endl;
     cout << "\tcompile <inputfile.asm> <outputfile.hack>" << endl;
     cout << "\thelp" << endl;
+}
+
+int main (int argc, char *argv[]) {
+  if (argc < 2) {
+    cerr << "Error: no command specified" << endl;
+    printUsage();
     exit(1);
   }
 
-  if (string(argv[1]) == "compile") {
+  string command (argv[1]);
+
+  if (command == "help" || command == "-h" || command == "--help") {
+    printUsage();
+    exit(0);
+  } else if (string(argv[1]) == "compile") {
     if (argc != 4) {
       cerr << "Error: invalid usage" << endl;
       cout << "Usage: samvirtcons compile <inputfile.asm> <outputfile.hack> " << endl;
@@ -39,6 +49,9 @@ int main (int argc, char *argv[]) {
 
       exit(0);
     }
+  } else {
+    cerr << "Error: unknown command" << endl;
+    cout << "See usage with the command help, -h or --help" << endl;
   }
 
   return 0;
