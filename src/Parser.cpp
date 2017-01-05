@@ -2,7 +2,6 @@
 #include "Lexer.hpp"
 #include <map>
 #include <fstream>
-#include <iostream>
 
 using namespace std;
 
@@ -15,13 +14,6 @@ Instructions Parser::parse(string filepath) {
   auto parser = Parser();
   auto symbols = parser.collectSymbols(tokens);
   auto instructions = parser.generateInstructions(tokens, symbols);
-
-  cout << "Symbols table" << endl;
-  cout << "=============" << endl;
-  for (auto s : symbols) {
-    cout << s.first << ": " << s.second << endl;
-  }
-  cout << endl;
 
   return instructions;
 }

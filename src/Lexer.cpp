@@ -1,6 +1,5 @@
 #include "Lexer.hpp"
 
-#include <iostream>
 #include <fstream>
 #include <regex>
 
