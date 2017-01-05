@@ -123,6 +123,10 @@ LexemesList Lexer::scan(std::ifstream &file) {
       continue;
     }
 
+    if (c == '!') {
+      lexemes.back().push_back(Lexeme(position, line, BANG_SYM));
+    }
+
     if (c == '(') {
       lexemes.back().push_back(Lexeme(position, line, PARENTOPEN_SYM));
       continue;
