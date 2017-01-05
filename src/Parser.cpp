@@ -39,8 +39,10 @@ SymMap Parser::collectSymbols(TokensList tokensList) {
   for (auto tokens : tokensList) {
     for (auto token : tokens) {
       if (token.token == VARIABLE) {
-        if (symbols.find(token.value) == symbols.end()) {
-          symbols.emplace(token.value, nextFreeAddress());
+        if (!std::all_of(token.value.begin(), token.value.end(), ::isdigit)) {
+          if (symbols.find(token.value) == symbols.end()) {
+            symbols.emplace(token.value, nextFreeAddress());
+          }
         }
       }
     }
@@ -74,7 +76,11 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
 
     if (tokens.front().token == VARIABLE) {
       auto ainstr = Instruction();
-      ainstr.make_A(symbols.at(tokens.front().value));
+      try {
+        ainstr.make_A(symbols.at(tokens.front().value));
+      } catch(const std::out_of_range e) {
+        ainstr.make_A(std::stoi(tokens.front().value));
+      }
       instructions.push_back(ainstr);
       continue;
     }
