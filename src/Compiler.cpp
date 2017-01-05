@@ -60,11 +60,3 @@ string Compiler::compile(Instructions instructions) {
 
   return output;
 }
-
-// void Compiler::compile(Instructions instructions, string filepath) {
-
-// }
-
-// void Compiler::compile(Instructions instructions, ofstream &file) {
-
-// }
