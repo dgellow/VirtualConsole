@@ -123,7 +123,7 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
 
     // cond
     vector<Token> cond (eqpos != tokens.end() ? tokens.begin() + 2 : tokens.begin(),
-                        semicolonpos != tokens.end() ? tokens.end() - 1 : tokens.end());
+                        semicolonpos != tokens.end() ? tokens.end() - 2 : tokens.end());
     cinstr.cond = cond;
     instructions.push_back(cinstr);
   }

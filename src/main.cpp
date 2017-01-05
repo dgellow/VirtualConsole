@@ -4,40 +4,9 @@
 
 #include "Lexer.hpp"
 #include "Parser.hpp"
+#include "Compiler.hpp"
 
 using namespace std;
-
-// struct A {
-//   A() {}
-//   virtual void f() {cout << "nopnop" << endl;};  // must be polymorphic to use runtime-checked dynamic_cast
-// };
-// struct D : A {
-//   D() {}
-//   D(int x) {
-//     this->x = x;
-//   }
-
-//   int x;
-// };
-
-// int main()
-// {
-//     // D d; // the most derived object
-//     // A& a = d; // upcast, dynamic_cast may be used, but unnecessary
-//     // D& new_d = dynamic_cast<D&>(a); // downcast
-
-//     // new_d.f();
-
-//   D d = D(33);
-//   vector<std::reference_wrapper<A>> v;
-//   v.push_back(d);
-//   A& a = v.back();
-
-//   if (auto ddd = dynamic_cast<D*>(&a)) {
-//     cout << "rolololo" << endl;
-//     cout << "ddd.x: " << ddd->x << endl;
-//   }
-// }
 
 int main () {
   std::string filepath = "./test.asm";
@@ -88,6 +57,12 @@ int main () {
       cerr << "cannot cast" << endl;
     }
   }
+  cout << endl;
+
+  cout << "Compiler" << endl;
+  cout << "==================="
+       << endl;
+  cout << Compiler::compile(instructions);
   cout << endl;
 
   // cout << Compiler::compile(ast);

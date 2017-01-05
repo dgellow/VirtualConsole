@@ -2,13 +2,13 @@
 #define __Compiler__
 
 #include <string>
-#include "AST.hpp"
+#include "Parser.hpp"
 
 class Compiler {
 public:
-  static std::string compile(AST ast);
-  static void compile(AST ast, std::string filepath);
-  static void compile(AST ast, std::ofstream &file);
+  static std::string compile(Instructions instructions);
+  // static void compile(Instructions instructions, std::string filepath);
+  // static void compile(Instructions instructions, std::ofstream &file);
 
 private:
   Compiler() {}

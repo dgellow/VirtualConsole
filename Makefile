@@ -12,6 +12,7 @@ game: build-directory
 	$(dependencies) \
         $(sourceDir)/Lexer.cpp \
         $(sourceDir)/Parser.cpp \
+        $(sourceDir)/Compiler.cpp \
         $(sourceDir)/main.cpp \
 	-o $(buildDir)/game
 
