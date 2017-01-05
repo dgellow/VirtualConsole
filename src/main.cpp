@@ -43,7 +43,8 @@ int main (int argc, char *argv[]) {
       auto instructions = Parser::parse(inputfile);
       auto output = Compiler::compile(instructions);
 
-      ofstream outfile(outputfile);
+      ofstream outfile;
+      outfile.open(outputfile);
       outfile << output;
       outfile.close();
 
