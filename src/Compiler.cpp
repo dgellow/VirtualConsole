@@ -1,6 +1,7 @@
 #include "Compiler.hpp"
 
 #include <bitset>
+#include "Grammar.hpp"
 
 using namespace std;
 
@@ -9,38 +10,51 @@ string Compiler::compile(Instructions instructions) {
 
   for (auto instruction : instructions) {
     if (instruction.type == AInstruction) {
-      output += bitset<16>(instruction.address).to_string('0', '1');
+      output += bitset<16>(instruction.address).to_string();
     } else if (instruction.type == CInstruction) {
       // opcode
       output += "111";
 
       // dest
-      output += instruction.dest.value.find("A") != string::npos ? "1" : "0";
-      output += instruction.dest.value.find("D") != string::npos ? "1" : "0";       output += instruction.dest.value.find("M") != string::npos ? "1" : "0";
+      if (instruction.dest.value.find_first_not_of(Grammar::legalDest) == string::npos) {
+        output += instruction.dest.value.find(Grammar::legalDest[0]) != string::npos ? "1" : "0";
+        output += instruction.dest.value.find(Grammar::legalDest[1]) != string::npos ? "1" : "0";
+        output += instruction.dest.value.find(Grammar::legalDest[2]) != string::npos ? "1" : "0";
+      } else {
+        throw invalid_argument("Compiler error: Invalid destination in C instruction");
+      }
 
       // cond
-      // TODO
+      string cond = "";
+      for (auto t : instruction.cond) {
+        if (t.value != "") {
+          cond += t.value;
+        } else {
+          try {
+            auto keyword = Grammar::legalKeyword.at(t.token);
+            cond += keyword;
+          } catch(const out_of_range e) {
+            throw invalid_argument("Compiler error: Invalid keyword in condition of C instruction");
+          }
+        }
+      }
 
+      try {
+        auto bits = Grammar::legalCond.at(cond);
+        output += bitset<7>(bits).to_string();
+      } catch(const out_of_range e) {
+        throw invalid_argument("Compiler error: Invalid condition in C instruction cond=" + cond);
+      }
 
       // jump
-      if (instruction.jump.value == "") {
-        output += "000";
-      } else if (instruction.jump.value == "JMP") {
-        output += "111";
-      } else if (instruction.jump.value == "JGT") {
-        output += "001";
-      } else if (instruction.jump.value == "JEQ") {
-        output += "010";
-      } else if (instruction.jump.value == "JGE") {
-        output += "011";
-      } else if (instruction.jump.value == "JLT") {
-        output += "100";
-      } else if (instruction.jump.value == "JNE") {
-        output += "101";
-      } else if (instruction.jump.value == "JLE") {
-        output += "110";
+      try {
+        auto jump = Grammar::legalJump.at(instruction.jump.value);
+        output += bitset<3>(jump).to_string();
+      } catch(const out_of_range e) {
+        throw invalid_argument("Compiler error: Invalid jump in C instruction");
       }
     }
+
     output += '\n';
   }
 

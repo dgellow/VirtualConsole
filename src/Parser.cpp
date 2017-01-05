@@ -98,11 +98,7 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
     // dest
     if (eqpos == tokens.begin() + 1) {
       auto token = tokens.front();
-      if (token.value.find_first_not_of("ADM") == string::npos) {
-        cinstr.dest = token;
-      } else {
-        throw invalid_argument("Parsing error: C instruction destination can only be a combination of A, D or M");
-      }
+      cinstr.dest = token;
     } else if (eqpos != tokens.end()) {
       throw invalid_argument("Parsing error: '=' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
@@ -110,13 +106,7 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
     // jump
     if (semicolonpos == tokens.end() - 2) {
       auto token = tokens.back();
-      if (token.value == "JMP" || token.value == "JEQ" || token.value == "JNE"
-          || token.value == "JGT" || token.value == "JGE" || token.value == "JLT"
-          || token.value == "JLE") {
-        cinstr.jump = token;
-      } else {
-        throw invalid_argument("Parsing error: C instruction jump can only be one of JMP, JEQ, JNE, JGT, JGE, JLT, JLE");
-      }
+      cinstr.jump = token;
     } else if (semicolonpos != tokens.end()) {
       throw invalid_argument("Parsing error: ';' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }

@@ -3,24 +3,9 @@
 
 #include <vector>
 #include <string>
+#include "Grammar.hpp"
 
-enum Tokens {
-  UNASSIGNED,
-  AT_SYM,
-  EQ_SYM,
-  COLON_SYM,
-  SEMICOLON_SYM,
-  PLUS_SYM,
-  MINUS_SYM,
-  AND_SYM,
-  OR_SYM,
-  PARENTOPEN_SYM,
-  PARENTCLOSE_SYM,
-  ALPHA,
-  DIGIT,
-  VARIABLE,
-  LABEL,
-};
+using namespace Grammar;
 
 class Lexeme {
 public:
