@@ -30,7 +30,7 @@
   @x
   D=M
   @sum
-  M=M+D;JEQ // sum = sum + x
+  M=D+M;JEQ // sum = sum + x
 
   @i
   D=M
