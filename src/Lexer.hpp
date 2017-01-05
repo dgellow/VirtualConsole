@@ -7,8 +7,7 @@
 
 using namespace Grammar;
 
-class Lexeme {
-public:
+struct Lexeme {
   Lexeme(uint32_t position, uint32_t line,
          Tokens token, std::string value="")  {
     this->position = position;
@@ -25,8 +24,7 @@ public:
   uint32_t line;
 };
 
-class Token {
-public:
+struct Token {
   Token() {
     token = UNASSIGNED;
     value = "";
@@ -46,15 +44,10 @@ public:
 using LexemesList = std::vector<std::vector<Lexeme>>;
 using TokensList = std::vector<std::vector<Token>>;
 
-class Lexer {
-public:
-  static TokensList lex(std::ifstream &file);
+namespace Lexer {
+  TokensList lex(std::ifstream &file);
   LexemesList scan(std::ifstream &file);
-  TokensList eval(std::ifstream &file, LexemesList tokens);
-
-private:
-  Lexer() {}
-  ~Lexer() {}
-};
+  TokensList eval(LexemesList tokens);
+}
 
 #endif /* __Lexer__ */

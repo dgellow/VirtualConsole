@@ -4,9 +4,8 @@
 #include <regex>
 
 TokensList Lexer::lex(std::ifstream &file) {
-  auto lexer = Lexer();
-  auto lexemes = lexer.scan(file);
-  return lexer.eval(file, lexemes);
+  auto lexemes = scan(file);
+  return eval(lexemes);
 }
 
 LexemesList Lexer::scan(std::ifstream &file) {
@@ -145,7 +144,7 @@ LexemesList Lexer::scan(std::ifstream &file) {
   return lexemes;
 }
 
-TokensList Lexer::eval(std::ifstream &file, LexemesList lexemesList) {
+TokensList Lexer::eval(LexemesList lexemesList) {
   auto tokens = TokensList();
 
   for (auto lexemes : lexemesList) {

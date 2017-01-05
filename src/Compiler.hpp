@@ -4,14 +4,9 @@
 #include <string>
 #include "Parser.hpp"
 
-class Compiler {
-public:
-  static std::string compile(Instructions instructions);
-  static void debug(Instructions instructions);
-
-private:
-  Compiler() {}
-  ~Compiler() {}
-};
+namespace Compiler {
+  std::string compile(Instructions instructions);
+  void debug(Instructions instructions);
+}
 
 #endif /* __Compiler__ */
