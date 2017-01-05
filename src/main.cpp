@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
+#include <array>
+#include <string>
 
 #include "Lexer.hpp"
 #include "Parser.hpp"
@@ -8,63 +9,37 @@
 
 using namespace std;
 
-int main () {
-  std::string filepath = "./test.asm";
-
-  std::ifstream file;
-  file.open(filepath);
-  auto tokens = Lexer::lex(file);
-  file.close();
-
-  cout << "Lexer" << std::endl;
-  cout << "==================="
-       << std::endl;
-
-  for (auto line : tokens) {
-    for (auto lexeme : line) {
-      if (lexeme.value == "") {
-        std::cout << lexeme.token;
-      } else {
-        std::cout << "{" << lexeme.token << ", " << lexeme.value << "}";
-      }
-      std::cout << " ";
-    }
-    std::cout << std::endl;
+int main (int argc, char *argv[]) {
+  if (argc < 2) {
+    cout << "OVERVIEW: Sam's Virtual Console" << endl;
+    cout << endl;
+    cout << "USAGE: samvirtcons COMMAND [options]" << endl;
+    cout << endl;
+    cout << "COMMANDS:" << endl;
+    cout << "\tcompile <inputfile.asm> <outputfile.hack>" << endl;
+    cout << "\thelp" << endl;
+    exit(1);
   }
-  cout << endl;
 
-  auto instructions = Parser::parse(filepath);
-
-  cout << "Parser" << endl;
-  cout << "==================="
-       << endl;
-
-  for (auto instruction : instructions) {
-    if (instruction.type == CInstruction) {
-      std::string cond = "";
-      for (auto c : instruction.cond) {
-        cond += (c.value == "" ? "_" +  to_string(c.token) + "_" : c.value);
-      }
-      cout << instruction.dest.value
-           << (instruction.dest.value == "" ? "" :  "=")
-           << cond
-           << (instruction.jump.value == "" ? "" : ";")
-           << instruction.jump.value
-           << endl;
-    } else if (instruction.type == AInstruction) {
-      cout << "@" << instruction.address << endl;
+  if (string(argv[1]) == "compile") {
+    if (argc != 4) {
+      cerr << "Error: invalid usage" << endl;
+      cout << "Usage: samvirtcons compile <inputfile.asm> <outputfile.hack> " << endl;
+      exit(1);
     } else {
-      cerr << "cannot cast" << endl;
+      string inputfile = argv[2];
+      string outputfile = argv[3];
+
+      auto instructions = Parser::parse(inputfile);
+      auto output = Compiler::compile(instructions);
+
+      ofstream outfile(outputfile);
+      outfile << output;
+      outfile.close();
+
+      exit(0);
     }
   }
-  cout << endl;
 
-  cout << "Compiler" << endl;
-  cout << "==================="
-       << endl;
-  cout << Compiler::compile(instructions);
-  cout << endl;
-
-  // cout << Compiler::compile(ast);
   return 0;
 }
