@@ -5,10 +5,15 @@
 #include <sstream>
 #include <vector>
 #include <bitset>
+#include <iomanip>
 
 uint16_t to_uint16(char c) {
   unsigned char uc = c;
   return uint16_t(uc);
+}
+
+void printHexByte(char c) {
+  cout << setfill('0') << setw(2) << hex << to_uint16(c);
 }
 
 void parseFile(ifstream &file) {
@@ -20,10 +25,10 @@ void parseFile(ifstream &file) {
   file.get(lsbProgramLocation);
   file.get(hsbProgramLocation);
 
-  cout << "Program location in memory: "
-       << hex << to_uint16(hsbProgramLocation)
-       << to_uint16(lsbProgramLocation)
-       << endl;
+  cout << "Program location in memory: ";
+  printHexByte(hsbProgramLocation);
+  printHexByte(lsbProgramLocation);
+  cout << endl;
 
   char c;
 
@@ -60,12 +65,19 @@ void parseFile(ifstream &file) {
       file.get(msb);
     }
 
-    // Log
+    // Add to the vector
     operations.push_back(operation);
+
+    // Log
     cout << Instruction::opsnames[int(operation.ops)]
-         << " " << Instruction::addressModeSym[int(operation.addressMode)]
-         << " " << to_uint16(msb) << to_uint16(lsb)
-         << endl;
+         << " "
+         << Instruction::addressModeSym[int(operation.addressMode)]
+         << " ";
+    if (dataLength > 0) {
+      printHexByte(msb);
+      printHexByte(lsb);
+    }
+    cout << endl;
   }
 }
 
