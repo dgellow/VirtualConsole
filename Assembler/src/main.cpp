@@ -9,10 +9,12 @@
 
 using namespace std;
 
+const string appName("samvirtassembler");
+
 void printUsage() {
-    cout << "OVERVIEW: Sam's Virtual Console" << endl;
+    cout << "OVERVIEW: Sam's Virtual Assembler" << endl;
     cout << endl;
-    cout << "USAGE: samvirtcons COMMAND [options]" << endl;
+    cout << "USAGE: " << appName << " COMMAND [options]" << endl;
     cout << endl;
     cout << "COMMANDS:" << endl;
     cout << "\tcompile <inputfile.asm> <outputfile.hack>" << endl;
@@ -34,7 +36,7 @@ int main (int argc, char *argv[]) {
   } else if (command == "compile") {
     if (argc != 4 && argc != 5) {
       cerr << "Error: invalid usage" << endl;
-      cout << "Usage: samvirtcons compile [--debug-parser] <inputfile.asm> <outputfile.hack> " << endl;
+      cout << "Usage: " << appName << " compile [--debug-parser] <inputfile.asm> <outputfile.hack> " << endl;
       exit(1);
     } else {
       string inputfile;
@@ -68,5 +70,5 @@ int main (int argc, char *argv[]) {
     cout << "See usage with the command help, -h or --help" << endl;
   }
 
-  return 0;
+  return -1;
 }

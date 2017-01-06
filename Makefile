@@ -1,20 +1,34 @@
 CFLAGS = -g -std=c++14
 CC = clang++
-
-buildDir = `pwd`/build
-sourceDir = `pwd`/src
 dependencies =
 
-.DEFAULT_GOAL := samvirtcons
+buildDir = `pwd`/build
+assemblerSourceDir = `pwd`/Assembler/src
+CPUSourceDir = `pwd`/CPU/src
+editorSourceDir = `pwd`/Editor/src
 
-samvirtcons: build-directory
+.DEFAULT_GOAL := help
+
+samvirtassembler: build-directory
 	$(CC) $(CFLAGS) \
 	$(dependencies) \
-        $(sourceDir)/Lexer.cpp \
-        $(sourceDir)/Parser.cpp \
-        $(sourceDir)/Compiler.cpp \
-        $(sourceDir)/main.cpp \
-	-o $(buildDir)/samvirtcons
+        $(assemblerSourceDir)/Lexer.cpp \
+        $(assemblerSourceDir)/Parser.cpp \
+        $(assemblerSourceDir)/Compiler.cpp \
+        $(assemblerSourceDir)/main.cpp \
+	-o $(buildDir)/samvirtassembler
+
+samvirtcpu: build-directory
+	$(CC) $(CFLAGS) \
+	$(dependencies) \
+        $(CPUSourceDir)/main.cpp \
+	-o $(buildDir)/samvirtcpu
+
+samvirteditor: build-directory
+	$(CC) $(CFLAGS) \
+	$(dependencies) \
+        $(editorSourceDir)/main.cpp \
+	-o $(buildDir)/samvirteditor
 
 clean:
 	rm -rf $(buildDir)/*
@@ -22,22 +36,41 @@ clean:
 build-directory:
 	@mkdir -p $(buildDir)
 
-run: samvirtcons
-	$(buildDir)/samvirtcons
+run-assembler: samvirtassembler
+	$(buildDir)/samvirtassembler
 
-debug: samvirtcons
-	lldb $(buildDir)/samvirtcons
+run-cpu: samvirtcpu
+	$(buildDir)/samvirtcpu
 
-all: clean samvirtcons
+run-editor: samvirteditor
+	$(buildDir)/samvirteditor
+
+debug-assembler: samvirtassembler
+	lldb $(buildDir)/samvirtassembler
+
+debug-cpu: samvirtcpu
+	lldb $(buildDir)/samvirtcpu
+
+debug-editor: samvirteditor
+	lldb $(buildDir)/samvirteditor
+
+all: clean samvirtassembler samvirtcpu samvirteditor
 
 help:
+	@echo ".—————————————————————————————————————."
+	@echo "| Sam's Virtual Console: build system |"
+	@echo "°—————————————————————————————————————°"
 	@echo "Available tasks (default is marked with *):"
-	@echo "*all		equivalent to 'clean' then 'samvirtcons'"
-	@echo " clean		remove files and directories generated during compilation"
-	@echo " samvirtcons	compile samvirtcons"
-	@echo " run		compile then run the samvirtcons"
-	@echo " debug		compile then launch a debugger (lldb)"
-	@echo " help		show this help message"
+	@echo "*all			clean then build everything"
+	@echo " clean			remove files and directories generated during compilation"
+	@echo " samvirtassembler	compile samvirtassembler"
+	@echo " samvirtcpu		compile samvirtcpu"
+	@echo " samvirteditor		compile samvirteditor"
+	@echo " run-assembler		compile then run the samvirtassembler"
+	@echo " run-cpu 		compile then run the samvirtcpu"
+	@echo " run-editor		compile then run the samvirteditor"
+	@echo " debug-assembler 	compile samvirtassembler then launch a debugger (lldb)"
+	@echo " debug-cpu		compile samvirtcpu then launch a debugger (lldb)"
+	@echo " debug-editor		compile samvirteditor then launch a debugger (lldb)"
+	@echo " help			show this help message"
 	@echo ""
-	@echo "Usage exemple:"
-	@echo "To compile and run samvirtcons, be sure to be at the root of the project and execute the command \`make run\`."

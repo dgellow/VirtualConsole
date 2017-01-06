@@ -1,12 +1,17 @@
 # Sam's Virtual Console
 
-Dependencies:
+Virtual console with integrated development editor.
 
-- SDL2
-- SDL2_image
-- SDL_mixer
+
+## Development
 
 ```
-# Build
-make
+# Build projects
+make all
 ```
+
+### Hierarchy
+
+- `Assembler`: 6502 assembler
+- `CPU`: 6502 emulator
+- `Editor`: Integrated development editor
