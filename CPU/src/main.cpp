@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include "Parser.hpp"
+
 using namespace std;
 
 const string appName("samvirtcpu");
@@ -11,6 +13,7 @@ void printUsage() {
     cout << "USAGE: " << appName << " COMMAND [options]" << endl;
     cout << endl;
     cout << "COMMANDS:" << endl;
+    cout << "\tparse" << endl;
     cout << "\thelp" << endl;
 }
 
@@ -26,6 +29,16 @@ int main(int argc, char *argv[]) {
   if (command == "help" || command == "-h" || command == "--help") {
     printUsage();
     exit(0);
+  } else if (command == "parse")  {
+    if (argc != 3) {
+      cerr << "Error: invalid usage" << endl;
+      cout << "Usage: " << appName << " parse <inputfile.asm>" << endl;
+      exit(1);
+    } else {
+      string inputfile = argv[2];
+      Parser::parse(inputfile);
+      exit(0);
+    }
   } else {
     cerr << "Error: unknown command" << endl;
     cout << "See usage with the command help, -h or --help" << endl;
