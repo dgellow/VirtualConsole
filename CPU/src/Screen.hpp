@@ -1,12 +1,14 @@
 #ifndef __Screen__
 #define __Screen__
 
-class Screen {
-public:
-  Screen() {}
+#include "RAM.hpp"
+
+struct Screen : RAM {
+  Screen(unsigned int registerWidth, unsigned int registers)
+    : RAM(registerWidth, registers) {
+  }
+
   ~Screen() {}
-
-
 };
 
 #endif /* __Screen__ */

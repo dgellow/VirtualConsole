@@ -1,22 +1,18 @@
-#ifndef __RAM16k__
-#define __RAM16k__
+#ifndef __RAM__
+#define __RAM__
 
 #include <cstdint>
 #include <limits>
 #include <vector>
 #include <string>
 
-// Memory of 2^14 registers, each 16 bit-wide.
-class RAM16k {
-public:
-  RAM16k() {
-    short registerWidth = 16;
-    short registers = 16384; // 2^14
+struct RAM {
+  RAM(unsigned int registerWidth, unsigned int registers) {
     state.resize(registerWidth * registers);
     max = state.size() - 1;
   }
 
-  ~RAM16k() {}
+  ~RAM() {}
 
   void write (uint32_t address, uint16_t value) {
     if (address > max) {
@@ -40,9 +36,8 @@ public:
     return state[address];
   }
 
-private:
   unsigned int max;
   std::vector<uint16_t> state;
 };
 
-#endif /* __RAM16k__ */
+#endif /* __RAM__ */
