@@ -22,6 +22,8 @@ samvirtcpu: build-directory
 	$(CC) $(CFLAGS) \
 	$(dependencies) \
         $(CPUSourceDir)/Parser.cpp \
+        $(CPUSourceDir)/Machine.cpp \
+        $(CPUSourceDir)/CPU.cpp \
         $(CPUSourceDir)/main.cpp \
 	-o $(buildDir)/samvirtcpu
 
