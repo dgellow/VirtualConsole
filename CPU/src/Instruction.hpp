@@ -429,12 +429,13 @@ namespace Instruction6502 {
   };
 
   struct Instruction {
-    Instruction(Operation operation, uint8_t dataLsb = 0, uint8_t dataMsb = 0)
-      : operation(operation), dataLsb(dataLsb), dataMsb(dataMsb) {}
+    Instruction(Operation operation, int dataLength = 0, uint8_t dataLsb = 0, uint8_t dataMsb = 0)
+      : operation(operation), dataLsb(dataLsb), dataMsb(dataMsb), dataLength(dataLength) {}
 
     Operation operation;
     uint8_t dataLsb; // least significant byte
     uint8_t dataMsb; // most significant byte
+    int dataLength;
   };
 
   using Instructions = std::vector<Instruction>;
