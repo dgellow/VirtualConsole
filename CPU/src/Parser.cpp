@@ -40,7 +40,7 @@ Instructions parseFile(ifstream &file) {
   file.get(msbProgramLocation);
 
   instructions.push_back(Instruction(Operation(ops::programLocation, opsgroup::other,
-                                               addressMode::implied),
+                                               addressMode::implied, opsoperand::none),
                                      0, lsbProgramLocation, msbProgramLocation));
 
   cout << "Program location in memory: ";
