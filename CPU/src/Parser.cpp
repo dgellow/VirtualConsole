@@ -18,17 +18,33 @@ void printHexByte(char c) {
   cout << setfill('0') << setw(2) << hex << to_uint16(c);
 }
 
-void parseFile(ifstream &file) {
-  vector<Instruction::Operation> operations;
+void printInstruction(Instruction instruction) {
+    cout << opsnames[int(instruction.operation.ops)]
+         << " "
+         << addressModeSym[int(instruction.operation.addressMode)]
+         << " ";
+    if (instruction.dataLength > 0) {
+      printHexByte(instruction.dataMsb);
+      printHexByte(instruction.dataLsb);
+    }
+    cout << endl;
+}
+
+Instructions parseFile(ifstream &file) {
+  Instructions instructions;
 
   // Two first bytes specify the memory location of the program
   char lsbProgramLocation;
-  char hsbProgramLocation;
+  char msbProgramLocation;
   file.get(lsbProgramLocation);
-  file.get(hsbProgramLocation);
+  file.get(msbProgramLocation);
+
+  instructions.push_back(Instruction(Operation(ops::programLocation, opsgroup::other,
+                                               addressMode::implied),
+                                     0, lsbProgramLocation, msbProgramLocation));
 
   cout << "Program location in memory: ";
-  printHexByte(hsbProgramLocation);
+  printHexByte(msbProgramLocation);
   printHexByte(lsbProgramLocation);
   cout << endl;
 
@@ -67,23 +83,16 @@ void parseFile(ifstream &file) {
       file.get(msb);
     }
 
-    // Add to the vector
-    operations.push_back(operation);
-
-    // Log
-    cout << Instruction::opsnames[int(operation.ops)]
-         << " "
-         << Instruction::addressModeSym[int(operation.addressMode)]
-         << " ";
-    if (dataLength > 0) {
-      printHexByte(msb);
-      printHexByte(lsb);
-    }
-    cout << endl;
+    // Add instruction to the vector
+    auto instruction = Instruction(operation, lsb, msb);
+    instructions.push_back(instruction);
+    printInstruction(instruction);
   }
+
+  return instructions;
 }
 
-void Parser::parse(string filepath) {
+Instructions Parser::parse(string filepath) {
   cout << "Parsing ... " << endl;
 
   ifstream file;
@@ -93,6 +102,8 @@ void Parser::parse(string filepath) {
     throw runtime_error("Parsing error: cannot read input file: " + filepath);
   }
 
-  parseFile(file);
+  auto instructions = parseFile(file);
   file.close();
+
+  return instructions;
 }

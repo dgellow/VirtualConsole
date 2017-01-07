@@ -7,7 +7,7 @@
 using namespace std;
 
 namespace Parser {
-  void parse(string filepath);
+  Instruction6502::Instructions parse(string filepath);
 }
 
 #endif /* __Parser__ */
