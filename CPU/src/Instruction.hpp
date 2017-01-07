@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace Instruction {
+namespace Instruction6502 {
   enum class ops {
     programLocation,
     ldx,
