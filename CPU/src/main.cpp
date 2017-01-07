@@ -2,6 +2,7 @@
 #include <string>
 
 #include "Parser.hpp"
+#include "Machine.hpp"
 
 using namespace std;
 
@@ -36,7 +37,9 @@ int main(int argc, char *argv[]) {
       exit(1);
     } else {
       string inputfile = argv[2];
-      Parser::parse(inputfile);
+      auto instructions = Parser::parse(inputfile);
+      Machine::run(instructions);
+
       exit(0);
     }
   } else {
