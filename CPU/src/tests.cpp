@@ -79,6 +79,16 @@ int main() {
 
 
     test("Load instructions: absolute");
+    machine.memory.set(0x1020, 55);
+    machine.memory.set(0x1030, 66);
+    machine.memory.set(0x1040, 77);
+
+    machine.run(1);
+    is(machine.cpu.a, 55, "lda $1020");
+    machine.run(1);
+    is(machine.cpu.x, 66, "ldx $1030");
+    machine.run(1);
+    is(machine.cpu.y, 77, "ldy $1040");
 
 
     test("Load instructions: absolute indexed x");

@@ -2,7 +2,7 @@
 
 uint8_t RAM::at(uint16_t address) {
   if (address > max) {
-    std::string msg = std::string("Tried to read an address exceeding the addressable RAM.") +
+    std::string msg = std::string("RAM error: tried to read an address exceeding the addressable RAM.") +
       " address=" + std::to_string(address) +
       ", RAM.max=" + std::to_string(max);
     throw std::invalid_argument(msg);
@@ -13,7 +13,7 @@ uint8_t RAM::at(uint16_t address) {
 
 void RAM::set(uint16_t address, uint8_t value) {
 if (address > max) {
-      std::string msg = std::string("Tried to write in an address exceeding the addressable RAM.") +
+      std::string msg = std::string("RAM error: tried to write in an address exceeding the addressable RAM.") +
         " address=" + std::to_string(address) +
         ", RAM.max=" + std::to_string(max);
       throw std::invalid_argument(msg);

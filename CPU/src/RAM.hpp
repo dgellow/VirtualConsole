@@ -8,7 +8,7 @@
 
 struct RAM {
   RAM(unsigned int registerWidth, unsigned int registers) {
-    state.resize(registerWidth * registers);
+    state.resize(registerWidth * registers * 1024);
     max = state.size() - 1;
   }
 
