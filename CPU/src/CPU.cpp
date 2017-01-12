@@ -3,6 +3,11 @@
 // Return actual data based on address mode of the operation
 uint8_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
                     uint8_t lsb, uint8_t msb) {
+  auto indexedLsb = memory.at(lsb + cpu.x);
+  auto indexedMsb = memory.at(lsb + cpu.x + 1);
+  auto indirectLsb = memory.at(lsb);
+  auto indirectMsb = memory.at(lsb + 1);
+
   switch (addressMode) {
   case addressMode::implied:
     throw std::runtime_error("CPU error: instruction with addressMode::implied shouldn't call resolveData");
@@ -13,12 +18,10 @@ uint8_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
   case addressMode::immediate: return msb * 100 + lsb;
   case addressMode::relative: return cpu.pc + lsb;
   case addressMode::zeropage: return memory.at(lsb);
-  case addressMode::zeropageIndexedIndirect:
-    throw std::runtime_error("CPU error: unimplemented address mode: zeropageIndirectIndexed");
+  case addressMode::zeropageIndexedIndirect: return memory.at((indexedMsb * 16 * 16) + indexedLsb);
   case addressMode::zeropageIndexedX: return memory.at(lsb + cpu.x);
   case addressMode::zeropageIndexedY: return memory.at(lsb + cpu.y);
-  case addressMode::zeropageIndirectIndexed:
-    throw std::runtime_error("CPU error: unimplemented address mode: zeropageIndirectIndexed");
+  case addressMode::zeropageIndirectIndexed: return memory.at((indirectMsb * 16 * 16) + indirectLsb + cpu.y);
   }
 }
 
