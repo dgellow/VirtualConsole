@@ -3,10 +3,20 @@
 
 #include "Parser.hpp"
 #include "Machine.hpp"
+#include "RunFlags.hpp"
 
 using namespace std;
 
 const string appName("samvirtcpu");
+
+bool findArgument(int argc, char *argv[], string arg) {
+  for (auto i = 0; i < argc; i++) {
+    if (string(argv[i]) == arg) {
+      return true;
+    }
+  }
+  return false;
+}
 
 void printUsage() {
     cout << "OVERVIEW: Sam's Virtual CPU" << endl;
@@ -31,12 +41,15 @@ int main(int argc, char *argv[]) {
     printUsage();
     exit(0);
   } else if (command == "parse")  {
-    if (argc != 3) {
+    if (argc < 3 || argc > 5) {
       cerr << "Error: invalid usage" << endl;
-      cout << "Usage: " << appName << " parse <inputfile.asm>" << endl;
+      cout << "Usage: " << appName << " parse [OPTIONS] <inputfile>" << endl;
       exit(1);
     } else {
-      string inputfile = argv[2];
+      string inputfile = argv[argc - 1];
+      RunFlags::testOutput = findArgument(argc, argv, "--test-output");
+      RunFlags::debugParser = findArgument(argc, argv, "--debug-parser");
+
       auto instructions = Parser::parse(inputfile);
       Machine::run(instructions);
 
