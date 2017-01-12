@@ -34,11 +34,8 @@ int main() {
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
-    machine.memory.set(22, 5);
-    machine.memory.set(33, 6);
-    machine.memory.set(44, 7);
-
     machine.load(instructions);
+
 
     test("Load instructions: default");
     is(machine.cpu.a, 0, "default a register");
@@ -49,6 +46,7 @@ int main() {
     is(machine.cpu.a, 0, "lda 0");
     is(machine.cpu.x, 0, "ldx 0");
     is(machine.cpu.x, 0, "ldy 0");
+
 
     test("Load instructions: immediate");
     machine.run(1);
@@ -64,29 +62,134 @@ int main() {
     is(machine.cpu.x, 33, "ldy #44");
     is(machine.cpu.y, 44, "ldy #44");
 
+
     test("Load instructions: immediate hex");
     machine.run(1);
-    is(machine.cpu.a, 34, "lda #$22");
+    is(machine.cpu.a, 0x22, "lda #$22");
     is(machine.cpu.x, 33, "lda #$22");
     is(machine.cpu.y, 44, "lda #$22");
     machine.run(1);
-    is(machine.cpu.a, 34, "ldx #$33");
-    is(machine.cpu.x, 51, "ldx #$33");
+    is(machine.cpu.a, 0x22, "ldx #$33");
+    is(machine.cpu.x, 0x33, "ldx #$33");
     is(machine.cpu.y, 44, "ldx #$33");
     machine.run(1);
-    is(machine.cpu.a, 34, "ldy #$44");
-    is(machine.cpu.x, 51, "ldy #$44");
-    is(machine.cpu.y, 68, "ldy #$44");
+    is(machine.cpu.a, 0x22, "ldy #$44");
+    is(machine.cpu.x, 0x33, "ldy #$44");
+    is(machine.cpu.y, 0x44, "ldy #$44");
+
 
     test("Load instructions: absolute");
-    machine.run(1);
-    is(machine.cpu.a, 5, "lda $22");
-    machine.run(1);
-    is(machine.cpu.x, 6, "ldx $33");
-    machine.run(1);
-    is(machine.cpu.y, 7, "ldy $44");
 
 
+    test("Load instructions: absolute indexed x");
+    machine.memory.set(0x1020, 60);
+    machine.memory.set(0x1021, 61);
+    machine.memory.set(0x1022, 62);
+    machine.memory.set(0x1040, 80);
+    machine.memory.set(0x1041, 81);
+    machine.memory.set(0x1042, 82);
+
+    machine.run(2);
+    is(machine.cpu.a, 60, "lda $1020,x when x=0");
+    machine.run(2);
+    is(machine.cpu.a, 61, "lda $1020,x when x=1");
+    machine.run(2);
+    is(machine.cpu.a, 62, "lda $1020,x when x=2");
+
+    machine.run(2);
+    is(machine.cpu.y, 80, "ldy $1040,x when x=0");
+    machine.run(2);
+    is(machine.cpu.y, 81, "ldy $1040,x when x=1");
+    machine.run(2);
+    is(machine.cpu.y, 82, "ldy $1040,x when x=2");
+
+
+    test("Load instructions: absolute indexed y");
+    machine.memory.set(0x1020, 60);
+    machine.memory.set(0x1021, 61);
+    machine.memory.set(0x1022, 62);
+    machine.memory.set(0x1030, 70);
+    machine.memory.set(0x1031, 71);
+    machine.memory.set(0x1032, 72);
+
+    machine.run(2);
+    is(machine.cpu.a, 60, "lda $1020,y when y=0");
+    machine.run(2);
+    is(machine.cpu.a, 61, "lda $1020,y when y=1");
+    machine.run(2);
+    is(machine.cpu.a, 62, "lda $1020,y when y=2");
+
+    machine.run(2);
+    is(machine.cpu.x, 70, "ldx $1030,y when y=0");
+    machine.run(2);
+    is(machine.cpu.x, 71, "ldx $1030,y when y=1");
+    machine.run(2);
+    is(machine.cpu.x, 72, "ldx $1030,y when y=2");
+
+
+    test("Load instructions: zeropage");
+    machine.memory.set(0x20, 5);
+    machine.memory.set(0x30, 6);
+    machine.memory.set(0x40, 7);
+
+    machine.run(1);
+    is(machine.cpu.a, 5, "lda $20");
+    machine.run(1);
+    is(machine.cpu.x, 6, "ldx $30");
+    machine.run(1);
+    is(machine.cpu.y, 7, "ldy $40");
+
+
+    test("Load instructions: zeropage indexed x");
+    machine.memory.set(0x20, 10);
+    machine.memory.set(0x21, 11);
+    machine.memory.set(0x22, 12);
+    machine.memory.set(0x40, 30);
+    machine.memory.set(0x41, 31);
+    machine.memory.set(0x42, 32);
+
+    machine.run(2);
+    is(machine.cpu.a, 10, "lda $20,x when x=0");
+    machine.run(2);
+    is(machine.cpu.a, 11, "lda $20,x when x=1");
+    machine.run(2);
+    is(machine.cpu.a, 12, "lda $20,x when x=2");
+
+    machine.run(2);
+    is(machine.cpu.y, 30, "ldy $40,x when x=0");
+    machine.run(2);
+    is(machine.cpu.y, 31, "ldy $40,x when x=1");
+    machine.run(2);
+    is(machine.cpu.y, 32, "ldy $40,x when x=2");
+
+
+    test("Load instructions: zeropage indexed y");
+    machine.memory.set(0x20, 100);
+    machine.memory.set(0x21, 101);
+    machine.memory.set(0x22, 102);
+    machine.memory.set(0x30, 90);
+    machine.memory.set(0x31, 91);
+    machine.memory.set(0x32, 92);
+
+    machine.run(2);
+    is(machine.cpu.a, 100, "lda $20,y when y=0");
+    machine.run(2);
+    is(machine.cpu.a, 101, "lda $20,y when y=1");
+    machine.run(2);
+    is(machine.cpu.a, 102, "lda $20,y when y=2");
+
+    machine.run(2);
+    is(machine.cpu.x, 90, "ldx $30,y when y=0");
+    machine.run(2);
+    is(machine.cpu.x, 91, "ldx $30,y when y=1");
+    machine.run(2);
+    is(machine.cpu.x, 92, "ldx $30,y when y=2");
+
+
+    test("Load instructions: zeropage indexed indirect");
+
+
+    test("Load instructions: zeropage indirect indexed");
   }
 
   // // Store
