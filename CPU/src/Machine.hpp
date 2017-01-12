@@ -15,7 +15,7 @@ struct Machine {
   ~Machine() {}
 
   static void run(Instructions instructions);
-  void run();
+  void run(unsigned int steps=0);
   void load(Instructions instructions);
 
   CPU cpu;
