@@ -10,7 +10,7 @@ struct CPU {
   CPU() {}
   ~CPU() {}
 
-  void compute(Instruction instruction, Memory memory);
+  void compute(Instruction instruction, Memory &memory);
 
   // Registers
   uint16_t pc = 0;
@@ -18,13 +18,13 @@ struct CPU {
   uint8_t a = 0;
   uint8_t x = 0;
   uint8_t y = 0;
-  bool c = false;
-  bool z = false;
-  bool i = false;
-  bool d = false;
-  bool b = false;
-  bool v = false;
-  bool s = false;
+  bool c = false; // Carry
+  bool z = false; // Zero
+  bool i = false; // Interrupt
+  bool d = false; // Decimal
+  bool b = false; // Break
+  bool v = false; // Overflow
+  bool n = false; // Negative
 };
 
 #endif /* __CPU__ */
