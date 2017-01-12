@@ -7,6 +7,11 @@ assemblerSourceDir = `pwd`/Assembler/src
 CPUSourceDir = `pwd`/CPU/src
 editorSourceDir = `pwd`/Editor/src
 
+testDir = `pwd`/tests
+assemblerTestDir = $testDir/Assembler
+CPUTestDir = $testDir/CPU
+editorTestDir = $testDir/Editor
+
 .DEFAULT_GOAL := help
 
 samvirtassembler: build-directory
@@ -21,9 +26,13 @@ samvirtassembler: build-directory
 samvirtcpu: build-directory
 	$(CC) $(CFLAGS) \
 	$(dependencies) \
+        $(CPUSourceDir)/RunFlags.cpp \
+        $(CPUSourceDir)/Utils.cpp \
         $(CPUSourceDir)/Parser.cpp \
         $(CPUSourceDir)/Machine.cpp \
         $(CPUSourceDir)/CPU.cpp \
+        $(CPUSourceDir)/Memory.cpp \
+        $(CPUSourceDir)/RAM.cpp \
         $(CPUSourceDir)/main.cpp \
 	-o $(buildDir)/samvirtcpu
 
@@ -47,6 +56,19 @@ run-cpu: samvirtcpu
 
 run-editor: samvirteditor
 	$(buildDir)/samvirteditor
+
+test-cpu: build-directory
+	$(CC) $(CFLAGS) \
+	$(dependencies) \
+        $(CPUSourceDir)/RunFlags.cpp \
+        $(CPUSourceDir)/Utils.cpp \
+        $(CPUSourceDir)/Parser.cpp \
+        $(CPUSourceDir)/Machine.cpp \
+        $(CPUSourceDir)/CPU.cpp \
+        $(CPUSourceDir)/Memory.cpp \
+        $(CPUSourceDir)/RAM.cpp \
+        $(CPUSourceDir)/tests.cpp \
+	-o $(buildDir)/testcpu
 
 debug-assembler: samvirtassembler
 	lldb $(buildDir)/samvirtassembler
