@@ -197,9 +197,28 @@ int main() {
 
 
     test("Load instructions: zeropage indexed indirect");
+    machine.memory.set(0x20, 0x10);
+    machine.memory.set(0x21, 0x18);
+    machine.memory.set(0x1018, 99);
+    machine.memory.set(0x2a, 0x20);
+    machine.memory.set(0x2b, 0x19);
+    machine.memory.set(0x2019, 79);
 
+    machine.run(2);
+    is(machine.cpu.a, 99, "lda ($20,x) when x=0");
+    machine.run(2);
+    is(machine.cpu.a, 79, "lda ($20,x) when x=10");
 
     test("Load instructions: zeropage indirect indexed");
+    machine.memory.set(0x40, 0x30);
+    machine.memory.set(0x41, 0x33);
+    machine.memory.set(0x3033, 66);
+    machine.memory.set(0x303d, 55);
+
+    machine.run(2);
+    is(machine.cpu.a, 66, "lda ($40),y when y=0");
+    machine.run(2);
+    is(machine.cpu.a, 55, "lda ($40),y when y=10");
   }
 
   // // Store

@@ -87,5 +87,15 @@
         ldx $30,y
 
 ;;; Zeropage indexed indirect
+        ldx #0
+        lda ($20,x)
+
+        ldx #10
+        lda ($20,x)
 
 ;;; Zeropage indirect indexed
+        ldy #0
+        lda ($40),y
+
+        ldy #10
+        lda ($40),y
