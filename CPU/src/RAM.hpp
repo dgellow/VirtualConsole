@@ -14,27 +14,8 @@ struct RAM {
 
   ~RAM() {}
 
-  void write (uint32_t address, uint16_t value) {
-    if (address > max) {
-      std::string msg = std::string("Tried to write in an address exceeding the addressable RAM.") +
-        " address=" + std::to_string(address) +
-        ", RAM.max=" + std::to_string(max);
-      throw std::invalid_argument(msg);
-    }
-
-    state[address] = value;
-  }
-
-  uint16_t read(uint32_t address) {
-    if (address > max) {
-      std::string msg = std::string("Tried to read an address exceeding the addressable RAM.") +
-        " address=" + std::to_string(address) +
-        ", RAM.max=" + std::to_string(max);
-      throw std::invalid_argument(msg);
-    }
-
-    return state[address];
-  }
+  uint8_t at(uint16_t address);
+  void set(uint16_t address, uint8_t value);
 
   unsigned int max;
   std::vector<uint16_t> state;
