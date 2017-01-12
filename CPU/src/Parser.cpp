@@ -5,18 +5,11 @@
 #include <sstream>
 #include <vector>
 #include <bitset>
-#include <iomanip>
+#include "Utils.hpp"
+#include "RunFlags.hpp"
 
 using namespace Instruction6502;
-
-uint16_t to_uint16(char c) {
-  unsigned char uc = c;
-  return uint16_t(uc);
-}
-
-void printHexByte(char c) {
-  cout << setfill('0') << setw(2) << hex << to_uint16(c);
-}
+using namespace Utils;
 
 void printInstruction(Instruction instruction) {
     cout << opsnames[int(instruction.operation.ops)]
@@ -30,7 +23,7 @@ void printInstruction(Instruction instruction) {
     cout << endl;
 }
 
-Instructions parseFile(ifstream &file) {
+Instructions Parser::parseFile(ifstream &file) {
   Instructions instructions;
 
   // Two first bytes specify the memory location of the program
@@ -39,14 +32,16 @@ Instructions parseFile(ifstream &file) {
   file.get(lsbProgramLocation);
   file.get(msbProgramLocation);
 
-  instructions.push_back(Instruction(Operation(ops::programLocation, opsgroup::other,
-                                               addressMode::implied, opsoperand::none),
-                                     0, lsbProgramLocation, msbProgramLocation));
+  // instructions.push_back(Instruction(Operation(ops::programLocation, opsgroup::other,
+  //                                              addressMode::implied, opsoperand::none),
+  //                                    0, lsbProgramLocation, msbProgramLocation));
 
-  cout << "Program location in memory: ";
-  printHexByte(msbProgramLocation);
-  printHexByte(lsbProgramLocation);
-  cout << endl;
+  if (RunFlags::debugParser) {
+    cout << "Program location in memory: ";
+    printHexByte(msbProgramLocation);
+    printHexByte(lsbProgramLocation);
+    cout << endl;
+  }
 
   char c;
 
@@ -84,17 +79,15 @@ Instructions parseFile(ifstream &file) {
     }
 
     // Add instruction to the vector
-    auto instruction = Instruction(operation, lsb, msb);
+    auto instruction = Instruction(operation, dataLength, lsb, msb);
     instructions.push_back(instruction);
-    printInstruction(instruction);
+    RunFlags::debugParser ? printInstruction(instruction) : (void) 0;
   }
 
   return instructions;
 }
 
 Instructions Parser::parse(string filepath) {
-  cout << "Parsing ... " << endl;
-
   ifstream file;
   file.open(filepath, ios::binary);
 
