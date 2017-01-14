@@ -222,25 +222,145 @@ int main() {
     is(machine.cpu.a, 55, "lda ($40),y when y=10");
   }
 
-  // // Store
-  // {
-  //   string file = "tests/CPU/tests_store.out";
-  //   auto instructions = Parser::parse(file);
-  //   auto machine = Machine();
+  // Store
+  {
+    auto t = Tests("Store");
 
-  //   machine.memory.set(1, 22);
-  //   machine.memory.set(2, 33);
-  //   machine.memory.set(3, 44);
+    string file = "tests/CPU/tests_store.out";
+    auto instructions = Parser::parse(file);
+    auto machine = Machine();
 
-  //   machine.load(instructions);
-  //   machine.run();
-  // }
+    machine.load(instructions);
 
-  if (testFailures != 0) {
-    std::cerr << "Some tests failed. Failures: " << testFailures << "/" << testNumber << std::endl;
-    exit(1);
-  } else {
-    std::cout << "All tests passed" << std::endl;
+
+    test("Store instructions: absolute");
+    machine.memory.set(0x1020, 0);
+    machine.memory.set(0x1021, 0);
+    machine.memory.set(0x1022, 0);
+
+    machine.run(3); // lda, ldx, ldy
+    machine.run(1);
+    t.is(machine.memory.at(0x1020), 1, "sta $1020");
+    t.is(machine.memory.at(0x1021), 0, "sta $1020");
+    t.is(machine.memory.at(0x1022), 0, "sta $1020");
+
+    machine.run(1);
+    t.is(machine.memory.at(0x1020), 1, "stx $1021");
+    t.is(machine.memory.at(0x1021), 2, "stx $1021");
+    t.is(machine.memory.at(0x1022), 0, "stx $1021");
+
+    machine.run(1);
+    t.is(machine.memory.at(0x1020), 1, "sty $1022");
+    t.is(machine.memory.at(0x1021), 2, "sty $1022");
+    t.is(machine.memory.at(0x1022), 3, "sty $1022");
+
+
+    test("Store instructions: absolute indexed x");
+    machine.memory.set(0x1030, 0);
+    machine.memory.set(0x1031, 0);
+    machine.memory.set(0x1032, 0);
+
+    machine.run(7);
+    t.is(machine.memory.at(0x1030), 99, "sta $1030,x when x=0");
+    t.is(machine.memory.at(0x1031), 99, "sta $1030,x when x=1");
+    t.is(machine.memory.at(0x1032), 99, "sta $1030,x when x=2");
+
+
+    test("Store instructions: absolute indexed y");
+    machine.memory.set(0x1040, 0);
+    machine.memory.set(0x1041, 0);
+    machine.memory.set(0x1042, 0);
+
+    machine.run(7);
+    t.is(machine.memory.at(0x1040), 88, "sta $1040,x when x=0");
+    t.is(machine.memory.at(0x1041), 88, "sta $1040,x when x=1");
+    t.is(machine.memory.at(0x1042), 88, "sta $1040,x when x=2");
+
+
+    test("Store instructions: zeropage");
+    machine.memory.set(0x20, 0);
+    machine.memory.set(0x21, 0);
+    machine.memory.set(0x22, 0);
+
+    machine.run(3); // lda, ldx, ldy
+    machine.run(1);
+    t.is(machine.memory.at(0x20), 1, "sta $20");
+    t.is(machine.memory.at(0x21), 0, "sta $20");
+    t.is(machine.memory.at(0x22), 0, "sta $20");
+
+    machine.run(1);
+    t.is(machine.memory.at(0x20), 1, "stx $20");
+    t.is(machine.memory.at(0x21), 2, "stx $21");
+    t.is(machine.memory.at(0x22), 0, "stx $22");
+
+    machine.run(1);
+    t.is(machine.memory.at(0x20), 1, "sty $20");
+    t.is(machine.memory.at(0x21), 2, "sty $21");
+    t.is(machine.memory.at(0x22), 3, "sty $22");
+
+
+    test("Store instructions: zeropage indexed x");
+    machine.memory.set(0x30, 0);
+    machine.memory.set(0x31, 0);
+    machine.memory.set(0x32, 0);
+
+    machine.run(1); // lda
+    machine.run(6);
+    t.is(machine.memory.at(0x30), 77, "sta $30,x when x=0");
+    t.is(machine.memory.at(0x31), 77, "sta $30,x when x=1");
+    t.is(machine.memory.at(0x32), 77, "sta $30,x when x=2");
+
+    machine.memory.set(0x40, 0);
+    machine.memory.set(0x41, 0);
+    machine.memory.set(0x42, 0);
+
+    machine.run(1); // ldy
+    machine.run(6);
+    t.is(machine.memory.at(0x40), 66, "sty $40,x when x=0");
+    t.is(machine.memory.at(0x41), 66, "sty $40,x when x=1");
+    t.is(machine.memory.at(0x42), 66, "sty $40,x when x=2");
+
+
+    test("Store instructions: zeropage indexed y");
+    machine.memory.set(0x50, 0);
+    machine.memory.set(0x51, 0);
+    machine.memory.set(0x52, 0);
+
+    machine.run(1); // ldx
+    machine.run(6);
+    t.is(machine.memory.at(0x50), 55, "stx $50,y when y=0");
+    t.is(machine.memory.at(0x51), 55, "stx $50,y when y=1");
+    t.is(machine.memory.at(0x52), 55, "stx $50,y when y=2");
+
+
+    test("Store instructions: zeropage indexed indirect");
+    machine.memory.set(0x60, 0x15);
+    machine.memory.set(0x61, 0xab);
+    machine.memory.set(0x15ab, 0);
+    machine.memory.set(0x6a, 0x28);
+    machine.memory.set(0x6b, 0xc7);
+    machine.memory.set(0x28c7, 0);
+
+    machine.run(1); // lda
+    machine.run(2);
+    t.is(machine.memory.at(0x15ab), 44, "sta ($60,x) when x=0");
+
+    machine.run(2);
+    t.is(machine.memory.at(0x28c6), 44, "sta ($60,x) when x=10");
+
+
+    test("Store instructions: zeropage indirect indexed");
+    machine.memory.set(0x70, 0x36);
+    machine.memory.set(0x71, 0x20);
+    machine.memory.set(0x3620, 0);
+    machine.memory.set(0x362a, 0);
+
+    machine.run(1); // lda
+    machine.run(2);
+    t.is(machine.memory.at(0x3620), 33, "sta ($70),y when y=0");
+
+    machine.run(2);
+    t.is(machine.memory.at(0x362a), 33, "sta ($70),y when y=10");
   }
 
   return 0;
