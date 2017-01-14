@@ -50,7 +50,6 @@ void test(std::string testName) {
   std::cout << "• " << testName << std::endl;
 }
 
-
 int main() {
 
   // Load
