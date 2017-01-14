@@ -354,11 +354,11 @@ int main() {
 
 
     test("Store instructions: zeropage indexed indirect");
-    machine.memory.set(0x60, 0x15);
-    machine.memory.set(0x61, 0xab);
+    machine.memory.set(0x60, 0xab);
+    machine.memory.set(0x61, 0x15);
     machine.memory.set(0x15ab, 0);
-    machine.memory.set(0x6a, 0x28);
-    machine.memory.set(0x6b, 0xc7);
+    machine.memory.set(0x6a, 0xc7);
+    machine.memory.set(0x6b, 0x28);
     machine.memory.set(0x28c7, 0);
 
     machine.run(1); // lda
@@ -366,12 +366,12 @@ int main() {
     t.is(machine.memory.at(0x15ab), 44, "sta ($60,x) when x=0");
 
     machine.run(2);
-    t.is(machine.memory.at(0x28c6), 44, "sta ($60,x) when x=10");
+    t.is(machine.memory.at(0x28c7), 44, "sta ($60,x) when x=10");
 
 
     test("Store instructions: zeropage indirect indexed");
-    machine.memory.set(0x70, 0x36);
-    machine.memory.set(0x71, 0x20);
+    machine.memory.set(0x70, 0x20);
+    machine.memory.set(0x71, 0x36);
     machine.memory.set(0x3620, 0);
     machine.memory.set(0x362a, 0);
 
