@@ -73,13 +73,6 @@
 
 ;;; Zeropage indexed y
         ldy #0
-        lda $20,y
-        ldy #1
-        lda $20,y
-        ldy #2
-        lda $20,y
-
-        ldy #0
         ldx $30,y
         ldy #1
         ldx $30,y
