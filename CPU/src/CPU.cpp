@@ -1,7 +1,7 @@
 #include "CPU.hpp"
 
 // Return actual data based on address mode of the operation
-uint8_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
+uint16_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
                     uint8_t lsb, uint8_t msb) {
   auto indexedLsb = memory.at(lsb + cpu.x);
   auto indexedMsb = memory.at(lsb + cpu.x + 1);
@@ -11,17 +11,17 @@ uint8_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
   switch (addressMode) {
   case addressMode::implied:
     throw std::runtime_error("CPU error: instruction with addressMode::implied shouldn't call resolveData");
-  case addressMode::absolute: return memory.at((msb * 16 * 16) + lsb);
-  case addressMode::absoluteIndexedX: return memory.at((msb * 16 * 16) + lsb + cpu.x);
-  case addressMode::absoluteIndexedY: return memory.at((msb * 16 * 16) + lsb + cpu.y);
+  case addressMode::absolute: return (msb * 16 * 16) + lsb;
+  case addressMode::absoluteIndexedX: return (msb * 16 * 16) + lsb + cpu.x;
+  case addressMode::absoluteIndexedY: return (msb * 16 * 16) + lsb + cpu.y;
   case addressMode::accumulator: return cpu.a;
   case addressMode::immediate: return msb * 100 + lsb;
   case addressMode::relative: return cpu.pc + lsb;
-  case addressMode::zeropage: return memory.at(lsb);
-  case addressMode::zeropageIndexedIndirect: return memory.at((indexedMsb * 16 * 16) + indexedLsb);
-  case addressMode::zeropageIndexedX: return memory.at(lsb + cpu.x);
-  case addressMode::zeropageIndexedY: return memory.at(lsb + cpu.y);
-  case addressMode::zeropageIndirectIndexed: return memory.at((indirectMsb * 16 * 16) + indirectLsb + cpu.y);
+  case addressMode::zeropage: return lsb;
+  case addressMode::zeropageIndexedIndirect: return (indexedMsb * 16 * 16) + indexedLsb;
+  case addressMode::zeropageIndexedX: return lsb + cpu.x;
+  case addressMode::zeropageIndexedY: return lsb + cpu.y;
+  case addressMode::zeropageIndirectIndexed: return (indirectMsb * 16 * 16) + indirectLsb + cpu.y;
   }
 }
 
@@ -36,17 +36,29 @@ void setNeg(CPU &cpu, uint16_t value) {
 }
 
 void load(CPU &cpu, Memory &memory, Instruction instruction) {
-  uint16_t mem = resolveData(cpu, memory, instruction.operation.addressMode,
+  uint16_t d = resolveData(cpu, memory, instruction.operation.addressMode,
                          instruction.dataLsb, instruction.dataMsb);
   switch (instruction.operation.ops) {
   case ops::lda:
-    cpu.a = mem;
+    if (instruction.operation.addressMode == addressMode::immediate) {
+      cpu.a = d;
+    } else {
+      cpu.a = memory.at(d);
+    }
     break;
   case ops::ldx:
-    cpu.x = mem;
+    if (instruction.operation.addressMode == addressMode::immediate) {
+      cpu.x = d;
+    } else {
+      cpu.x = memory.at(d);
+    }
     break;
   case ops::ldy:
-    cpu.y = mem;
+    if (instruction.operation.addressMode == addressMode::immediate) {
+      cpu.y = d;
+    } else {
+      cpu.y = memory.at(d);
+    }
     break;
   }
 
