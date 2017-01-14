@@ -65,21 +65,22 @@ void load(CPU &cpu, Memory &memory, Instruction instruction) {
   cpu.pc++;
 }
 
-void store(CPU &cpu, Instruction instruction) {
+void store(CPU &cpu, Memory &memory, Instruction instruction) {
+  auto d = resolveData(cpu, memory, instruction.operation.addressMode,
+                        instruction.dataLsb, instruction.dataMsb);
   switch(instruction.operation.ops) {
   case ops::sta:
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    memory.set(d, cpu.a);
     break;
   case ops::stx:
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    memory.set(d, cpu.x);
     break;
   case ops::sty:
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    memory.set(d, cpu.y);
     break;
   }
+
+  cpu.pc++;
 }
 
 void arithmetic(CPU &cpu, Instruction instruction) {
@@ -379,7 +380,7 @@ void other(CPU &cpu, Instruction instruction) {
 void CPU::compute(Instruction instruction, Memory &memory) {
   switch (instruction.operation.group) {
   case opsgroup::load: load(*this, memory, instruction); break;
-  case opsgroup::store: store(*this, instruction); break;
+  case opsgroup::store: store(*this, memory, instruction); break;
   case opsgroup::arithmetic: arithmetic(*this, instruction); break;
   case opsgroup::inc: inc(*this, instruction); break;
   case opsgroup::dec: dec(*this, instruction); break;
