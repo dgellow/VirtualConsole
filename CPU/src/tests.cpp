@@ -382,6 +382,88 @@ int main() {
     t.is(machine.memory.at(0x362a), 33, "sta ($70),y when y=10");
   }
 
+  // Arithmetic
+  {
+    auto t = Tests("Arithmetic");
+
+    string file = "tests/CPU/tests_arithmetic.out";
+    auto instructions = Parser::parse(file);
+    auto machine = Machine();
+
+    machine.load(instructions);
+
+    test("Arithmetic instructions: immediate");
+    machine.run(2);
+    t.is(machine.cpu.a, 0, "adc #0 when a=0 and c=0");
+    t.is(machine.cpu.c, 0, "adc #0 when a=0 and c=0");
+    t.is(machine.cpu.n, 0, "adc #0 when a=0 and c=0");
+    t.is(machine.cpu.z, 1, "adc #0 when a=0 and c=0");
+
+    machine.run(6);
+    t.is(machine.cpu.a, 5, "adc #1, 5 times, when a=0 and c=0");
+    t.is(machine.cpu.c, 0, "adc #1, 5 times, when a=0 and c=0");
+    t.is(machine.cpu.n, 0, "adc #1, 5 times, when a=0 and c=0");
+    t.is(machine.cpu.z, 0, "adc #1, 5 times, when a=0 and c=0");
+
+    machine.run(2);
+    t.is(machine.cpu.a, 0x10, "adc #$01 when a=0x0f and c=0");
+    t.is(machine.cpu.c, 0, "adc #$01 when a=0x0f and c=0");
+    t.is(machine.cpu.n, 0, "adc #$01 when a=0x0f and c=0");
+    t.is(machine.cpu.z, 0, "adc #$01 when a=0x0f and c=0");
+
+    machine.run(2);
+    t.is(machine.cpu.a, 0x00, "adc #$ff when a=0x01 and c=0");
+    t.is(machine.cpu.c, 1, "adc #$01 when a=0x0f and c=0");
+    t.is(machine.cpu.n, 0, "adc #$01 when a=0x0f and c=0");
+    t.is(machine.cpu.z, 0, "adc #$01 when a=0x0f and c=0");
+
+    machine.run(2);
+    t.is(machine.cpu.a, 0, "sbc #0 when a=0 and c=0");
+    t.is(machine.cpu.c, 0, "sbc #0 when a=0 and c=0");
+    t.is(machine.cpu.n, 0, "sbc #0 when a=0 and c=0");
+    t.is(machine.cpu.z, 1, "sbc #0 when a=0 and c=0");
+
+    machine.run(6);
+    t.is(machine.cpu.a, 0, "sbc #1, 5 times, when a=5 and c=0");
+    t.is(machine.cpu.c, 0, "sbc #1, 5 times, when a=5 and c=0");
+    t.is(machine.cpu.n, 0, "sbc #1, 5 times, when a=5 and c=0");
+    t.is(machine.cpu.z, 1, "sbc #1, 5 times, when a=5 and c=0");
+
+    machine.run(2);
+    t.is(machine.cpu.a, 0x0f, "sbc #$10 when a=0x01 and c=0");
+    t.is(machine.cpu.c, 0, "sbc #$10 when a=0x01 and c=0");
+    t.is(machine.cpu.n, 1, "sbc #$10 when a=0x01 and c=0");
+    t.is(machine.cpu.z, 0, "sbc #$10 when a=0x01 and c=0");
+
+    machine.run(2);
+    t.is(machine.cpu.a, );
+
+    test("Arithmetic instructions: absolute");
+
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: absolute indexed x");
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: absolute indexed y");
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: zeropage");
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: zeropage indexed x");
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: zeropage indexed y");
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: zeropage indexed indirect");
+    t.is(0, 999, "unimplemented test");
+
+    test("Arithmetic instructions: zeropage indirect indexed");
+    t.is(0, 999, "unimplemented test");
+  }
+
   globalWasSuccess ?
     exit(0):
     exit(1);
