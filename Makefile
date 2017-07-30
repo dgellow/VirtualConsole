@@ -12,6 +12,8 @@ assemblerTestDir = $testDir/Assembler
 CPUTestDir = $testDir/CPU
 editorTestDir = $testDir/Editor
 
+editorAppName = editor.app
+
 .DEFAULT_GOAL := help
 
 samvirtassembler: build-directory
@@ -37,10 +39,9 @@ samvirtcpu: build-directory
 	-o $(buildDir)/samvirtcpu
 
 samvirteditor: build-directory
-	$(CC) $(CFLAGS) \
-	$(dependencies) \
-        $(editorSourceDir)/main.cpp \
-	-o $(buildDir)/samvirteditor
+	pushd $(editorSourceDir) && qmake && make && popd
+	rm -r $(buildDir)/$(editorAppName)
+	mv $(editorSourceDir)/$(editorAppName) $(buildDir)/
 
 clean:
 	rm -rf $(buildDir)/*
@@ -55,7 +56,7 @@ run-cpu: samvirtcpu
 	$(buildDir)/samvirtcpu
 
 run-editor: samvirteditor
-	$(buildDir)/samvirteditor
+	open $(buildDir)/editor.app
 
 test-cpu: build-directory
 	$(CC) $(CFLAGS) \
@@ -76,9 +77,6 @@ debug-assembler: samvirtassembler
 debug-cpu: samvirtcpu
 	lldb $(buildDir)/samvirtcpu
 
-debug-editor: samvirteditor
-	lldb $(buildDir)/samvirteditor
-
 all: clean samvirtassembler samvirtcpu samvirteditor
 
 help:
@@ -90,12 +88,11 @@ help:
 	@echo " clean			remove files and directories generated during compilation"
 	@echo " samvirtassembler	compile samvirtassembler"
 	@echo " samvirtcpu		compile samvirtcpu"
-	@echo " samvirteditor		compile samvirteditor"
+	@echo " samvirteditor		compile editor.app"
 	@echo " run-assembler		compile then run the samvirtassembler"
 	@echo " run-cpu 		compile then run the samvirtcpu"
-	@echo " run-editor		compile then run the samvirteditor"
+	@echo " run-editor		compile then run editor.app"
 	@echo " debug-assembler 	compile samvirtassembler then launch a debugger (lldb)"
 	@echo " debug-cpu		compile samvirtcpu then launch a debugger (lldb)"
-	@echo " debug-editor		compile samvirteditor then launch a debugger (lldb)"
 	@echo " help			show this help message"
 	@echo ""

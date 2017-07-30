@@ -38,7 +38,7 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPlainTextEdit" name="plainTextEdit">
+   <widget class="QPlainTextEdit" name="textEditor">
     <property name="geometry">
      <rect>
       <x>-1</x>
@@ -124,7 +124,7 @@ color: white;</string>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="buttonReset">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -137,7 +137,7 @@ color: white;</string>
       <string>Reset</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
+    <widget class="QPushButton" name="buttonRun">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -150,7 +150,7 @@ color: white;</string>
       <string>Run</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="buttonLoad">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -163,7 +163,7 @@ color: white;</string>
       <string>Load</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="buttonArrowUp">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -176,7 +176,7 @@ color: white;</string>
       <string>🔼</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_8">
+    <widget class="QPushButton" name="buttonArrowLeft">
      <property name="geometry">
       <rect>
        <x>260</x>
@@ -189,7 +189,7 @@ color: white;</string>
       <string>◀️</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_9">
+    <widget class="QPushButton" name="buttonArrowRight">
      <property name="geometry">
       <rect>
        <x>300</x>
@@ -202,7 +202,7 @@ color: white;</string>
       <string>▶️</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_10">
+    <widget class="QPushButton" name="buttonArrowDown">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -215,7 +215,7 @@ color: white;</string>
       <string>🔽</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_11">
+    <widget class="QPushButton" name="buttonSelect">
      <property name="geometry">
       <rect>
        <x>340</x>
@@ -228,7 +228,7 @@ color: white;</string>
       <string>select</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_12">
+    <widget class="QPushButton" name="buttonB">
      <property name="geometry">
       <rect>
        <x>480</x>
@@ -241,7 +241,7 @@ color: white;</string>
       <string>B</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_13">
+    <widget class="QPushButton" name="buttonStart">
      <property name="geometry">
       <rect>
        <x>400</x>
@@ -254,7 +254,7 @@ color: white;</string>
       <string>start</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_14">
+    <widget class="QPushButton" name="buttonA">
      <property name="geometry">
       <rect>
        <x>520</x>
@@ -286,11 +286,11 @@ color: white;</string>
     <property name="movable">
      <bool>false</bool>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="tabCPU">
      <attribute name="title">
       <string>CPU/RAM</string>
      </attribute>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="tableROM">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -455,7 +455,7 @@ color: white;</string>
        </property>
       </column>
      </widget>
-     <widget class="QTableWidget" name="tableWidget_2">
+     <widget class="QTableWidget" name="tableRAM">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -66061,7 +66061,7 @@ color: white;</string>
        </property>
       </column>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="labelRAM">
       <property name="geometry">
        <rect>
         <x>570</x>
@@ -66074,7 +66074,7 @@ color: white;</string>
        <string>RAM</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="lineEditPC">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -66084,7 +66084,7 @@ color: white;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="labelPC">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -66097,7 +66097,7 @@ color: white;</string>
        <string>PC</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="lineEditX">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -66107,7 +66107,7 @@ color: white;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_3">
+     <widget class="QLabel" name="labelX">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -66120,7 +66120,7 @@ color: white;</string>
        <string>X</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="lineEditY">
       <property name="geometry">
        <rect>
         <x>180</x>
@@ -66130,7 +66130,7 @@ color: white;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="labelY">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -66143,7 +66143,7 @@ color: white;</string>
        <string>Y</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="lineEditA">
       <property name="geometry">
        <rect>
         <x>180</x>
@@ -66153,7 +66153,7 @@ color: white;</string>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="labelA">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -66166,7 +66166,7 @@ color: white;</string>
        <string>A</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="buttonPause">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -66179,7 +66179,7 @@ color: white;</string>
        <string>Pause</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="buttonStep">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -66192,7 +66192,7 @@ color: white;</string>
        <string>Step</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="buttonGoTo">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -66206,13 +66206,29 @@ color: white;</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="tabREPL">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>REPL</string>
      </attribute>
+     <widget class="QPlainTextEdit" name="textREPL">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>641</width>
+        <height>261</height>
+       </rect>
+      </property>
+      <property name="plainText">
+       <string>Sam's Virtual Terminal
+Type &quot;help&quot; to see available commands.
+Use Tab to auto-complete.
+&gt; </string>
+      </property>
+     </widget>
     </widget>
    </widget>
-   <widget class="QOpenGLWidget" name="openGLWidget">
+   <widget class="QOpenGLWidget" name="openGL">
     <property name="geometry">
      <rect>
       <x>450</x>
