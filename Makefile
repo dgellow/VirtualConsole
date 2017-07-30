@@ -40,7 +40,7 @@ samvirtcpu: build-directory
 
 samvirteditor: build-directory
 	pushd $(editorSourceDir) && qmake && make && popd
-	rm -r $(buildDir)/$(editorAppName)
+	rm -rf $(buildDir)/$(editorAppName)
 	mv $(editorSourceDir)/$(editorAppName) $(buildDir)/
 
 clean:
