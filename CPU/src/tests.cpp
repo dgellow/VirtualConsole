@@ -30,10 +30,11 @@ struct Tests {
 
   bool is(int x, int y, std::string msg = "") {
     testNumber++;
+    assertNumber++;
     bool success = x == y;
     if (!success) {
       testFailures ++;
-      std::cerr << "  assertion " << testNumber << " failed: "
+      std::cerr << "  assertion " << assertNumber << " failed: "
                 << msg
                 << ": actual value " << std::dec << x
                 << " (0x" << std::hex << x << ")"
@@ -45,13 +46,15 @@ struct Tests {
     return success;
   }
 
+  void test(std::string testName) {
+    assertNumber = 0;
+    std::cout << "• " << testName << std::endl;
+  }
+
+  int assertNumber = 0;
   int testNumber = 0;
   int testFailures = 0;
 };
-
-void test(std::string testName) {
-  std::cout << "• " << testName << std::endl;
-}
 
 int main() {
 
@@ -66,7 +69,7 @@ int main() {
     machine.load(instructions);
 
 
-    test("Load instructions: default");
+    t.test("Load instructions: default");
     t.is(machine.cpu.a, 0, "default a register");
     t.is(machine.cpu.x, 0, "default x register");
     t.is(machine.cpu.y, 0, "default y register");
@@ -77,7 +80,7 @@ int main() {
     t.is(machine.cpu.x, 0, "ldy 0");
 
 
-    test("Load instructions: immediate");
+    t.test("Load instructions: immediate");
     machine.run(1);
     t.is(machine.cpu.a, 22, "lda #22");
     t.is(machine.cpu.x, 0, "lda #22");
@@ -92,7 +95,7 @@ int main() {
     t.is(machine.cpu.y, 44, "ldy #44");
 
 
-    test("Load instructions: immediate hex");
+    t.test("Load instructions: immediate hex");
     machine.run(1);
     t.is(machine.cpu.a, 0x22, "lda #$22");
     t.is(machine.cpu.x, 33, "lda #$22");
@@ -107,7 +110,7 @@ int main() {
     t.is(machine.cpu.y, 0x44, "ldy #$44");
 
 
-    test("Load instructions: absolute");
+    t.test("Load instructions: absolute");
     machine.memory.set(0x1020, 55);
     machine.memory.set(0x1030, 66);
     machine.memory.set(0x1040, 77);
@@ -120,7 +123,7 @@ int main() {
     t.is(machine.cpu.y, 77, "ldy $1040");
 
 
-    test("Load instructions: absolute indexed x");
+    t.test("Load instructions: absolute indexed x");
     machine.memory.set(0x1020, 60);
     machine.memory.set(0x1021, 61);
     machine.memory.set(0x1022, 62);
@@ -143,7 +146,7 @@ int main() {
     t.is(machine.cpu.y, 82, "ldy $1040,x when x=2");
 
 
-    test("Load instructions: absolute indexed y");
+    t.test("Load instructions: absolute indexed y");
     machine.memory.set(0x1020, 60);
     machine.memory.set(0x1021, 61);
     machine.memory.set(0x1022, 62);
@@ -166,7 +169,7 @@ int main() {
     t.is(machine.cpu.x, 72, "ldx $1030,y when y=2");
 
 
-    test("Load instructions: zeropage");
+    t.test("Load instructions: zeropage");
     machine.memory.set(0x20, 5);
     machine.memory.set(0x30, 6);
     machine.memory.set(0x40, 7);
@@ -179,7 +182,7 @@ int main() {
     t.is(machine.cpu.y, 7, "ldy $40");
 
 
-    test("Load instructions: zeropage indexed x");
+    t.test("Load instructions: zeropage indexed x");
     machine.memory.set(0x20, 10);
     machine.memory.set(0x21, 11);
     machine.memory.set(0x22, 12);
@@ -202,7 +205,7 @@ int main() {
     t.is(machine.cpu.y, 32, "ldy $40,x when x=2");
 
 
-    test("Load instructions: zeropage indexed y");
+    t.test("Load instructions: zeropage indexed y");
     machine.memory.set(0x20, 100);
     machine.memory.set(0x21, 101);
     machine.memory.set(0x22, 102);
@@ -218,7 +221,7 @@ int main() {
     t.is(machine.cpu.x, 92, "ldx $30,y when y=2");
 
 
-    test("Load instructions: zeropage indexed indirect");
+    t.test("Load instructions: zeropage indexed indirect");
     machine.memory.set(0x20, 0x10);
     machine.memory.set(0x21, 0x18);
     machine.memory.set(0x1810, 99);
@@ -232,7 +235,7 @@ int main() {
     t.is(machine.cpu.a, 79, "lda ($20,x) when x=10");
 
 
-    test("Load instructions: zeropage indirect indexed");
+    t.test("Load instructions: zeropage indirect indexed");
     machine.memory.set(0x40, 0x30);
     machine.memory.set(0x41, 0x33);
     machine.memory.set(0x3330, 66);
@@ -255,7 +258,7 @@ int main() {
     machine.load(instructions);
 
 
-    test("Store instructions: absolute");
+    t.test("Store instructions: absolute");
     machine.memory.set(0x1020, 0);
     machine.memory.set(0x1021, 0);
     machine.memory.set(0x1022, 0);
@@ -277,7 +280,7 @@ int main() {
     t.is(machine.memory.at(0x1022), 3, "sty $1022");
 
 
-    test("Store instructions: absolute indexed x");
+    t.test("Store instructions: absolute indexed x");
     machine.memory.set(0x1030, 0);
     machine.memory.set(0x1031, 0);
     machine.memory.set(0x1032, 0);
@@ -288,7 +291,7 @@ int main() {
     t.is(machine.memory.at(0x1032), 99, "sta $1030,x when x=2");
 
 
-    test("Store instructions: absolute indexed y");
+    t.test("Store instructions: absolute indexed y");
     machine.memory.set(0x1040, 0);
     machine.memory.set(0x1041, 0);
     machine.memory.set(0x1042, 0);
@@ -299,7 +302,7 @@ int main() {
     t.is(machine.memory.at(0x1042), 88, "sta $1040,x when x=2");
 
 
-    test("Store instructions: zeropage");
+    t.test("Store instructions: zeropage");
     machine.memory.set(0x20, 0);
     machine.memory.set(0x21, 0);
     machine.memory.set(0x22, 0);
@@ -321,7 +324,7 @@ int main() {
     t.is(machine.memory.at(0x22), 3, "sty $22");
 
 
-    test("Store instructions: zeropage indexed x");
+    t.test("Store instructions: zeropage indexed x");
     machine.memory.set(0x30, 0);
     machine.memory.set(0x31, 0);
     machine.memory.set(0x32, 0);
@@ -343,7 +346,7 @@ int main() {
     t.is(machine.memory.at(0x42), 66, "sty $40,x when x=2");
 
 
-    test("Store instructions: zeropage indexed y");
+    t.test("Store instructions: zeropage indexed y");
     machine.memory.set(0x50, 0);
     machine.memory.set(0x51, 0);
     machine.memory.set(0x52, 0);
@@ -355,7 +358,7 @@ int main() {
     t.is(machine.memory.at(0x52), 55, "stx $50,y when y=2");
 
 
-    test("Store instructions: zeropage indexed indirect");
+    t.test("Store instructions: zeropage indexed indirect");
     machine.memory.set(0x60, 0xab);
     machine.memory.set(0x61, 0x15);
     machine.memory.set(0x15ab, 0);
@@ -371,7 +374,7 @@ int main() {
     t.is(machine.memory.at(0x28c7), 44, "sta ($60,x) when x=10");
 
 
-    test("Store instructions: zeropage indirect indexed");
+    t.test("Store instructions: zeropage indirect indexed");
     machine.memory.set(0x70, 0x20);
     machine.memory.set(0x71, 0x36);
     machine.memory.set(0x3620, 0);
@@ -395,7 +398,8 @@ int main() {
 
     machine.load(instructions);
 
-    test("Arithmetic instructions: immediate");
+
+    t.test("Arithmetic instructions: adc, immediate mode");
     machine.run(2);
     t.is(machine.cpu.a, 0, "adc #0 when a=0 and c=0");
     t.is(machine.cpu.c, 0, "adc #0 when a=0 and c=0");
@@ -426,6 +430,8 @@ int main() {
     t.is(machine.cpu.n, 1, "adc #$01 when a=0x81");
     t.is(machine.cpu.z, 0, "adc #$01 when a=0x81");
 
+
+    t.test("Arithmetic instructions: sbc, immediate mode");
     machine.run(2);
     t.is(machine.cpu.a, 0xff, "sbc #0 when a=0 and c=0");
     t.is(machine.cpu.c, 0, "sbc #0 when a=0 and c=0");
@@ -484,25 +490,25 @@ int main() {
     t.is(machine.cpu.z, 0, "adc $1020 when a=1 and $1020=-2");
     machine.cpu.n = 0;
 
-    test("Arithmetic instructions: absolute indexed x");
+    t.test("Arithmetic instructions: sbc, zeropage indexed x");
     t.is(0, 999, "unimplemented test");
 
-    test("Arithmetic instructions: absolute indexed y");
+    t.test("Arithmetic instructions: adc, zeropage indexed y");
     t.is(0, 999, "unimplemented test");
 
-    test("Arithmetic instructions: zeropage");
+    t.test("Arithmetic instructions: sbc, zeropage indexed y");
     t.is(0, 999, "unimplemented test");
 
-    test("Arithmetic instructions: zeropage indexed x");
+    t.test("Arithmetic instructions: adc, zeropage indexed indirect");
     t.is(0, 999, "unimplemented test");
 
-    test("Arithmetic instructions: zeropage indexed y");
+    t.test("Arithmetic instructions: sbc, zeropage indexed indirect");
     t.is(0, 999, "unimplemented test");
 
-    test("Arithmetic instructions: zeropage indexed indirect");
+    t.test("Arithmetic instructions: adc, zeropage indirect indexed");
     t.is(0, 999, "unimplemented test");
 
-    test("Arithmetic instructions: zeropage indirect indexed");
+    t.test("Arithmetic instructions: sbc, zeropage indirect indexed");
     t.is(0, 999, "unimplemented test");
   }
 
