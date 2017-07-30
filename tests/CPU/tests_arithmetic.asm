@@ -22,6 +22,10 @@
         lda #$01
         adc #$ff
 
+        ;; ADC: result lesser than zero
+        lda #2                  ; N flag should be set by test case
+        adc #1
+
         ;; SBC: zero - zero = zero
         lda #0
         sbc #0
