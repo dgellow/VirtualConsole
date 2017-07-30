@@ -51,6 +51,7 @@
 
 ;;; Absolute
         ;; ADC: zero + zero = zero
+        clc
         lda #0
         sta $1020
         lda #0
@@ -78,11 +79,12 @@
         lda #$f0
         adc $1020
 
-        ;; ADC: result lesser than zero
-        lda #2                  ; N flag should be set by test case
+        ;; ADC: negative result (MSB = 1)
+        clc
+        lda #$81                ; 0x81 == -127
         sta $1020
-        lda #1
-        adc $1020
+        lda #$01
+        adc $1020               ; 0x82 == -126
 
 ;;; Absolute indexed x
 

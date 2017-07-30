@@ -456,8 +456,9 @@ int main() {
     t.is(machine.cpu.n, 1, "sbc #$01 when a=0xff and c=0");
     t.is(machine.cpu.z, 0, "sbc #$01 when a=0xff and c=0");
 
-    test("Arithmetic instructions: absolute");
-    machine.run(4);
+
+    t.test("Arithmetic instructions: adc, absolute mode");
+    machine.run(5);
     t.is(machine.cpu.a, 0, "adc $1020 when a=0 and $1020=0");
     t.is(machine.cpu.c, 0, "adc $1020 when a=0 and $1020=0");
     t.is(machine.cpu.n, 0, "adc $1020 when a=0 and $1020=0");
@@ -472,23 +473,46 @@ int main() {
     machine.run(4);
     t.is(machine.cpu.a, 0xf3, "adc $1020 when a=0xf0, $1020=3 and c=0");
     t.is(machine.cpu.c, 0, "adc $1020 when a=0xf0, $1020=3 and c=0");
-    t.is(machine.cpu.n, 0, "adc $1020 when a=0xf0, $1020=3 and c=0");
+    t.is(machine.cpu.n, 1, "adc $1020 when a=0xf0, $1020=3 and c=0");
     t.is(machine.cpu.z, 0, "adc $1020 when a=0xf0, $1020=3 and c=0");
 
     machine.run(4);
-    t.is(machine.cpu.a, 0x01, "adc $1020 when a=0xf0, $1020=0x10 and c=0");
+    t.is(machine.cpu.a, 0x00, "adc $1020 when a=0xf0, $1020=0x10 and c=0");
     t.is(machine.cpu.c, 1, "adc $1020 when a=0xf0, $1020=3 and c=0");
     t.is(machine.cpu.n, 0, "adc $1020 when a=0xf0, $1020=3 and c=0");
-    t.is(machine.cpu.z, 0, "adc $1020 when a=0xf0, $1020=3 and c=0");
+    t.is(machine.cpu.z, 1, "adc $1020 when a=0xf0, $1020=3 and c=0");
 
-    machine.run(1);
-    machine.cpu.n = 1;
-    machine.run(3);
-    t.is(machine.cpu.a, 1, "adc $1020 when a=1 and $1020=-2");
-    t.is(machine.cpu.c, 0, "adc $1020 when a=1 and $1020=-2");
-    t.is(machine.cpu.n, 1, "adc $1020 when a=1 and $1020=-2");
-    t.is(machine.cpu.z, 0, "adc $1020 when a=1 and $1020=-2");
-    machine.cpu.n = 0;
+    machine.run(5);
+    t.is(machine.cpu.a, 0x82, "adc $1020 when a=1 and $1020=$81");
+    t.is(machine.cpu.c, 0, "adc $1020 when a=1 and $1020=0x81");
+    t.is(machine.cpu.n, 1, "adc $1020 when a=1 and $1020=0x81");
+    t.is(machine.cpu.z, 0, "adc $1020 when a=1 and $1020=0x81");
+    t.is(machine.cpu.v, 0, "adc $1020 when a=1 and $1020=0x81");
+
+
+    t.test("Arithmetic instructions: sbc, absolute mode");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: adc, absolute indexed x");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: sbc, absolute indexed x");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: adc, absolute indexed y");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: sbc, absolute indexed y");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: adc, zeropage mode");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: sbc, zeropage mode");
+    t.is(0, 999, "unimplemented test");
+
+    t.test("Arithmetic instructions: adc, zeropage indexed x");
+    t.is(0, 999, "unimplemented test");
 
     t.test("Arithmetic instructions: sbc, zeropage indexed x");
     t.is(0, 999, "unimplemented test");

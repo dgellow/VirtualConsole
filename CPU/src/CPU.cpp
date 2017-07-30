@@ -99,20 +99,20 @@ void impl_adc(CPU &cpu, uint8_t arg) {
     cpu.n = cpu.a >= 0x80;
 }
 
-void arithmetic(CPU &cpu, Instruction instruction) {
-  uint8_t arg = 0;
-  switch (instruction.operation.addressMode) {
-  case addressMode::immediate:
-    arg = instruction.dataLsb;
-    break;
+void arithmetic(CPU &cpu, Memory &memory, Instruction instruction) {
+  auto d = resolveData(cpu, memory, instruction.operation.addressMode,
+                    instruction.dataLsb, instruction.dataMsb);
+
+  if (instruction.operation.addressMode == addressMode::absolute) {
+    d = memory.at(d);
   }
 
   switch(instruction.operation.ops) {
   case ops::adc:
-    impl_adc(cpu, arg);
+    impl_adc(cpu, d);
     break;
   case ops::sbc:
-    impl_adc(cpu, ~arg);
+    impl_adc(cpu, ~d);
     break;
   }
 
@@ -391,7 +391,7 @@ void CPU::compute(Instruction instruction, Memory &memory) {
   switch (instruction.operation.group) {
   case opsgroup::load: load(*this, memory, instruction); break;
   case opsgroup::store: store(*this, memory, instruction); break;
-  case opsgroup::arithmetic: arithmetic(*this, instruction); break;
+  case opsgroup::arithmetic: arithmetic(*this, memory, instruction); break;
   case opsgroup::inc: inc(*this, instruction); break;
   case opsgroup::dec: dec(*this, instruction); break;
   case opsgroup::shift: shift(*this, instruction); break;
