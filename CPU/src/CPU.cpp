@@ -83,32 +83,36 @@ void store(CPU &cpu, Memory &memory, Instruction instruction) {
   cpu.pc++;
 }
 
+void impl_adc(CPU &cpu, uint8_t arg) {
+    unsigned const sum = cpu.a + arg + cpu.c;
+
+    cpu.c = sum > 0xff;
+
+    // The overflow flag is set when the sign of the addends is the
+    // same and differs from the sign of the sum.
+    cpu.v = ~(cpu.a ^ arg) & (cpu.a ^ sum) & 0x80;
+
+    cpu.a = sum;
+    cpu.z = cpu.a == 0;
+    // The most significant bit specifies if the value can be considered
+    // negative.
+    cpu.n = cpu.a >= 0x80;
+}
+
 void arithmetic(CPU &cpu, Instruction instruction) {
+  uint8_t arg = 0;
+  switch (instruction.operation.addressMode) {
+  case addressMode::immediate:
+    arg = instruction.dataLsb;
+    break;
+  }
+
   switch(instruction.operation.ops) {
   case ops::adc:
-    switch (instruction.operation.addressMode) {
-    case addressMode::immediate:
-      auto data = instruction.dataLsb;
-
-      cpu.c = cpu.a + data > 0xff;
-
-      // In the case of an addition the V flag indicates if the result
-      // is outside of the 2's complement range (-128 to 127).
-      cpu.v = cpu.a + data >= 0x80;
-
-      cpu.a += data;
-      cpu.z = cpu.a == 0;
-      // The most significant bit specifies if the value is negative.
-      cpu.n = cpu.a >= 0x80;
-
-      break;
-    }
+    impl_adc(cpu, arg);
     break;
   case ops::sbc:
-    throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    impl_adc(cpu, ~arg);
     break;
   }
 
@@ -336,45 +340,35 @@ void set(CPU &cpu, Instruction instruction) {
   switch(instruction.operation.ops) {
   case ops::sec:
     cpu.c = true;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   case ops::sed:
     cpu.d = true;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   case ops::sei:
     cpu.i = true;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   }
+
+  cpu.pc++;
 }
 
 void clear(CPU &cpu, Instruction instruction) {
   switch(instruction.operation.ops) {
   case ops::clc:
     cpu.c = false;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   case ops::cld:
     cpu.d = false;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   case ops::cli:
     cpu.i = false;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   case ops::clv:
     cpu.v = false;
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
     break;
   }
+
+  cpu.pc++;
 }
 
 void other(CPU &cpu, Instruction instruction) {

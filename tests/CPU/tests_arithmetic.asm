@@ -23,6 +23,7 @@
         adc #$ff
 
         ;; ADC: negative result (MSB = 1)
+        clc
         lda #$81                ; 0x81 == -127
         adc #$01                ; 0x82 == -126
 
@@ -31,18 +32,20 @@
         sbc #0
 
         ;; SBC: multiple substractions
+        clc
         lda #5
-        sbc #1
         sbc #1
         sbc #1
         sbc #1
         sbc #1
 
         ;; SBC: result lesser than 0
+        clc
         lda #$01
         sbc #$10
 
         ;; SBC: result greater than 0
+        clc
         lda #$ff
         sbc #$01
 

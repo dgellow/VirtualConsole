@@ -35,8 +35,11 @@ struct Tests {
       testFailures ++;
       std::cerr << "  assertion " << testNumber << " failed: "
                 << msg
-                << ": actual value " << x
-                << ", expected value " << y
+                << ": actual value " << std::dec << x
+                << " (0x" << std::hex << x << ")"
+                << ", expected value " << std::dec << y
+                << " (0x" << std::hex << y << ")"
+                << std::dec
                 << std::endl;
     }
     return success;
@@ -417,41 +420,34 @@ int main() {
     t.is(machine.cpu.n, 0, "adc #$01 when a=0x0f and c=0");
     t.is(machine.cpu.z, 1, "adc #$01 when a=0x0f and c=0");
 
-    machine.run(2);
+    machine.run(3);
     t.is(machine.cpu.a, 0x82, "adc #$01 when a=0x81");
-    t.is(machine.cpu.c, 0, "adc #1 when a=0x02");
-    t.is(machine.cpu.n, 1, "adc #1 when a=0x02");
-    t.is(machine.cpu.z, 0, "adc #1 when a=0x02");
-    machine.cpu.n = 0;
+    t.is(machine.cpu.c, 0, "adc #$01 when a=0x81");
+    t.is(machine.cpu.n, 1, "adc #$01 when a=0x81");
+    t.is(machine.cpu.z, 0, "adc #$01 when a=0x81");
 
     machine.run(2);
-    t.is(machine.cpu.a, 0, "sbc #0 when a=0 and c=0");
+    t.is(machine.cpu.a, 0xff, "sbc #0 when a=0 and c=0");
     t.is(machine.cpu.c, 0, "sbc #0 when a=0 and c=0");
-    t.is(machine.cpu.n, 0, "sbc #0 when a=0 and c=0");
-    t.is(machine.cpu.z, 1, "sbc #0 when a=0 and c=0");
+    t.is(machine.cpu.n, 1, "sbc #0 when a=0 and c=0");
+    t.is(machine.cpu.z, 0, "sbc #0 when a=0 and c=0");
 
     machine.run(6);
-    t.is(machine.cpu.a, 0, "sbc #1, 5 times, when a=5 and c=0");
-    t.is(machine.cpu.c, 0, "sbc #1, 5 times, when a=5 and c=0");
-    t.is(machine.cpu.n, 0, "sbc #1, 5 times, when a=5 and c=0");
-    t.is(machine.cpu.z, 1, "sbc #1, 5 times, when a=5 and c=0");
+    t.is(machine.cpu.a, 0, "sbc #1, 4 times, when a=5 and c=0");
+    t.is(machine.cpu.c, 1, "sbc #1, 4 times, when a=5 and c=0");
+    t.is(machine.cpu.n, 0, "sbc #1, 4 times, when a=5 and c=0");
+    t.is(machine.cpu.z, 1, "sbc #1, 4 times, when a=5 and c=0");
 
-    machine.run(2);
-    t.is(machine.cpu.a, 0x0f, "sbc #$10 when a=0x01 and c=0");
+    machine.run(3);
+    t.is(machine.cpu.a, 0xf0, "sbc #$10 when a=0x01 and c=0");
     t.is(machine.cpu.c, 0, "sbc #$10 when a=0x01 and c=0");
     t.is(machine.cpu.n, 1, "sbc #$10 when a=0x01 and c=0");
     t.is(machine.cpu.z, 0, "sbc #$10 when a=0x01 and c=0");
 
-    machine.run(2);
-    t.is(machine.cpu.a, 0xfe, "sbc #$01 when a=0xff and c=0");
-    t.is(machine.cpu.c, 0, "sbc #$01 when a=0xff and c=0");
-    t.is(machine.cpu.n, 0, "sbc #$01 when a=0xff and c=0");
-    t.is(machine.cpu.z, 0, "sbc #$01 when a=0xff and c=0");
-
-    machine.run(2);
-    t.is(machine.cpu.a, 0xfe, "sbc #$01 when a=0xff and c=0");
-    t.is(machine.cpu.c, 0, "sbc #$01 when a=0xff and c=0");
-    t.is(machine.cpu.n, 0, "sbc #$01 when a=0xff and c=0");
+    machine.run(3);
+    t.is(machine.cpu.a, 0xfd, "sbc #$01 when a=0xff and c=0");
+    t.is(machine.cpu.c, 1, "sbc #$01 when a=0xff and c=0");
+    t.is(machine.cpu.n, 1, "sbc #$01 when a=0xff and c=0");
     t.is(machine.cpu.z, 0, "sbc #$01 when a=0xff and c=0");
 
     test("Arithmetic instructions: absolute");
