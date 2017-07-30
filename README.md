@@ -12,6 +12,6 @@ make all
 
 ### Hierarchy
 
-- `Assembler`: 6502 assembler
-- `CPU`: 6502 emulator
-- `Editor`: Integrated development editor
+- [Assembler](assembler): 6502 assembler
+- [CPU](cpu): 6502 emulator
+- [Editor](editor): Integrated development editor
