@@ -46,8 +46,40 @@
         lda #$ff
         sbc #$01
 
-
 ;;; Absolute
+        ;; ADC: zero + zero = zero
+        lda #0
+        sta $1020
+        lda #0
+        adc $1020
+
+        ;; ADC: multiple additions
+        lda #5
+        sta $1020
+        lda #0
+        adc $1020
+        adc $1020
+        adc $1020
+        adc $1020
+        adc $1020
+
+        ;; ADC: result lesser than 0xff
+        lda #3
+        sta $1020
+        lda #$f0
+        adc $1020
+
+        ;; ADC: result greater than 0xff
+        lda #$10
+        sta $1020
+        lda #$f0
+        adc $1020
+
+        ;; ADC: result lesser than zero
+        lda #2                  ; N flag should be set by test case
+        sta $1020
+        lda #1
+        adc $1020
 
 ;;; Absolute indexed x
 
