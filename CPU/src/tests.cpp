@@ -415,15 +415,13 @@ int main() {
     t.is(machine.cpu.a, 0x00, "adc #$ff when a=0x01 and c=0");
     t.is(machine.cpu.c, 1, "adc #$01 when a=0x0f and c=0");
     t.is(machine.cpu.n, 0, "adc #$01 when a=0x0f and c=0");
-    t.is(machine.cpu.z, 0, "adc #$01 when a=0x0f and c=0");
+    t.is(machine.cpu.z, 1, "adc #$01 when a=0x0f and c=0");
 
-    machine.run(1);
-    machine.cpu.n = 1;
-    machine.run(1);
-    t.is(machine.cpu.a, 0x01, "adc #1 when a=0x02 and n=1");
-    t.is(machine.cpu.c, 0, "adc #1 when a=0x02 and n=1");
-    t.is(machine.cpu.n, 1, "adc #1 when a=0x02 and n=1");
-    t.is(machine.cpu.z, 0, "adc #1 when a=0x02 and n=1");
+    machine.run(2);
+    t.is(machine.cpu.a, 0x82, "adc #$01 when a=0x81");
+    t.is(machine.cpu.c, 0, "adc #1 when a=0x02");
+    t.is(machine.cpu.n, 1, "adc #1 when a=0x02");
+    t.is(machine.cpu.z, 0, "adc #1 when a=0x02");
     machine.cpu.n = 0;
 
     machine.run(2);

@@ -14,7 +14,7 @@
         adc #1
         adc #1
 
-        ;; ADC: result lesser than 0xff
+        ;; ADC: result lesser than 0xff, but equals to 0x80 (-128)
         lda #$0f
         adc #$01
 
@@ -22,9 +22,9 @@
         lda #$01
         adc #$ff
 
-        ;; ADC: result lesser than zero
-        lda #2                  ; N flag should be set by test case
-        adc #1
+        ;; ADC: negative result (MSB = 1)
+        lda #$81                ; 0x81 == -127
+        adc #$01                ; 0x82 == -126
 
         ;; SBC: zero - zero = zero
         lda #0

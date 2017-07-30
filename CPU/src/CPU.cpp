@@ -86,9 +86,23 @@ void store(CPU &cpu, Memory &memory, Instruction instruction) {
 void arithmetic(CPU &cpu, Instruction instruction) {
   switch(instruction.operation.ops) {
   case ops::adc:
-    throw std::runtime_error("CPU error: unimplemented instruction: adc");
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    switch (instruction.operation.addressMode) {
+    case addressMode::immediate:
+      auto data = instruction.dataLsb;
+
+      cpu.c = cpu.a + data > 0xff;
+
+      // In the case of an addition the V flag indicates if the result
+      // is outside of the 2's complement range (-128 to 127).
+      cpu.v = cpu.a + data >= 0x80;
+
+      cpu.a += data;
+      cpu.z = cpu.a == 0;
+      // The most significant bit specifies if the value is negative.
+      cpu.n = cpu.a >= 0x80;
+
+      break;
+    }
     break;
   case ops::sbc:
     throw std::runtime_error("CPU error: unimplemented instruction: " +
@@ -97,6 +111,8 @@ void arithmetic(CPU &cpu, Instruction instruction) {
                              opsnames[int(instruction.operation.ops)]);
     break;
   }
+
+  cpu.pc++;
 }
 
 void inc(CPU &cpu, Instruction instruction) {
