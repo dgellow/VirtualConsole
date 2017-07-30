@@ -12,6 +12,7 @@ struct Memory {
 
   uint8_t at(uint16_t address);
   void set(uint16_t address, uint8_t value);
+  void debugPrint(uint16_t from, uint16_t count);
 
   unsigned int ramLastAddress = 0x7ffd;
   unsigned int screenLastAddress = 0xfffe;
