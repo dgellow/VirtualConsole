@@ -594,6 +594,42 @@ int main() {
     t.is(0, 999, "unimplemented test");
   }
 
+  // Set and clear
+  {
+    auto t = Tests("Set and clear");
+
+    string file = "tests/CPU/tests_set_clear.out";
+    auto instructions = Parser::parse(file);
+    auto machine = Machine();
+
+    machine.load(instructions);
+
+
+    t.test("Carry flag");
+    machine.run(1);
+    t.is(machine.cpu.c, 1, "sec");
+    machine.run(1);
+    t.is(machine.cpu.c, 0, "clc");
+
+    t.test("Decimal mode");
+    machine.run(1);
+    t.is(machine.cpu.d, 1, "sed");
+    machine.run(1);
+    t.is(machine.cpu.d, 0, "cld");
+
+    t.test("Interrupt disable status");
+    machine.run(1);
+    t.is(machine.cpu.i, 1, "sei");
+    machine.run(1);
+    t.is(machine.cpu.i, 0, "cli");
+
+    t.test("Overflow flag");
+    machine.run(3);
+    t.is(machine.cpu.v, 1, "set overflow flag");
+    machine.run(1);
+    t.is(machine.cpu.v, 0, "clv");
+  }
+
   globalWasSuccess ?
     exit(0):
     exit(1);
