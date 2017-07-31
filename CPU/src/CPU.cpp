@@ -32,7 +32,9 @@ void setZero(CPU &cpu, uint16_t value) {
 
 // Set flag n based on given value
 void setNeg(CPU &cpu, uint16_t value) {
-  cpu.n = value < 0;
+  // The most significant bit specifies if the value can be considered
+  // negative.
+  cpu.n = value >= 0x80;
 }
 
 void load(CPU &cpu, Memory &memory, Instruction instruction) {
@@ -93,10 +95,8 @@ void impl_adc(CPU &cpu, uint8_t arg) {
     cpu.v = ~(cpu.a ^ arg) & (cpu.a ^ sum) & 0x80;
 
     cpu.a = sum;
-    cpu.z = cpu.a == 0;
-    // The most significant bit specifies if the value can be considered
-    // negative.
-    cpu.n = cpu.a >= 0x80;
+    setZero(cpu, cpu.a);
+    setNeg(cpu, cpu.a);
 }
 
 void arithmetic(CPU &cpu, Memory &memory, Instruction instruction) {

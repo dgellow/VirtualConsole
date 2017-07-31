@@ -86,6 +86,86 @@
         lda #$01
         adc $1020               ; 0x82 == -126
 
+        ;; SBC: zero - zero = zero
+        clc
+        lda #0
+        sta $1020
+        lda #0
+        sbc $1020
+
+        clc
+        lda #0
+        sta $1020
+        lda #0
+        clc
+        sbc $1020
+
+        clc
+        lda #0
+        sta $1020
+        lda #0
+        sec
+        sbc $1020
+
+        ;; SBC: multiple substractions
+        clc
+        lda #5
+        sta $1020
+        lda #0
+        clc
+        sbc $1020
+        clc
+        sbc $1020
+        clc
+        sbc $1020
+        clc
+        sbc $1020
+        clc
+        sbc $1020
+
+        clc
+        lda #5
+        sta $1020
+        lda #0
+        sec
+        sbc $1020
+        sec
+        sbc $1020
+        sec
+        sbc $1020
+        sec
+        sbc $1020
+        sec
+        sbc $1020
+
+        ;; SBC: result lesser than 0
+        clc
+        lda #$01
+        sta $1020
+        lda #$00
+        sbc $1020
+
+        ;; SBC: result equals to 0x80 (-128)
+	clc
+        lda #$00
+        sta $1020
+        lda #$81
+        sbc $1020
+
+        ;; SBC: result equals to 0x7f (127)
+	clc
+        lda #$00
+        sta $1020
+        lda #$80
+        sbc $1020
+
+        ;; SBC: positive result (MSB = 0)
+        clc
+        lda #$01
+        sta $1020
+        lda #$7f                ; 0x7f == 127
+        sbc $1020               ; 0x7d == 125
+
 ;;; Absolute indexed x
 
 ;;; Absolute indexed y

@@ -491,7 +491,65 @@ int main() {
 
 
     t.test("Arithmetic instructions: sbc, absolute mode");
-    t.is(0, 999, "unimplemented test");
+    machine.run(5);
+    t.is(machine.cpu.a, 0xff, "sbc $1020 when a=0 and $1020=0");
+    t.is(machine.cpu.c, 0, "sbc $1020 when a=0 and $1020=0");
+    t.is(machine.cpu.n, 1, "sbc $1020 when a=0 and $1020=0");
+    t.is(machine.cpu.z, 0, "sbc $1020 when a=0 and $1020=0");
+
+    machine.run(6);
+    t.is(machine.cpu.a, 0xff, "sbc $1020 when a=0 and $1020=0, after a clc");
+    t.is(machine.cpu.c, 0, "sbc $1020 when a=0 and $1020=0, after a clc");
+    t.is(machine.cpu.n, 1, "sbc $1020 when a=0 and $1020=0, after a clc");
+    t.is(machine.cpu.z, 0, "sbc $1020 when a=0 and $1020=0, after a clc");
+
+    machine.run(6);
+    t.is(machine.cpu.a, 0x00, "sbc $1020 when a=0 and $1020=0, after a sec");
+    t.is(machine.cpu.c, 1, "sbc $1020 when a=0 and $1020=0, after a sec");
+    t.is(machine.cpu.n, 0, "sbc $1020 when a=0 and $1020=0, after a sec");
+    t.is(machine.cpu.z, 1, "sbc $1020 when a=0 and $1020=0, after a sec");
+
+    machine.run(14);
+    t.is(machine.cpu.a, 0xe2, "sbc $1020, 5 times, when a=0 and $1020=5, with clc");
+    t.is(machine.cpu.c, 1, "sbc $1020, 5 times, when a=0 and $1020=5, with clc");
+    t.is(machine.cpu.n, 1, "sbc $1020, 5 times, when a=0 and $1020=5, with clc");
+    t.is(machine.cpu.z, 0, "sbc $1020, 5 times, when a=0 and $1020=5, with clc");
+    t.is(machine.cpu.v, 0, "sbc $1020, 5 times, when a=0 and $1020=5, with clc");
+
+    machine.run(14);
+    t.is(machine.cpu.a, 0xe7, "sbc $1020, 5 times, when a=0 and $1020=5, with sec");
+    t.is(machine.cpu.c, 1, "sbc $1020, 5 times, when a=0 and $1020=5, with sec");
+    t.is(machine.cpu.n, 1, "sbc $1020, 5 times, when a=0 and $1020=5, with sec");
+    t.is(machine.cpu.z, 0, "sbc $1020, 5 times, when a=0 and $1020=5, with sec");
+    t.is(machine.cpu.v, 0, "sbc $1020, 5 times, when a=0 and $1020=5, with sec");
+
+    machine.run(5);
+    t.is(machine.cpu.a, 0xfe, "sbc $1020 when a=0x01 and $1020=0x00");
+    t.is(machine.cpu.c, 0, "sbc $1020 when a=0x01 and $1020=0x00");
+    t.is(machine.cpu.n, 1, "sbc $1020 when a=0x01 and $1020=0x00");
+    t.is(machine.cpu.z, 0, "sbc $1020 when a=0x01 and $1020=0x00");
+    t.is(machine.cpu.v, 0, "sbc $1020 when a=0x01 and $1020=0x00");
+
+    machine.run(5);
+    t.is(machine.cpu.a, 0x80, "sbc $1020 when a=0x81 and $1020=0x00");
+    t.is(machine.cpu.c, 1, "sbc $1020 when a=0x81 and $1020=0x00");
+    t.is(machine.cpu.n, 1, "sbc $1020 when a=0x81 and $1020=0x00");
+    t.is(machine.cpu.z, 0, "sbc $1020 when a=0x81 and $1020=0x00");
+    t.is(machine.cpu.v, 0, "sbc $1020 when a=0x81 and $1020=0x00");
+
+    machine.run(5);
+    t.is(machine.cpu.a, 0x7f, "sbc $1020 when a=0x80 and $1020=0x00");
+    t.is(machine.cpu.c, 1, "sbc $1020 when a=0x80 and $1020=0x00");
+    t.is(machine.cpu.n, 0, "sbc $1020 when a=0x80 and $1020=0x00");
+    t.is(machine.cpu.z, 0, "sbc $1020 when a=0x80 and $1020=0x00");
+    t.is(machine.cpu.v, 1, "sbc $1020 when a=0x80 and $1020=0x00");
+
+    machine.run(5);
+    t.is(machine.cpu.a, 0x7d, "sbc $1020 when a=0x7f and $1020=0x01");
+    t.is(machine.cpu.c, 1, "sbc $1020 when a=0x7f and $1020=0x01");
+    t.is(machine.cpu.n, 0, "sbc $1020 when a=0x7f and $1020=0x01");
+    t.is(machine.cpu.z, 0, "sbc $1020 when a=0x7f and $1020=0x01");
+    t.is(machine.cpu.v, 0, "sbc $1020 when a=0x7f and $1020=0x01");
 
     t.test("Arithmetic instructions: adc, absolute indexed x");
     t.is(0, 999, "unimplemented test");
