@@ -377,6 +377,7 @@ void other(CPU &cpu, Instruction instruction) {
     // do nothing
     break;
   case ops::brk:
+    // force an interrupt
     cpu.b = true;
     cpu.i = true;
         throw std::runtime_error("CPU error: unimplemented instruction: " +

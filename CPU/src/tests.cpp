@@ -630,6 +630,36 @@ int main() {
     t.is(machine.cpu.v, 0, "clv");
   }
 
+  // Other
+  {
+    auto t = Tests("Other");
+
+    string file = "tests/CPU/tests_other.out";
+    auto instructions = Parser::parse(file);
+    auto machine = Machine();
+
+    machine.load(instructions);
+
+
+    t.test("No operation (nop)");
+    machine.run(5);
+    t.is(machine.cpu.a, 0, "nop, 5 times");
+    t.is(machine.cpu.c, 0, "nop, 5 times");
+    t.is(machine.cpu.n, 0, "nop, 5 times");
+    t.is(machine.cpu.z, 0, "nop, 5 times");
+    t.is(machine.cpu.v, 0, "nop, 5 times");
+
+    machine.run(5);
+    t.is(machine.cpu.a, 0x12, "nop in between other instructions");
+    t.is(machine.cpu.c, 1, "nop in between other instructions");
+    t.is(machine.cpu.n, 0, "nop in between other instructions");
+    t.is(machine.cpu.z, 0, "nop in between other instructions");
+    t.is(machine.cpu.v, 0, "nop in between other instructions");
+
+    t.test("Break");
+    t.is(0, 999, "unimplemented test");
+  }
+
   globalWasSuccess ?
     exit(0):
     exit(1);
