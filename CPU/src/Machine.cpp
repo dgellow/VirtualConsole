@@ -17,12 +17,12 @@ void printHeader() {
 }
 
 void printState(CPU &cpu) {
-  cout << " ";
-  printDecByte(cpu.pc); cout << " | ";
-  printHexByte(cpu.a, 4); cout << " | ";
-  printHexByte(cpu.x, 4); cout << " | ";
-  printHexByte(cpu.y, 4); cout << " |";
-  cout << endl;
+  cout << " "
+       << sstreamDecByte(cpu.pc).str() << " | "
+       << sstreamHexByte(cpu.a, 4).str() << " | "
+       << sstreamHexByte(cpu.x, 4).str() << " | "
+       << sstreamHexByte(cpu.y, 4).str() << " |"
+       << endl;
 }
 
 void Machine::load(Instructions instructions) {
@@ -52,4 +52,10 @@ void Machine::run(unsigned int steps) {
       }
     }
   }
+}
+
+std::ostringstream Machine::ostream() {
+  std::ostringstream os;
+  os << "Machine()";
+  return os;
 }

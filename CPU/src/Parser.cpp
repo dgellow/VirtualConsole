@@ -17,8 +17,9 @@ void printInstruction(Instruction instruction) {
          << addressModeSym[int(instruction.operation.addressMode)]
          << " ";
     if (instruction.dataLength > 0) {
-      printHexByte(instruction.dataMsb);
-      printHexByte(instruction.dataLsb);
+      cout
+        << sstreamHexByte(instruction.dataMsb).str()
+        << sstreamHexByte(instruction.dataLsb).str();
     }
     cout << endl;
 }
@@ -37,10 +38,10 @@ Instructions Parser::parseFile(ifstream &file) {
   //                                    0, lsbProgramLocation, msbProgramLocation));
 
   if (RunFlags::debugParser) {
-    cout << "Program location in memory: ";
-    printHexByte(msbProgramLocation);
-    printHexByte(lsbProgramLocation);
-    cout << endl;
+    cout << "Program location in memory: "
+         << sstreamHexByte(msbProgramLocation).str()
+         << sstreamHexByte(lsbProgramLocation).str()
+         << endl;
   }
 
   char c;

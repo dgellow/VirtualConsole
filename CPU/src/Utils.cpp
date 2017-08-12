@@ -6,11 +6,21 @@ namespace Utils {
     return uint16_t(uc);
   }
 
-  void printDecByte(uint16_t v, unsigned int w) {
-    cout << setfill('0') << setw(w) << dec << v;
+  std::ostringstream sstreamDecByte(uint16_t v, unsigned int w) {
+    std::ostringstream os;
+    os << setfill('0') << setw(w) << dec << v;
+    return os;
   }
 
-  void printHexByte(char c, unsigned int w) {
-    cout << setfill('0') << setw(w) << hex << to_uint16(c);
+  std::ostringstream sstreamHexByte(char c, unsigned int w) {
+    std::ostringstream os;
+    os << setfill('0') << setw(w) << hex << to_uint16(c);
+    return os;
+  }
+
+  std::ostringstream sstreamBoolByte(bool b) {
+    std::ostringstream os;
+    os << (b ? "true": "false");
+    return os;
   }
 }

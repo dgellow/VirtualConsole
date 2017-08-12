@@ -34,16 +34,27 @@ void Memory::debugPrint(uint16_t from, uint16_t count) {
             << "  ==========" << std::endl;
   for (auto i = 0; i < count; i++) {
     if (i % 10 == 0) {
-      Utils::printHexByte(from + i, 4);
-      std::cout << ": ";
+      std::cout << Utils::sstreamHexByte(from + i, 4).str() << ": ";
     }
 
-    Utils::printDecByte(at(from + i), 4);
-    std::cout << " ";
+    std::cout << Utils::sstreamDecByte(at(from + i), 4).str() << " ";
 
     if (i % 10 == 9) {
       std::cout << endl;
     }
   }
   std::cout << endl;
+}
+
+std::ostringstream Memory::ostream() {
+  auto w = 4;
+  std::ostringstream os;
+  os << "Memory("
+     << "ramLastAddress=" << Utils::sstreamHexByte(ramLastAddress, w).str() << ", "
+     << "screenLastAddress=" << Utils::sstreamHexByte(screenLastAddress, w).str() << ", "
+     << "keyboardAddress=" << Utils::sstreamHexByte(keyboardAddress, w).str() << ", "
+     << "stackStartAddress=" << Utils::sstreamHexByte(stackStartAddress, w).str() << ", "
+     << "stackLastAddress=" << Utils::sstreamHexByte(stackLastAddress, w).str()
+     << ")";
+  return os;
 }

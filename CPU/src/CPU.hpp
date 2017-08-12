@@ -4,6 +4,8 @@
 #include "Memory.hpp"
 #include "Instruction.hpp"
 
+#include <sstream>
+
 using namespace Instruction6502;
 
 struct CPU {
@@ -11,6 +13,7 @@ struct CPU {
   ~CPU() {}
 
   void compute(Instruction instruction, Memory &memory);
+  std::ostringstream ostream();
 
   // Registers
   uint16_t pc = 0;

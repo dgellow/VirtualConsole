@@ -1,5 +1,7 @@
 #include "CPU.hpp"
 
+#include <iostream>
+
 // Return actual data based on address mode of the operation
 uint16_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
                     uint8_t lsb, uint8_t msb) {
@@ -408,4 +410,23 @@ void CPU::compute(Instruction instruction, Memory &memory) {
   case opsgroup::clear: clear(*this, instruction); break;
   case opsgroup::other: other(*this, instruction); break;
   }
+}
+
+std::ostringstream CPU::ostream() {
+  std::ostringstream os;
+  os << "CPU("
+     << "pc=" << Utils::sstreamHexByte(pc, 4).str() << ", "
+     << "stack=" << Utils::sstreamHexByte(stack).str() << ", "
+     << "a=" << Utils::sstreamHexByte(a).str() << ", "
+     << "x=" << Utils::sstreamHexByte(x).str() << ", "
+     << "y=" << Utils::sstreamHexByte(y).str() << ", "
+     << "c=" << Utils::sstreamBoolByte(c).str() << ", "
+     << "z=" << Utils::sstreamBoolByte(z).str() << ", "
+     << "i=" << Utils::sstreamBoolByte(i).str() << ", "
+     << "d=" << Utils::sstreamBoolByte(d).str() << ", "
+     << "b=" << Utils::sstreamBoolByte(b).str() << ", "
+     << "v=" << Utils::sstreamBoolByte(v).str() << ", "
+     << "n=" << Utils::sstreamBoolByte(n).str()
+     << ")";
+  return os;
 }

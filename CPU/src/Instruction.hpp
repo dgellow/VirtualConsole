@@ -1,9 +1,12 @@
 #ifndef __Instruction__
 #define __Instruction__
 
+#include "Utils.hpp"
+
 #include <map>
 #include <string>
 #include <vector>
+#include <sstream>
 
 namespace Instruction6502 {
   enum class ops {
@@ -203,6 +206,17 @@ namespace Instruction6502 {
     y,
   };
 
+  const std::string opsoperandSym[] = {
+    "none",
+    "memory",
+    "status",
+    "pc",
+    "stack",
+    "a",
+    "x",
+    "y",
+  };
+
   struct Operation {
     Operation() {}
 
@@ -210,6 +224,17 @@ namespace Instruction6502 {
               opsoperand operand1, opsoperand operand2 = opsoperand::none)
       : ops(ops), group(group), addressMode(addressMode),
         operand1(operand1), operand2(operand2) {};
+
+    std::ostringstream ostream() {
+      std::ostringstream os;
+      os << "Operation("
+         << "ops=" << opsnames[int(ops)] << ", "
+         << "addressMode=" << addressModeSym[int(addressMode)] << ", "
+         << "operand1=" << opsoperandSym[int(operand1)] << ", "
+         << "operand2=" << opsoperandSym[int(operand2)]
+         << ")";
+      return os;
+    }
 
     ops ops;
     opsgroup group;
@@ -429,8 +454,20 @@ namespace Instruction6502 {
   };
 
   struct Instruction {
-    Instruction(Operation operation, int dataLength = 0, uint8_t dataLsb = 0, uint8_t dataMsb = 0)
-      : operation(operation), dataLsb(dataLsb), dataMsb(dataMsb), dataLength(dataLength) {}
+    Instruction(Operation operation, int dataLength = 0,
+                uint8_t dataLsb = 0, uint8_t dataMsb = 0)
+      : operation(operation), dataLsb(dataLsb),
+        dataMsb(dataMsb), dataLength(dataLength) {}
+
+    std::ostringstream ostream() {
+      std::ostringstream os;
+      os << "Instruction("
+         << "LSB=" << Utils::sstreamHexByte(dataLsb).str() << ", "
+         << "MSB=" << Utils::sstreamHexByte(dataMsb).str() << ", "
+         << "dataLength=" << dataLength
+         << ")";
+      return os;
+    }
 
     Operation operation;
     uint8_t dataLsb; // least significant byte

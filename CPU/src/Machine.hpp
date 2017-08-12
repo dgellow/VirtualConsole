@@ -5,6 +5,8 @@
 #include "CPU.hpp"
 #include "Memory.hpp"
 
+#include <sstream>
+
 using namespace Instruction6502;
 
 struct Machine {
@@ -17,6 +19,7 @@ struct Machine {
   static void run(Instructions instructions);
   void run(unsigned int steps=0);
   void load(Instructions instructions);
+  std::ostringstream ostream();
 
   CPU cpu;
   Memory memory;
