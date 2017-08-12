@@ -12,9 +12,9 @@ make all
 
 ### Projects
 
-- [Assembler](assembler): 6502 assembler
-- [CPU](cpu): 6502 emulator
-- [Editor](editor): Integrated development editor
+- [Assembler](Assembler): 6502 assembler
+- [CPU](CPU): 6502 emulator
+- [Editor](Editor): Integrated development editor
 
 ### Ressources
 
