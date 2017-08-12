@@ -66,7 +66,7 @@ int main() {
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
-    machine.load(instructions);
+    machine.rom.load(instructions);
 
 
     t.test("Load instructions: default");
@@ -255,7 +255,7 @@ int main() {
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
-    machine.load(instructions);
+    machine.rom.load(instructions);
 
 
     t.test("Store instructions: absolute");
@@ -396,7 +396,7 @@ int main() {
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
-    machine.load(instructions);
+    machine.rom.load(instructions);
 
 
     t.test("Arithmetic instructions: adc, immediate mode");
@@ -594,6 +594,31 @@ int main() {
     t.is(0, 999, "unimplemented test");
   }
 
+  // Jumps, Subroutines
+  {
+    auto t = Tests("Jumps and subroutines");
+
+    string file = "tests/CPU/tests_jumps_subroutines.out";
+    auto instructions = Parser::parse(file);
+    auto machine = Machine();
+
+    machine.rom.load(instructions);
+
+
+    t.test("Jump to subroutine");
+    machine.run(9);
+    t.is(machine.cpu.a, 0x01, "jsr");
+    t.is(machine.cpu.x, 0x02, "jsr");
+    t.is(machine.cpu.y, 0x03, "jsr");
+
+
+    t.test("Jump to memory");
+    machine.run(8);
+    t.is(machine.cpu.a, 0xff, "jmp");
+    t.is(machine.cpu.x, 0xfe, "jmp");
+    t.is(machine.cpu.y, 0xfd, "jmp");
+  }
+
   // Set and clear
   {
     auto t = Tests("Set and clear");
@@ -602,7 +627,7 @@ int main() {
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
-    machine.load(instructions);
+    machine.rom.load(instructions);
 
 
     t.test("Carry flag");
@@ -638,7 +663,7 @@ int main() {
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
-    machine.load(instructions);
+    machine.rom.load(instructions);
 
 
     t.test("No operation (nop)");

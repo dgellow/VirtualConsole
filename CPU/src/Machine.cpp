@@ -10,28 +10,49 @@ using namespace Utils;
 void printHeader() {
   cout
     << "  pc  |"
-    << "   a  |"
-    << "   x  |"
-    << "   y  |"
+    << "  a |"
+    << "  x |"
+    << "  y |"
+    << " c |"
+    << " z |"
+    << " i |"
+    << " d |"
+    << " b |"
+    << " v |"
+    << " n |"
     << endl;
 }
 
-void printState(CPU &cpu) {
-  cout << " "
-       << sstreamDecByte(cpu.pc).str() << " | "
-       << sstreamHexByte(cpu.a, 4).str() << " | "
-       << sstreamHexByte(cpu.x, 4).str() << " | "
-       << sstreamHexByte(cpu.y, 4).str() << " |"
+string boolToStr(bool b) {
+  return b ? "✓" : " ";
+}
+
+void Machine::printState() {
+  cout << " " << sstreamHexByte(cpu.pc, 4).str() << " |"
+       << " " << sstreamHexByte(cpu.a).str() << " |"
+       << " " << sstreamHexByte(cpu.x).str() << " |"
+       << " " << sstreamHexByte(cpu.y).str() << " |"
+       << " " << boolToStr(cpu.c) << " |"
+       << " " << boolToStr(cpu.z) << " |"
+       << " " << boolToStr(cpu.i) << " |"
+       << " " << boolToStr(cpu.d) << " |"
+       << " " << boolToStr(cpu.b) << " |"
+       << " " << boolToStr(cpu.v) << " |"
+       << " " << boolToStr(cpu.n) << " |"
        << endl;
 }
 
-void Machine::load(Instructions instructions) {
-  this->rom = instructions;
+void Machine::printExit() {
+  cout << endl
+       << "End of the rom reached" << endl
+       << cpu.ostream().str()
+       << memory.ostream().str()
+       << endl;
 }
 
 void Machine::run(Instructions instructions) {
   auto machine = Machine();
-  machine.load(instructions);
+  machine.rom.load(instructions);
   machine.run();
 }
 
@@ -43,7 +64,7 @@ void Machine::run(unsigned int steps) {
     auto instruction = rom.at(cpu.pc);
     cpu.compute(instruction, memory);
 
-    RunFlags::testOutput ? printState(cpu) : (void) 0;
+    RunFlags::testOutput ? printState() : (void) 0;
 
     if (steps != 0) {
       nbInstructions--;
@@ -52,6 +73,8 @@ void Machine::run(unsigned int steps) {
       }
     }
   }
+
+  RunFlags::testOutput ? printExit() : (void) 0;
 }
 
 std::ostringstream Machine::ostream() {

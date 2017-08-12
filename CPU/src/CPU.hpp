@@ -17,7 +17,7 @@ struct CPU {
 
   // Registers
   uint16_t pc = 0;
-  uint8_t stack = 0;
+  uint8_t stack = 0xff;
   uint8_t a = 0;
   uint8_t x = 0;
   uint8_t y = 0;

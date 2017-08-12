@@ -85,6 +85,9 @@ Instructions Parser::parseFile(ifstream &file) {
     RunFlags::debugParser ? printInstruction(instruction) : (void) 0;
   }
 
+  if (RunFlags::debugParser) {
+    cout << endl;
+  }
   return instructions;
 }
 

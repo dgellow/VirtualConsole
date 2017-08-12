@@ -27,6 +27,24 @@ uint16_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode,
   }
 }
 
+void incrementCounter(CPU &cpu, Instruction instruction) {
+  cpu.pc++;
+  cpu.pc += instruction.dataLength;
+}
+
+// Push value to the stack
+void pushStack(CPU &cpu, Memory &memory, uint8_t value) {
+  memory.set(memory.stackStartAddress + cpu.stack, value);
+  cpu.stack--;
+}
+
+// Pull value from the stack
+uint8_t popStack(CPU &cpu, Memory &memory) {
+  auto d = memory.at(memory.stackStartAddress + cpu.stack);
+  cpu.stack++;
+  return d;
+}
+
 // Set flag z based on given value
 void setZero(CPU &cpu, uint16_t value) {
   cpu.z = value == 0;
@@ -66,7 +84,7 @@ void load(CPU &cpu, Memory &memory, Instruction instruction) {
     break;
   }
 
-  cpu.pc++;
+  incrementCounter(cpu, instruction);
 }
 
 void store(CPU &cpu, Memory &memory, Instruction instruction) {
@@ -84,7 +102,7 @@ void store(CPU &cpu, Memory &memory, Instruction instruction) {
     break;
   }
 
-  cpu.pc++;
+  incrementCounter(cpu, instruction);
 }
 
 void impl_adc(CPU &cpu, uint8_t arg) {
@@ -118,7 +136,7 @@ void arithmetic(CPU &cpu, Memory &memory, Instruction instruction) {
     break;
   }
 
-  cpu.pc++;
+  incrementCounter(cpu, instruction);
 }
 
 void inc(CPU &cpu, Instruction instruction) {
@@ -312,25 +330,34 @@ void tostack(CPU &cpu, Instruction instruction) {
   }
 }
 
-void jump(CPU &cpu, Instruction instruction) {
+void jump(CPU &cpu, Memory &memory, Instruction instruction) {
+  auto d = resolveData(cpu, memory, instruction.operation.addressMode,
+                       instruction.dataLsb, instruction.dataMsb);
+
   switch(instruction.operation.ops) {
   case ops::jmp:
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    cpu.pc = d;
     break;
   case ops::jsr:
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
+    auto data = cpu.pc + instruction.dataLength;
+    uint8_t lsb = data;
+    uint8_t msb = data / (16 * 16);
+    pushStack(cpu, memory, msb);
+    pushStack(cpu, memory, lsb);
+    cpu.pc = d;
     break;
   }
 }
 
-void subroutine(CPU &cpu, Instruction instruction) {
+void subroutine(CPU &cpu, Memory &memory, Instruction instruction) {
   switch(instruction.operation.ops) {
   case ops::rts:
-        throw std::runtime_error("CPU error: unimplemented instruction: " +
-                             opsnames[int(instruction.operation.ops)]);
-    break;
+    {
+      auto lsb = popStack(cpu, memory);
+      auto msb = popStack(cpu, memory);
+      cpu.pc = (msb * 16 * 16) + lsb + 1;
+      break;
+    }
   case ops::rti:
         throw std::runtime_error("CPU error: unimplemented instruction: " +
                              opsnames[int(instruction.operation.ops)]);
@@ -351,7 +378,7 @@ void set(CPU &cpu, Instruction instruction) {
     break;
   }
 
-  cpu.pc++;
+  incrementCounter(cpu, instruction);
 }
 
 void clear(CPU &cpu, Instruction instruction) {
@@ -370,7 +397,7 @@ void clear(CPU &cpu, Instruction instruction) {
     break;
   }
 
-  cpu.pc++;
+  incrementCounter(cpu, instruction);
 }
 
 void other(CPU &cpu, Instruction instruction) {
@@ -387,10 +414,17 @@ void other(CPU &cpu, Instruction instruction) {
     break;
   }
 
-  cpu.pc++;
+  incrementCounter(cpu, instruction);
 }
 
 void CPU::compute(Instruction instruction, Memory &memory) {
+  // std::cout << "———— CPU.compute() ————" << std::endl;
+  // std::cout << "Before:" << std::endl;
+  // std::cout << "\tcpu: " << ostream().str() << std::endl;
+  // std::cout << "\tinstruction: " << instruction.ostream().str() << std::endl;
+  // std::cout << "\toperation: " << instruction.operation.ostream().str() << std::endl;
+  // std::cout << "\tmemory: " << memory.ostream().str() << std::endl;
+
   switch (instruction.operation.group) {
   case opsgroup::load: load(*this, memory, instruction); break;
   case opsgroup::store: store(*this, memory, instruction); break;
@@ -404,12 +438,20 @@ void CPU::compute(Instruction instruction, Memory &memory) {
   case opsgroup::branch: branch(*this, instruction); break;
   case opsgroup::transfer: transfer(*this, instruction); break;
   case opsgroup::stack: tostack(*this, instruction); break;
-  case opsgroup::jump: jump(*this, instruction); break;
-  case opsgroup::subroutine: subroutine(*this, instruction); break;
+  case opsgroup::jump: jump(*this, memory, instruction); break;
+  case opsgroup::subroutine: subroutine(*this, memory, instruction); break;
   case opsgroup::set: set(*this, instruction); break;
   case opsgroup::clear: clear(*this, instruction); break;
   case opsgroup::other: other(*this, instruction); break;
   }
+
+  // std::cout << std::endl;
+  // std::cout << "After:" << std::endl;
+  // std::cout << "\tcpu: " << ostream().str() << std::endl;
+  // std::cout << "\tinstruction: " << instruction.ostream().str() << std::endl;
+  // std::cout << "\toperation: " << instruction.operation.ostream().str() << std::endl;
+  // std::cout << "\tmemory: " << memory.ostream().str() << std::endl;
+  // std::cout << "———————————————————————" << std::endl;
 }
 
 std::ostringstream CPU::ostream() {

@@ -4,6 +4,7 @@
 #include "Instruction.hpp"
 #include "CPU.hpp"
 #include "Memory.hpp"
+#include "ROM.hpp"
 
 #include <sstream>
 
@@ -18,13 +19,15 @@ struct Machine {
 
   static void run(Instructions instructions);
   void run(unsigned int steps=0);
-  void load(Instructions instructions);
   std::ostringstream ostream();
 
   CPU cpu;
+  ROM rom;
   Memory memory;
 
-  Instructions rom;
+private:
+  void printState();
+  void printExit();
 };
 
 #endif /* __Machine__ */
