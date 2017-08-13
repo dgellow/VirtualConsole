@@ -37,7 +37,7 @@ void Memory::debugPrint(uint16_t from, uint16_t count) {
       std::cout << Utils::sstreamHexByte(from + i, 4).str() << ": ";
     }
 
-    std::cout << Utils::sstreamDecByte(at(from + i), 4).str() << " ";
+    std::cout << Utils::sstreamHexByte(at(from + i), 4).str() << " ";
 
     if (i % 10 == 9) {
       std::cout << endl;

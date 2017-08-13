@@ -40,8 +40,8 @@ void pushStack(CPU &cpu, Memory &memory, uint8_t value) {
 
 // Pull value from the stack
 uint8_t popStack(CPU &cpu, Memory &memory) {
-  auto d = memory.at(memory.stackStartAddress + cpu.stack);
   cpu.stack++;
+  auto d = memory.at(memory.stackStartAddress + cpu.stack);
   return d;
 }
 
@@ -340,7 +340,7 @@ void jump(CPU &cpu, Memory &memory, Instruction instruction) {
     break;
   case ops::jsr:
     auto data = cpu.pc + instruction.dataLength;
-    uint8_t lsb = data;
+    uint8_t lsb = data % (16 * 16);
     uint8_t msb = data / (16 * 16);
     pushStack(cpu, memory, msb);
     pushStack(cpu, memory, lsb);
