@@ -1,5 +1,5 @@
-#ifndef __Machine__
-#define __Machine__
+#ifndef MACHINE
+#define MACHINE
 
 #include "CPU.hpp"
 #include "Instruction.hpp"
@@ -30,4 +30,4 @@ private:
   void printExit();
 };
 
-#endif /* __Machine__ */
+#endif /* MACHINE */

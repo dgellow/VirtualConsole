@@ -1,5 +1,5 @@
-#ifndef __ROM__
-#define __ROM__
+#ifndef ROM_
+#define ROM_
 
 #include "Instruction.hpp"
 
@@ -39,4 +39,4 @@ struct ROM {
   Instructions instructions;
 };
 
-#endif /* __ROM__ */
+#endif /* ROM_ */

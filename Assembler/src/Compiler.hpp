@@ -1,5 +1,5 @@
-#ifndef __Compiler__
-#define __Compiler__
+#ifndef COMPILER
+#define COMPILER
 
 #include "Parser.hpp"
 #include <string>
@@ -9,4 +9,4 @@ std::string compile(Instructions instructions);
 void debug(Instructions instructions);
 } // namespace Compiler
 
-#endif /* __Compiler__ */
+#endif /* COMPILER */

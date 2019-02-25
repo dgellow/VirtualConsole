@@ -1,5 +1,5 @@
-#ifndef __Instruction__
-#define __Instruction__
+#ifndef INSTRUCTION
+#define INSTRUCTION
 
 #include "Utils.hpp"
 
@@ -403,4 +403,4 @@ struct Instruction {
 using Instructions = std::vector<Instruction>;
 } // namespace Instruction6502
 
-#endif /* __Instruction__ */
+#endif /* INSTRUCTION */

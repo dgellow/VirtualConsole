@@ -1,5 +1,5 @@
-#ifndef __Memory__
-#define __Memory__
+#ifndef MEMORY
+#define MEMORY
 
 #include "RAM.hpp"
 #include "Screen.hpp"
@@ -26,4 +26,4 @@ struct Memory {
   Screen screen;
 };
 
-#endif /* __Memory__ */
+#endif /* MEMORY */

@@ -1,5 +1,5 @@
-#ifndef __Utils__
-#define __Utils__
+#ifndef UTILS
+#define UTILS
 
 #include <iomanip>
 #include <sstream>
@@ -13,4 +13,4 @@ std::ostringstream sstreamHexByte(char c, unsigned int w = 2);
 std::ostringstream sstreamBoolByte(bool b);
 } // namespace Utils
 
-#endif /* __Utils__ */
+#endif /* UTILS */

@@ -1,5 +1,5 @@
-#ifndef __CPU__
-#define __CPU__
+#ifndef CPU_
+#define CPU_
 
 #include "Instruction.hpp"
 #include "Memory.hpp"
@@ -30,4 +30,4 @@ struct CPU {
   bool n = false; // Negative
 };
 
-#endif /* __CPU__ */
+#endif /* CPU_ */

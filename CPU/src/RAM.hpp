@@ -1,5 +1,5 @@
-#ifndef __RAM__
-#define __RAM__
+#ifndef RAM_
+#define RAM_
 
 #include <cstdint>
 #include <limits>
@@ -21,4 +21,4 @@ struct RAM {
   std::vector<uint16_t> state;
 };
 
-#endif /* __RAM__ */
+#endif /* RAM_ */

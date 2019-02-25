@@ -1,5 +1,5 @@
-#ifndef __Screen__
-#define __Screen__
+#ifndef SCREEN
+#define SCREEN
 
 #include "RAM.hpp"
 
@@ -13,4 +13,4 @@ struct Screen : RAM {
   std::ostringstream ostream();
 };
 
-#endif /* __Screen__ */
+#endif /* SCREEN */

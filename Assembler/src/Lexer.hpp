@@ -1,5 +1,5 @@
-#ifndef __Lexer__
-#define __Lexer__
+#ifndef LEXER
+#define LEXER
 
 #include "Grammar.hpp"
 #include <string>
@@ -47,4 +47,4 @@ LexemesList scan(std::ifstream &file);
 TokensList eval(LexemesList tokens);
 } // namespace Lexer
 
-#endif /* __Lexer__ */
+#endif /* LEXER */

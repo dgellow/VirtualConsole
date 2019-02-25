@@ -1,5 +1,5 @@
-#ifndef __Parser__
-#define __Parser__
+#ifndef PARSER
+#define PARSER
 
 #include "Instruction.hpp"
 #include <string>
@@ -11,4 +11,4 @@ Instruction6502::Instructions parseFile(ifstream &file);
 Instruction6502::Instructions parse(string filepath);
 } // namespace Parser
 
-#endif /* __Parser__ */
+#endif /* PARSER */

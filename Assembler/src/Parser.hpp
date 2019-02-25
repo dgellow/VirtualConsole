@@ -1,5 +1,5 @@
-#ifndef __Parser__
-#define __Parser__
+#ifndef PARSER
+#define PARSER
 
 #include "Lexer.hpp"
 #include <map>
@@ -66,4 +66,4 @@ private:
   uint32_t freeAddress = 15;
 };
 
-#endif /* __Parser__ */
+#endif /* PARSER */
