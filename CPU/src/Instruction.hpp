@@ -4,183 +4,119 @@
 #include "Utils.hpp"
 
 #include <map>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 namespace Instruction6502 {
-  enum class ops {
-    programLocation,
-    ldx,
-    ldy,
-    lda,
-    sta,
-    stx,
-    sty,
-    adc,
-    sbc,
-    inc,
-    inx,
-    iny,
-    dec,
-    dex,
-    dey,
-    asl,
-    lsr,
-    rol,
-    ror,
-    and_, // 'and' is a reserved identifier
-    ora,
-    eor,
-    cmp,
-    cpx,
-    cpy,
-    bit,
-    bcc,
-    bcs,
-    beq,
-    bmi,
-    bne,
-    bpl,
-    bvc,
-    bvs,
-    tax,
-    txa,
-    tay,
-    tya,
-    tsx,
-    txs,
-    pha,
-    pla,
-    php,
-    plp,
-    jmp,
-    jsr,
-    rts,
-    rti,
-    sec,
-    sed,
-    sei,
-    clc,
-    cld,
-    cli,
-    clv,
-    nop,
-    brk,
-  };
+enum class ops {
+  programLocation,
+  ldx,
+  ldy,
+  lda,
+  sta,
+  stx,
+  sty,
+  adc,
+  sbc,
+  inc,
+  inx,
+  iny,
+  dec,
+  dex,
+  dey,
+  asl,
+  lsr,
+  rol,
+  ror,
+  and_, // 'and' is a reserved identifier
+  ora,
+  eor,
+  cmp,
+  cpx,
+  cpy,
+  bit,
+  bcc,
+  bcs,
+  beq,
+  bmi,
+  bne,
+  bpl,
+  bvc,
+  bvs,
+  tax,
+  txa,
+  tay,
+  tya,
+  tsx,
+  txs,
+  pha,
+  pla,
+  php,
+  plp,
+  jmp,
+  jsr,
+  rts,
+  rti,
+  sec,
+  sed,
+  sei,
+  clc,
+  cld,
+  cli,
+  clv,
+  nop,
+  brk,
+};
 
-  const std::string opsnames[] = {
-    "org",
-    "ldx",
-    "ldy",
-    "lda",
-    "sta",
-    "stx",
-    "sty",
-    "adc",
-    "sbc",
-    "inc",
-    "inx",
-    "iny",
-    "dec",
-    "dex",
-    "dey",
-    "asl",
-    "lsr",
-    "rol",
-    "ror",
-    "and",
-    "ora",
-    "eor",
-    "cmp",
-    "cpx",
-    "cpy",
-    "bit",
-    "bcc",
-    "bcs",
-    "beq",
-    "bmi",
-    "bne",
-    "bpl",
-    "bvc",
-    "bvs",
-    "tax",
-    "txa",
-    "tay",
-    "tya",
-    "tsx",
-    "txs",
-    "pha",
-    "pla",
-    "php",
-    "plp",
-    "jmp",
-    "jsr",
-    "rts",
-    "rti",
-    "sec",
-    "sed",
-    "sei",
-    "clc",
-    "cld",
-    "cli",
-    "clv",
-    "nop",
-    "brk",
-  };
+const std::string opsnames[] = {
+    "org", "ldx", "ldy", "lda", "sta", "stx", "sty", "adc", "sbc", "inc", "inx", "iny", "dec", "dex", "dey",
+    "asl", "lsr", "rol", "ror", "and", "ora", "eor", "cmp", "cpx", "cpy", "bit", "bcc", "bcs", "beq", "bmi",
+    "bne", "bpl", "bvc", "bvs", "tax", "txa", "tay", "tya", "tsx", "txs", "pha", "pla", "php", "plp", "jmp",
+    "jsr", "rts", "rti", "sec", "sed", "sei", "clc", "cld", "cli", "clv", "nop", "brk",
+};
 
-  enum class opsgroup {
-    load,
-    store,
-    arithmetic,
-    inc,
-    dec,
-    shift,
-    rotate,
-    logic,
-    compare,
-    branch,
-    transfer,
-    stack,
-    subroutine,
-    jump,
-    set,
-    clear,
-    other,
-  };
+enum class opsgroup {
+  load,
+  store,
+  arithmetic,
+  inc,
+  dec,
+  shift,
+  rotate,
+  logic,
+  compare,
+  branch,
+  transfer,
+  stack,
+  subroutine,
+  jump,
+  set,
+  clear,
+  other,
+};
 
-  enum class addressMode {
-    accumulator,
-    immediate,
-    implied,
-    relative,
-    absolute,
-    zeropage,
-    absoluteIndexedX,
-    absoluteIndexedY,
-    zeropageIndexedX,
-    zeropageIndexedY,
-    zeropageIndexedIndirect,
-    zeropageIndirectIndexed,
-  };
+enum class addressMode {
+  accumulator,
+  immediate,
+  implied,
+  relative,
+  absolute,
+  zeropage,
+  absoluteIndexedX,
+  absoluteIndexedY,
+  zeropageIndexedX,
+  zeropageIndexedY,
+  zeropageIndexedIndirect,
+  zeropageIndirectIndexed,
+};
 
-  const std::string addressModeSym[] = {
-    "A",
-    "#",
-    "i",
-    "r",
-    "a",
-    "zp",
-    "a,x",
-    "a,y",
-    "zp,x",
-    "zp,y",
-    "(zp,x)",
-    "(zp),y",
-  };
+const std::string addressModeSym[] = {
+    "A", "#", "i", "r", "a", "zp", "a,x", "a,y", "zp,x", "zp,y", "(zp,x)", "(zp),y",
+};
 
-  // The length is the number of bytes following the opcode to use as data
-  const std::map<addressMode, unsigned int> dataLength = {
+// The length is the number of bytes following the opcode to use as data
+const std::map<addressMode, unsigned int> dataLength = {
     {addressMode::accumulator, 0},
     {addressMode::immediate, 1},
     {addressMode::implied, 0},
@@ -193,57 +129,48 @@ namespace Instruction6502 {
     {addressMode::zeropageIndexedY, 1},
     {addressMode::zeropageIndexedIndirect, 1},
     {addressMode::zeropageIndirectIndexed, 1},
-  };
+};
 
-  enum class opsoperand {
-    none,
-    memory,
-    status,
-    pc,
-    stack,
-    a,
-    x,
-    y,
-  };
+enum class opsoperand {
+  none,
+  memory,
+  status,
+  pc,
+  stack,
+  a,
+  x,
+  y,
+};
 
-  const std::string opsoperandSym[] = {
-    "none",
-    "memory",
-    "status",
-    "pc",
-    "stack",
-    "a",
-    "x",
-    "y",
-  };
+const std::string opsoperandSym[] = {
+    "none", "memory", "status", "pc", "stack", "a", "x", "y",
+};
 
-  struct Operation {
-    Operation() {}
+struct Operation {
+  Operation() {}
 
-    Operation(ops ops, opsgroup group, addressMode addressMode,
-              opsoperand operand1, opsoperand operand2 = opsoperand::none)
-      : ops(ops), group(group), addressMode(addressMode),
-        operand1(operand1), operand2(operand2) {};
+  Operation(ops ops, opsgroup group, addressMode addressMode, opsoperand operand1,
+            opsoperand operand2 = opsoperand::none)
+      : ops(ops), group(group), addressMode(addressMode), operand1(operand1), operand2(operand2){};
 
-    std::ostringstream ostream() {
-      std::ostringstream os;
-      os << "Operation("
-         << "ops=" << opsnames[int(ops)] << ", "
-         << "addressMode=" << addressModeSym[int(addressMode)] << ", "
-         << "operand1=" << opsoperandSym[int(operand1)] << ", "
-         << "operand2=" << opsoperandSym[int(operand2)]
-         << ")";
-      return os;
-    }
+  std::ostringstream ostream() {
+    std::ostringstream os;
+    os << "Operation("
+       << "ops=" << opsnames[int(ops)] << ", "
+       << "addressMode=" << addressModeSym[int(addressMode)] << ", "
+       << "operand1=" << opsoperandSym[int(operand1)] << ", "
+       << "operand2=" << opsoperandSym[int(operand2)] << ")";
+    return os;
+  }
 
-    ops ops;
-    opsgroup group;
-    addressMode addressMode;
-    opsoperand operand1;
-    opsoperand operand2;
-  };
+  ops ops;
+  opsgroup group;
+  addressMode addressMode;
+  opsoperand operand1;
+  opsoperand operand2;
+};
 
-  const std::map<uint8_t, Operation> opscodes = {
+const std::map<uint8_t, Operation> opscodes = {
     {0xad, Operation(ops::lda, opsgroup::load, addressMode::absolute, opsoperand::a)},
     {0xbd, Operation(ops::lda, opsgroup::load, addressMode::absoluteIndexedX, opsoperand::a)},
     {0xb9, Operation(ops::lda, opsgroup::load, addressMode::absoluteIndexedY, opsoperand::a)},
@@ -426,7 +353,8 @@ namespace Instruction6502 {
     {0x28, Operation(ops::plp, opsgroup::stack, addressMode::implied, opsoperand::stack, opsoperand::status)},
 
     {0x4c, Operation(ops::jmp, opsgroup::jump, addressMode::absolute, opsoperand::none)},
-    // {0x6c, Operation(ops::jmp, opsgroup::jump, addressMode::, opsoperand::none)}, <== not sure what's the address mode
+    // {0x6c, Operation(ops::jmp, opsgroup::jump, addressMode::,
+    // opsoperand::none)}, <== not sure what's the address mode
 
     {0x20, Operation(ops::jsr, opsgroup::jump, addressMode::absolute, opsoperand::none)},
 
@@ -451,31 +379,28 @@ namespace Instruction6502 {
     {0xea, Operation(ops::nop, opsgroup::other, addressMode::implied, opsoperand::none)},
 
     {0x00, Operation(ops::brk, opsgroup::other, addressMode::implied, opsoperand::none)},
-  };
+};
 
-  struct Instruction {
-    Instruction(Operation operation, int dataLength = 0,
-                uint8_t dataLsb = 0, uint8_t dataMsb = 0)
-      : operation(operation), dataLsb(dataLsb),
-        dataMsb(dataMsb), dataLength(dataLength) {}
+struct Instruction {
+  Instruction(Operation operation, int dataLength = 0, uint8_t dataLsb = 0, uint8_t dataMsb = 0)
+      : operation(operation), dataLsb(dataLsb), dataMsb(dataMsb), dataLength(dataLength) {}
 
-    std::ostringstream ostream() {
-      std::ostringstream os;
-      os << "Instruction("
-         << "LSB=" << Utils::sstreamHexByte(dataLsb).str() << ", "
-         << "MSB=" << Utils::sstreamHexByte(dataMsb).str() << ", "
-         << "dataLength=" << dataLength
-         << ")";
-      return os;
-    }
+  std::ostringstream ostream() {
+    std::ostringstream os;
+    os << "Instruction("
+       << "LSB=" << Utils::sstreamHexByte(dataLsb).str() << ", "
+       << "MSB=" << Utils::sstreamHexByte(dataMsb).str() << ", "
+       << "dataLength=" << dataLength << ")";
+    return os;
+  }
 
-    Operation operation;
-    uint8_t dataLsb; // least significant byte
-    uint8_t dataMsb; // most significant byte
-    int dataLength;
-  };
+  Operation operation;
+  uint8_t dataLsb; // least significant byte
+  uint8_t dataMsb; // most significant byte
+  int dataLength;
+};
 
-  using Instructions = std::vector<Instruction>;
-}
+using Instructions = std::vector<Instruction>;
+} // namespace Instruction6502
 
 #endif /* __Instruction__ */

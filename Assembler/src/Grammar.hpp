@@ -1,58 +1,43 @@
 #ifndef __Grammar__
 #define __Grammar__
 
-#include <string>
 #include <array>
 #include <map>
+#include <string>
 
 namespace Grammar {
-  enum Tokens {
-    UNASSIGNED,
-    AT_SYM,
-    EQ_SYM,
-    COLON_SYM,
-    SEMICOLON_SYM,
-    PLUS_SYM,
-    MINUS_SYM,
-    BANG_SYM,
-    AND_SYM,
-    OR_SYM,
-    PARENTOPEN_SYM,
-    PARENTCLOSE_SYM,
-    ALPHA,
-    DIGIT,
-    VARIABLE,
-    LABEL,
-  };
+enum Tokens {
+  UNASSIGNED,
+  AT_SYM,
+  EQ_SYM,
+  COLON_SYM,
+  SEMICOLON_SYM,
+  PLUS_SYM,
+  MINUS_SYM,
+  BANG_SYM,
+  AND_SYM,
+  OR_SYM,
+  PARENTOPEN_SYM,
+  PARENTCLOSE_SYM,
+  ALPHA,
+  DIGIT,
+  VARIABLE,
+  LABEL,
+};
 
-  const std::map<Tokens, std::string> legalKeyword = {
-    {AT_SYM, "@"},
-    {EQ_SYM, "="},
-    {COLON_SYM, ":"},
-    {SEMICOLON_SYM, ";"},
-    {PLUS_SYM, "+"},
-    {MINUS_SYM, "-"},
-    {BANG_SYM, "!"},
-    {AND_SYM, "&"},
-    {OR_SYM, "|"},
-    {PARENTOPEN_SYM, "("},
-    {PARENTCLOSE_SYM, ")"},
-  };
+const std::map<Tokens, std::string> legalKeyword = {
+    {AT_SYM, "@"},   {EQ_SYM, "="},  {COLON_SYM, ":"}, {SEMICOLON_SYM, ";"},  {PLUS_SYM, "+"},        {MINUS_SYM, "-"},
+    {BANG_SYM, "!"}, {AND_SYM, "&"}, {OR_SYM, "|"},    {PARENTOPEN_SYM, "("}, {PARENTCLOSE_SYM, ")"},
+};
 
-  const std::string legalDest = "ADM";
+const std::string legalDest = "ADM";
 
-  const std::map<std::string, uint16_t> legalJump = {
-    {"", 0b000},
-    {"JGT", 0b001},
-    {"JEQ", 0b010},
-    {"JGE", 0b011},
-    {"JLT", 0b100},
-    {"JNE", 0b101},
-    {"JLE", 0b110},
-    {"JMP", 0b111},
-  };
+const std::map<std::string, uint16_t> legalJump = {
+    {"", 0b000},    {"JGT", 0b001}, {"JEQ", 0b010}, {"JGE", 0b011},
+    {"JLT", 0b100}, {"JNE", 0b101}, {"JLE", 0b110}, {"JMP", 0b111},
+};
 
-  const std::map<std::string, uint16_t> legalCond = {
+const std::map<std::string, uint16_t> legalCond = {
     // a=0
     {"0", 0b0101010},
     {"1", 0b0111111},
@@ -82,8 +67,7 @@ namespace Grammar {
     {"D-M", 0b1010011},
     {"M-D", 0b1000111},
     {"D&M", 0b1000000},
-    {"D|M", 0b1010101}
-  };
-}
+    {"D|M", 0b1010101}};
+} // namespace Grammar
 
 #endif /* __Grammar__ */

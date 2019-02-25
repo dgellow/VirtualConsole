@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "Parser.hpp"
 #include "Machine.hpp"
+#include "Parser.hpp"
 #include "RunFlags.hpp"
 
 using namespace std;
@@ -19,13 +19,13 @@ bool findArgument(int argc, char *argv[], string arg) {
 }
 
 void printUsage() {
-    cout << "OVERVIEW: Sam's Virtual CPU" << endl;
-    cout << endl;
-    cout << "USAGE: " << appName << " COMMAND [options]" << endl;
-    cout << endl;
-    cout << "COMMANDS:" << endl;
-    cout << "\tparse" << endl;
-    cout << "\thelp" << endl;
+  cout << "OVERVIEW: Sam's Virtual CPU" << endl;
+  cout << endl;
+  cout << "USAGE: " << appName << " COMMAND [options]" << endl;
+  cout << endl;
+  cout << "COMMANDS:" << endl;
+  cout << "\tparse" << endl;
+  cout << "\thelp" << endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -35,12 +35,12 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  string command (argv[1]);
+  string command(argv[1]);
 
   if (command == "help" || command == "-h" || command == "--help") {
     printUsage();
     exit(0);
-  } else if (command == "parse")  {
+  } else if (command == "parse") {
     if (argc < 3 || argc > 5) {
       cerr << "Error: invalid usage" << endl;
       cout << "Usage: " << appName << " parse [OPTIONS] <inputfile>" << endl;

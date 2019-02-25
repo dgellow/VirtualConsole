@@ -1,27 +1,23 @@
 #include "Parser.hpp"
 
+#include "RunFlags.hpp"
+#include "Utils.hpp"
+#include <bitset>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <bitset>
-#include "Utils.hpp"
-#include "RunFlags.hpp"
 
 using namespace Instruction6502;
 using namespace Utils;
 
 void printInstruction(Instruction instruction) {
-    cout << opsnames[int(instruction.operation.ops)]
-         << " "
-         << addressModeSym[int(instruction.operation.addressMode)]
-         << " ";
-    if (instruction.dataLength > 0) {
-      cout
-        << sstreamHexByte(instruction.dataMsb).str()
-        << sstreamHexByte(instruction.dataLsb).str();
-    }
-    cout << endl;
+  cout << opsnames[int(instruction.operation.ops)] << " " << addressModeSym[int(instruction.operation.addressMode)]
+       << " ";
+  if (instruction.dataLength > 0) {
+    cout << sstreamHexByte(instruction.dataMsb).str() << sstreamHexByte(instruction.dataLsb).str();
+  }
+  cout << endl;
 }
 
 Instructions Parser::parseFile(ifstream &file) {
@@ -38,10 +34,8 @@ Instructions Parser::parseFile(ifstream &file) {
   //                                    0, lsbProgramLocation, msbProgramLocation));
 
   if (RunFlags::debugParser) {
-    cout << "Program location in memory: "
-         << sstreamHexByte(msbProgramLocation).str()
-         << sstreamHexByte(lsbProgramLocation).str()
-         << endl;
+    cout << "Program location in memory: " << sstreamHexByte(msbProgramLocation).str()
+         << sstreamHexByte(lsbProgramLocation).str() << endl;
   }
 
   char c;
@@ -54,8 +48,7 @@ Instructions Parser::parseFile(ifstream &file) {
     try {
       operation = opscodes.at(ic);
     } catch (out_of_range e) {
-      cerr << "Parsing error: the byte " << hex << ic
-           << " isn't a supported opcode" << endl;
+      cerr << "Parsing error: the byte " << hex << ic << " isn't a supported opcode" << endl;
       continue;
     }
 
@@ -64,8 +57,7 @@ Instructions Parser::parseFile(ifstream &file) {
     try {
       dataLength = Instruction6502::dataLength.at(operation.addressMode);
     } catch (out_of_range e) {
-      cerr << "Parsing error: no data length found for addressMode "
-           << addressModeSym[int(operation.addressMode)]
+      cerr << "Parsing error: no data length found for addressMode " << addressModeSym[int(operation.addressMode)]
            << endl;
       continue;
     }
@@ -82,7 +74,7 @@ Instructions Parser::parseFile(ifstream &file) {
     // Add instruction to the vector
     auto instruction = Instruction(operation, dataLength, lsb, msb);
     instructions.push_back(instruction);
-    RunFlags::debugParser ? printInstruction(instruction) : (void) 0;
+    RunFlags::debugParser ? printInstruction(instruction) : (void)0;
   }
 
   if (RunFlags::debugParser) {

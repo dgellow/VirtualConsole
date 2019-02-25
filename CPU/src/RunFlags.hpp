@@ -2,8 +2,8 @@
 #define __RunFlags__
 
 namespace RunFlags {
-  extern bool testOutput;
-  extern bool debugParser;
-}
+extern bool testOutput;
+extern bool debugParser;
+} // namespace RunFlags
 
 #endif /* __RunFlags */

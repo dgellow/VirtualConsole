@@ -77,6 +77,9 @@ debug-assembler: samvirtassembler
 debug-cpu: samvirtcpu
 	lldb $(buildDir)/samvirtcpu
 
+format:
+	find . \( -iname '*.cpp' -or -iname '*.hpp' \) -exec clang-format -style=file -i --verbose {} \;
+
 all: clean samvirtassembler samvirtcpu samvirteditor
 
 help:

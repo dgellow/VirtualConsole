@@ -1,8 +1,8 @@
 #ifndef __CPU__
 #define __CPU__
 
-#include "Memory.hpp"
 #include "Instruction.hpp"
+#include "Memory.hpp"
 
 #include <sstream>
 

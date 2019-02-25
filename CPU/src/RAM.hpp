@@ -3,8 +3,8 @@
 
 #include <cstdint>
 #include <limits>
-#include <vector>
 #include <string>
+#include <vector>
 
 struct RAM {
   RAM(unsigned int registerWidth, unsigned int registers) {

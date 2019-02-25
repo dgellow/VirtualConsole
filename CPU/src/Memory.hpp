@@ -7,8 +7,7 @@
 #include <sstream>
 
 struct Memory {
-  Memory () : ram(8, 32), screen(8, 32) {
-  }
+  Memory() : ram(8, 32), screen(8, 32) {}
 
   ~Memory() {}
 

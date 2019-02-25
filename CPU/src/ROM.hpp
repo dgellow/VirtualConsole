@@ -11,9 +11,7 @@ struct ROM {
   ROM() {}
   ~ROM() {}
 
-  void load(Instructions instructions) {
-    this->instructions = instructions;
-  }
+  void load(Instructions instructions) { this->instructions = instructions; }
 
   uint16_t size() {
     auto i = 0;

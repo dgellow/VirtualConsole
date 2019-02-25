@@ -166,9 +166,8 @@ TokensList Lexer::eval(LexemesList lexemesList) {
         if (lexeme.token == DIGIT || lexeme.token == ALPHA) {
           value += lexeme.value;
         } else {
-            auto msg = "Lexing error at position " + std::to_string(lexeme.position)
-              + " , line " + std::to_string(lexeme.line)
-              + " : A variable can only use alphanumeric";
+          auto msg = "Lexing error at position " + std::to_string(lexeme.position) + " , line " +
+                     std::to_string(lexeme.line) + " : A variable can only use alphanumeric";
           throw std::invalid_argument(msg);
         }
       } else if (lexeme.token == PARENTOPEN_SYM) {
@@ -180,15 +179,13 @@ TokensList Lexer::eval(LexemesList lexemesList) {
         } else if (lexeme.token == PARENTCLOSE_SYM) {
           if (i != lexemes.size() - 1) {
             auto l = lexemes[i + 1];
-            auto msg = "Lexing error at position " + std::to_string(l.position)
-              + " , line " + std::to_string(l.line)
-              + " : Unexpected character after label declaration";
+            auto msg = "Lexing error at position " + std::to_string(l.position) + " , line " + std::to_string(l.line) +
+                       " : Unexpected character after label declaration";
             throw std::invalid_argument(msg);
           }
         } else {
-          auto msg = "Lexing error at position " + std::to_string(lexeme.position)
-            + " , line " + std::to_string(lexeme.line)
-            + " : A label can only use alphanumeric";
+          auto msg = "Lexing error at position " + std::to_string(lexeme.position) + " , line " +
+                     std::to_string(lexeme.line) + " : A label can only use alphanumeric";
           throw std::invalid_argument(msg);
         }
       }

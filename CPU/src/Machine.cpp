@@ -1,31 +1,27 @@
 #include "Machine.hpp"
 
-#include <iostream>
-#include "Utils.hpp"
 #include "RunFlags.hpp"
+#include "Utils.hpp"
+#include <iostream>
 
 using namespace std;
 using namespace Utils;
 
 void printHeader() {
-  cout
-    << "  pc  |"
-    << "  a |"
-    << "  x |"
-    << "  y |"
-    << " c |"
-    << " z |"
-    << " i |"
-    << " d |"
-    << " b |"
-    << " v |"
-    << " n |"
-    << endl;
+  cout << "  pc  |"
+       << "  a |"
+       << "  x |"
+       << "  y |"
+       << " c |"
+       << " z |"
+       << " i |"
+       << " d |"
+       << " b |"
+       << " v |"
+       << " n |" << endl;
 }
 
-string boolToStr(bool b) {
-  return b ? "✓" : " ";
-}
+string boolToStr(bool b) { return b ? "✓" : " "; }
 
 void Machine::printState() {
   cout << " " << sstreamHexByte(cpu.pc, 4).str() << " |"
@@ -38,16 +34,11 @@ void Machine::printState() {
        << " " << boolToStr(cpu.d) << " |"
        << " " << boolToStr(cpu.b) << " |"
        << " " << boolToStr(cpu.v) << " |"
-       << " " << boolToStr(cpu.n) << " |"
-       << endl;
+       << " " << boolToStr(cpu.n) << " |" << endl;
 }
 
 void Machine::printExit() {
-  cout << endl
-       << "End of the rom reached" << endl
-       << cpu.ostream().str()
-       << memory.ostream().str()
-       << endl;
+  cout << endl << "End of the rom reached" << endl << cpu.ostream().str() << memory.ostream().str() << endl;
 }
 
 void Machine::run(Instructions instructions) {
@@ -58,13 +49,13 @@ void Machine::run(Instructions instructions) {
 
 void Machine::run(unsigned int steps) {
   unsigned int nbInstructions = steps;
-  RunFlags::testOutput ? printHeader() : (void) 0;
+  RunFlags::testOutput ? printHeader() : (void)0;
 
-  while(cpu.pc < rom.size()) {
+  while (cpu.pc < rom.size()) {
     auto instruction = rom.at(cpu.pc);
     cpu.compute(instruction, memory);
 
-    RunFlags::testOutput ? printState() : (void) 0;
+    RunFlags::testOutput ? printState() : (void)0;
 
     if (steps != 0) {
       nbInstructions--;
@@ -74,7 +65,7 @@ void Machine::run(unsigned int steps) {
     }
   }
 
-  RunFlags::testOutput ? printExit() : (void) 0;
+  RunFlags::testOutput ? printExit() : (void)0;
 }
 
 std::ostringstream Machine::ostream() {

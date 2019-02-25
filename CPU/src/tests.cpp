@@ -1,8 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include "RunFlags.hpp"
-#include "Parser.hpp"
 #include "Machine.hpp"
+#include "Parser.hpp"
+#include "RunFlags.hpp"
+#include <fstream>
+#include <iostream>
 #include <string>
 
 bool globalWasSuccess = true;
@@ -13,15 +13,11 @@ struct Tests {
     std::cout << testsName << ":" << std::endl;
   }
 
-  ~Tests() {
-    printResults();
-  }
+  ~Tests() { printResults(); }
 
   void printResults() {
     if (testFailures != 0) {
-      std::cerr << "Some tests failed. Failures: "
-                << testFailures << "/" << testNumber
-                << std::endl;
+      std::cerr << "Some tests failed. Failures: " << testFailures << "/" << testNumber << std::endl;
       globalWasSuccess = false;
     } else {
       std::cout << "All tests passed" << std::endl;
@@ -33,15 +29,10 @@ struct Tests {
     assertNumber++;
     bool success = x == y;
     if (!success) {
-      testFailures ++;
-      std::cerr << "  assertion " << assertNumber << " failed: "
-                << msg
-                << ": actual value " << std::dec << x
-                << " (0x" << std::hex << x << ")"
-                << ", expected value " << std::dec << y
-                << " (0x" << std::hex << y << ")"
-                << std::dec
-                << std::endl;
+      testFailures++;
+      std::cerr << "  assertion " << assertNumber << " failed: " << msg << ": actual value " << std::dec << x << " (0x"
+                << std::hex << x << ")"
+                << ", expected value " << std::dec << y << " (0x" << std::hex << y << ")" << std::dec << std::endl;
     }
     return success;
   }
@@ -68,7 +59,6 @@ int main() {
 
     machine.rom.load(instructions);
 
-
     t.test("Load instructions: default");
     t.is(machine.cpu.a, 0, "default a register");
     t.is(machine.cpu.x, 0, "default x register");
@@ -78,7 +68,6 @@ int main() {
     t.is(machine.cpu.a, 0, "lda 0");
     t.is(machine.cpu.x, 0, "ldx 0");
     t.is(machine.cpu.x, 0, "ldy 0");
-
 
     t.test("Load instructions: immediate");
     machine.run(1);
@@ -94,7 +83,6 @@ int main() {
     t.is(machine.cpu.x, 33, "ldy #44");
     t.is(machine.cpu.y, 44, "ldy #44");
 
-
     t.test("Load instructions: immediate hex");
     machine.run(1);
     t.is(machine.cpu.a, 0x22, "lda #$22");
@@ -109,7 +97,6 @@ int main() {
     t.is(machine.cpu.x, 0x33, "ldy #$44");
     t.is(machine.cpu.y, 0x44, "ldy #$44");
 
-
     t.test("Load instructions: absolute");
     machine.memory.set(0x1020, 55);
     machine.memory.set(0x1030, 66);
@@ -121,7 +108,6 @@ int main() {
     t.is(machine.cpu.x, 66, "ldx $1030");
     machine.run(1);
     t.is(machine.cpu.y, 77, "ldy $1040");
-
 
     t.test("Load instructions: absolute indexed x");
     machine.memory.set(0x1020, 60);
@@ -145,7 +131,6 @@ int main() {
     machine.run(2);
     t.is(machine.cpu.y, 82, "ldy $1040,x when x=2");
 
-
     t.test("Load instructions: absolute indexed y");
     machine.memory.set(0x1020, 60);
     machine.memory.set(0x1021, 61);
@@ -168,7 +153,6 @@ int main() {
     machine.run(2);
     t.is(machine.cpu.x, 72, "ldx $1030,y when y=2");
 
-
     t.test("Load instructions: zeropage");
     machine.memory.set(0x20, 5);
     machine.memory.set(0x30, 6);
@@ -180,7 +164,6 @@ int main() {
     t.is(machine.cpu.x, 6, "ldx $30");
     machine.run(1);
     t.is(machine.cpu.y, 7, "ldy $40");
-
 
     t.test("Load instructions: zeropage indexed x");
     machine.memory.set(0x20, 10);
@@ -204,7 +187,6 @@ int main() {
     machine.run(2);
     t.is(machine.cpu.y, 32, "ldy $40,x when x=2");
 
-
     t.test("Load instructions: zeropage indexed y");
     machine.memory.set(0x20, 100);
     machine.memory.set(0x21, 101);
@@ -220,7 +202,6 @@ int main() {
     machine.run(2);
     t.is(machine.cpu.x, 92, "ldx $30,y when y=2");
 
-
     t.test("Load instructions: zeropage indexed indirect");
     machine.memory.set(0x20, 0x10);
     machine.memory.set(0x21, 0x18);
@@ -233,7 +214,6 @@ int main() {
     t.is(machine.cpu.a, 99, "lda ($20,x) when x=0");
     machine.run(2);
     t.is(machine.cpu.a, 79, "lda ($20,x) when x=10");
-
 
     t.test("Load instructions: zeropage indirect indexed");
     machine.memory.set(0x40, 0x30);
@@ -257,7 +237,6 @@ int main() {
 
     machine.rom.load(instructions);
 
-
     t.test("Store instructions: absolute");
     machine.memory.set(0x1020, 0);
     machine.memory.set(0x1021, 0);
@@ -279,7 +258,6 @@ int main() {
     t.is(machine.memory.at(0x1021), 2, "sty $1022");
     t.is(machine.memory.at(0x1022), 3, "sty $1022");
 
-
     t.test("Store instructions: absolute indexed x");
     machine.memory.set(0x1030, 0);
     machine.memory.set(0x1031, 0);
@@ -290,7 +268,6 @@ int main() {
     t.is(machine.memory.at(0x1031), 99, "sta $1030,x when x=1");
     t.is(machine.memory.at(0x1032), 99, "sta $1030,x when x=2");
 
-
     t.test("Store instructions: absolute indexed y");
     machine.memory.set(0x1040, 0);
     machine.memory.set(0x1041, 0);
@@ -300,7 +277,6 @@ int main() {
     t.is(machine.memory.at(0x1040), 88, "sta $1040,x when x=0");
     t.is(machine.memory.at(0x1041), 88, "sta $1040,x when x=1");
     t.is(machine.memory.at(0x1042), 88, "sta $1040,x when x=2");
-
 
     t.test("Store instructions: zeropage");
     machine.memory.set(0x20, 0);
@@ -323,7 +299,6 @@ int main() {
     t.is(machine.memory.at(0x21), 2, "sty $21");
     t.is(machine.memory.at(0x22), 3, "sty $22");
 
-
     t.test("Store instructions: zeropage indexed x");
     machine.memory.set(0x30, 0);
     machine.memory.set(0x31, 0);
@@ -345,7 +320,6 @@ int main() {
     t.is(machine.memory.at(0x41), 66, "sty $40,x when x=1");
     t.is(machine.memory.at(0x42), 66, "sty $40,x when x=2");
 
-
     t.test("Store instructions: zeropage indexed y");
     machine.memory.set(0x50, 0);
     machine.memory.set(0x51, 0);
@@ -356,7 +330,6 @@ int main() {
     t.is(machine.memory.at(0x50), 55, "stx $50,y when y=0");
     t.is(machine.memory.at(0x51), 55, "stx $50,y when y=1");
     t.is(machine.memory.at(0x52), 55, "stx $50,y when y=2");
-
 
     t.test("Store instructions: zeropage indexed indirect");
     machine.memory.set(0x60, 0xab);
@@ -372,7 +345,6 @@ int main() {
 
     machine.run(2);
     t.is(machine.memory.at(0x28c7), 44, "sta ($60,x) when x=10");
-
 
     t.test("Store instructions: zeropage indirect indexed");
     machine.memory.set(0x70, 0x20);
@@ -397,7 +369,6 @@ int main() {
     auto machine = Machine();
 
     machine.rom.load(instructions);
-
 
     t.test("Arithmetic instructions: adc, immediate mode");
     machine.run(2);
@@ -430,7 +401,6 @@ int main() {
     t.is(machine.cpu.n, 1, "adc #$01 when a=0x81");
     t.is(machine.cpu.z, 0, "adc #$01 when a=0x81");
 
-
     t.test("Arithmetic instructions: sbc, immediate mode");
     machine.run(2);
     t.is(machine.cpu.a, 0xff, "sbc #0 when a=0 and c=0");
@@ -455,7 +425,6 @@ int main() {
     t.is(machine.cpu.c, 1, "sbc #$01 when a=0xff and c=0");
     t.is(machine.cpu.n, 1, "sbc #$01 when a=0xff and c=0");
     t.is(machine.cpu.z, 0, "sbc #$01 when a=0xff and c=0");
-
 
     t.test("Arithmetic instructions: adc, absolute mode");
     machine.run(5);
@@ -488,7 +457,6 @@ int main() {
     t.is(machine.cpu.n, 1, "adc $1020 when a=1 and $1020=0x81");
     t.is(machine.cpu.z, 0, "adc $1020 when a=1 and $1020=0x81");
     t.is(machine.cpu.v, 0, "adc $1020 when a=1 and $1020=0x81");
-
 
     t.test("Arithmetic instructions: sbc, absolute mode");
     machine.run(5);
@@ -604,13 +572,11 @@ int main() {
 
     machine.rom.load(instructions);
 
-
     t.test("Jump to subroutine");
     machine.run(9);
     t.is(machine.cpu.a, 0x01, "jsr");
     t.is(machine.cpu.x, 0x02, "jsr");
     t.is(machine.cpu.y, 0x03, "jsr");
-
 
     t.test("Jump to memory");
     machine.run(8);
@@ -628,7 +594,6 @@ int main() {
     auto machine = Machine();
 
     machine.rom.load(instructions);
-
 
     t.test("Carry flag");
     machine.run(1);
@@ -665,7 +630,6 @@ int main() {
 
     machine.rom.load(instructions);
 
-
     t.test("No operation (nop)");
     machine.run(5);
     t.is(machine.cpu.a, 0, "nop, 5 times");
@@ -685,7 +649,5 @@ int main() {
     t.is(0, 999, "unimplemented test");
   }
 
-  globalWasSuccess ?
-    exit(0):
-    exit(1);
+  globalWasSuccess ? exit(0) : exit(1);
 }

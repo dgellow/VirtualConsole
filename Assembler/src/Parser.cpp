@@ -1,7 +1,7 @@
 #include "Parser.hpp"
 #include "Lexer.hpp"
-#include <map>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
@@ -28,9 +28,9 @@ SymMap Parser::collectSymbols(TokensList tokensList) {
       if (symbols.count(tokens.front().value) == 0) {
         symbols.emplace(tokens.front().value, i);
       } else {
-        throw std::invalid_argument(string("Parsing error at line ") + to_string(tokens.front().line)
-                                    + ", position " + to_string(tokens.front().position)
-                                    + ": The label " + tokens.front().value + " already exists");
+        throw std::invalid_argument(string("Parsing error at line ") + to_string(tokens.front().line) + ", position " +
+                                    to_string(tokens.front().position) + ": The label " + tokens.front().value +
+                                    " already exists");
       }
     } else {
       i++;
@@ -80,7 +80,7 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
       auto ainstr = Instruction(tokens.front().position, tokens.front().line);
       try {
         ainstr.make_A(symbols.at(tokens.front().value));
-      } catch(const std::out_of_range e) {
+      } catch (const std::out_of_range e) {
         ainstr.make_A(std::stoi(tokens.front().value));
       }
       instructions.push_back(ainstr);
@@ -90,19 +90,18 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
     // C instruction
     auto cinstr = Instruction(tokens.front().position, tokens.front().line);
     cinstr.type = CInstruction;
-    auto eqpos = find_if(tokens.begin(), tokens.end(),
-                         [](const Token & t) -> bool {return t.token == EQ_SYM;});
-    auto semicolonpos = find_if(tokens.begin(), tokens.end(),
-                                [](const Token & t) -> bool {return t.token == SEMICOLON_SYM;});
+    auto eqpos = find_if(tokens.begin(), tokens.end(), [](const Token &t) -> bool { return t.token == EQ_SYM; });
+    auto semicolonpos =
+        find_if(tokens.begin(), tokens.end(), [](const Token &t) -> bool { return t.token == SEMICOLON_SYM; });
 
     // dest
     if (eqpos == tokens.begin() + 1) {
       auto token = tokens.front();
       cinstr.dest = token;
     } else if (eqpos != tokens.end()) {
-      throw invalid_argument(string("Parsing error at line ") + to_string(eqpos->line)
-                             + ", position " + to_string(eqpos->position)
-                             + ": '=' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
+      throw invalid_argument(
+          string("Parsing error at line ") + to_string(eqpos->line) + ", position " + to_string(eqpos->position) +
+          ": '=' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
 
     // jump
@@ -110,14 +109,15 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
       auto token = tokens.back();
       cinstr.jump = token;
     } else if (semicolonpos != tokens.end()) {
-      throw invalid_argument(string("Parsing error at line ") + to_string(semicolonpos->line)
-                             + " position " + to_string(semicolonpos->position)
-                             + ": ';' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
+      throw invalid_argument(
+          string("Parsing error at line ") + to_string(semicolonpos->line) + " position " +
+          to_string(semicolonpos->position) +
+          ": ';' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
 
     // cond
-    vector<Token> cond (eqpos != tokens.end() ? tokens.begin() + 2 : tokens.begin(),
-                        semicolonpos != tokens.end() ? tokens.end() - 2 : tokens.end());
+    vector<Token> cond(eqpos != tokens.end() ? tokens.begin() + 2 : tokens.begin(),
+                       semicolonpos != tokens.end() ? tokens.end() - 2 : tokens.end());
     cinstr.cond = cond;
     instructions.push_back(cinstr);
   }

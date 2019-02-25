@@ -1,10 +1,10 @@
 #ifndef __Parser__
 #define __Parser__
 
-#include <string>
-#include <map>
-#include <vector>
 #include "Lexer.hpp"
+#include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -16,8 +16,8 @@ enum InstructionTypes {
 };
 
 struct Instruction {
-  Instruction(uint32_t position, uint32_t line) : position(position), line(line) {};
-  ~Instruction() {};
+  Instruction(uint32_t position, uint32_t line) : position(position), line(line){};
+  ~Instruction(){};
 
   void make_A(uint32_t address) {
     this->type = AInstruction;
@@ -35,9 +35,9 @@ struct Instruction {
 
   uint32_t address = 0; // <- A
 
-  Token dest; // <- C
+  Token dest;         // <- C
   vector<Token> cond; // <- C
-  Token jump; // <- C
+  Token jump;         // <- C
   uint32_t position;
   uint32_t line;
 };
@@ -55,10 +55,10 @@ public:
   Instructions generateInstructions(TokensList tokens, SymMap symbols);
 
 private:
-  Parser() {};
-  ~Parser() {};
+  Parser(){};
+  ~Parser(){};
 
-  uint32_t nextFreeAddress () {
+  uint32_t nextFreeAddress() {
     freeAddress++;
     return freeAddress;
   }
