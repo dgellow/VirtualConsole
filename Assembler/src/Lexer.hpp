@@ -5,15 +5,13 @@
 #include <string>
 #include <vector>
 
-using namespace Grammar;
-
 struct Lexeme {
-  Lexeme(uint32_t position, uint32_t line, Tokens token, std::string value = "")
+  Lexeme(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
       : token(token), value(value), position(position), line(line) {}
 
   ~Lexeme() {}
 
-  Tokens token;
+  Grammar::Tokens token;
   std::string value;
   uint32_t position;
   uint32_t line;
@@ -21,18 +19,18 @@ struct Lexeme {
 
 struct Token {
   Token() {
-    token = UNASSIGNED;
+    token = Grammar::UNASSIGNED;
     value = "";
     position = -1;
     line = -1;
   }
 
-  Token(uint32_t position, uint32_t line, Tokens token, std::string value = "")
+  Token(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
       : token(token), value(value), position(position), line(line) {}
 
   ~Token() {}
 
-  Tokens token;
+  Grammar::Tokens token;
   std::string value;
   uint32_t position;
   uint32_t line;

@@ -8,13 +8,13 @@ uint16_t to_uint16(char c) {
 
 std::ostringstream sstreamDecByte(uint16_t v, unsigned int w) {
   std::ostringstream os;
-  os << setfill('0') << setw(w) << dec << v;
+  os << std::setfill('0') << std::setw(w) << std::dec << v;
   return os;
 }
 
 std::ostringstream sstreamHexByte(char c, unsigned int w) {
   std::ostringstream os;
-  os << setfill('0') << setw(w) << hex << to_uint16(c);
+  os << std::setfill('0') << std::setw(w) << std::hex << to_uint16(c);
   return os;
 }
 

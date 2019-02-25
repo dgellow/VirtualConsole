@@ -7,11 +7,12 @@
 #include "Lexer.hpp"
 #include "Parser.hpp"
 
-using namespace std;
-
-const string appName("samvirtassembler");
+const std::string appName("samvirtassembler");
 
 void printUsage() {
+  using std::cout;
+  using std::endl;
+
   cout << "OVERVIEW: Sam's Virtual Assembler" << endl;
   cout << endl;
   cout << "USAGE: " << appName << " COMMAND [options]" << endl;
@@ -22,13 +23,17 @@ void printUsage() {
 }
 
 int main(int argc, char *argv[]) {
+  using std::cerr;
+  using std::cout;
+  using std::endl;
+
   if (argc < 2) {
     cerr << "Error: no command specified" << endl;
     printUsage();
     exit(1);
   }
 
-  string command(argv[1]);
+  std::string command(argv[1]);
 
   if (command == "help" || command == "-h" || command == "--help") {
     printUsage();
@@ -39,8 +44,8 @@ int main(int argc, char *argv[]) {
       cout << "Usage: " << appName << " compile [--debug-parser] <inputfile.asm> <outputfile.hack> " << endl;
       exit(1);
     } else {
-      string inputfile;
-      string outputfile;
+      std::string inputfile;
+      std::string outputfile;
       bool debugParser = false;
 
       if (argc == 4) {
@@ -49,7 +54,7 @@ int main(int argc, char *argv[]) {
       } else {
         inputfile = argv[3];
         outputfile = argv[4];
-        debugParser = string(argv[2]) == "--debug-parser";
+        debugParser = std::string(argv[2]) == "--debug-parser";
       }
 
       auto instructions = Parser::parse(inputfile);
@@ -58,7 +63,7 @@ int main(int argc, char *argv[]) {
         Compiler::debug(instructions);
       }
 
-      ofstream outfile;
+      std::ofstream outfile;
       outfile.open(outputfile);
       outfile << output;
       outfile.close();

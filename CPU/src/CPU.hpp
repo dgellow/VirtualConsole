@@ -6,13 +6,11 @@
 
 #include <sstream>
 
-using namespace Instruction6502;
-
 struct CPU {
   CPU() {}
   ~CPU() {}
 
-  void compute(Instruction instruction, Memory &memory);
+  void compute(Instruction6502::Instruction instruction, Memory &memory);
   std::ostringstream ostream();
 
   // Registers

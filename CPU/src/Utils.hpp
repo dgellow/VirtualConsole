@@ -4,8 +4,6 @@
 #include <iomanip>
 #include <sstream>
 
-using namespace std;
-
 namespace Utils {
 uint16_t to_uint16(char c);
 std::ostringstream sstreamDecByte(uint16_t v, unsigned int w = 4);

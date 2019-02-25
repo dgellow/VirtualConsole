@@ -4,10 +4,8 @@
 #include <bitset>
 #include <iostream>
 
-using namespace std;
-
-string condToString(Instruction instruction) {
-  string cond = "";
+std::string condToString(Instruction instruction) {
+  std::string cond = "";
   for (auto t : instruction.cond) {
     if (t.value != "") {
       cond += t.value;
@@ -15,9 +13,9 @@ string condToString(Instruction instruction) {
       try {
         auto keyword = Grammar::legalKeyword.at(t.token);
         cond += keyword;
-      } catch (const out_of_range e) {
-        throw invalid_argument(string("Compiler error at line ") + to_string(t.line) + ", position " +
-                               to_string(t.position) + ": Invalid keyword in condition of C instruction");
+      } catch (const std::out_of_range e) {
+        throw std::invalid_argument(std::string("Compiler error at line ") + std::to_string(t.line) + ", position " +
+                                    std::to_string(t.position) + ": Invalid keyword in condition of C instruction");
       }
     }
   }
@@ -27,20 +25,20 @@ string condToString(Instruction instruction) {
 void Compiler::debug(Instructions instructions) {
   for (auto instruction : instructions) {
     if (instruction.type == AInstruction) {
-      cout << "@" << instruction.address << endl;
+      std::cout << "@" << instruction.address << std::endl;
     } else if (instruction.type == CInstruction) {
-      cout << (instruction.dest.value.empty() ? "" : instruction.dest.value + "=") << condToString(instruction)
-           << (instruction.jump.value.empty() ? "" : ";" + instruction.jump.value) << endl;
+      std::cout << (instruction.dest.value.empty() ? "" : instruction.dest.value + "=") << condToString(instruction)
+                << (instruction.jump.value.empty() ? "" : ";" + instruction.jump.value) << std::endl;
     }
   }
 }
 
-string Compiler::compile(Instructions instructions) {
-  string output = "";
+std::string Compiler::compile(Instructions instructions) {
+  std::string output = "";
 
   for (auto instruction : instructions) {
     if (instruction.type == AInstruction) {
-      output += bitset<16>(instruction.address).to_string();
+      output += std::bitset<16>(instruction.address).to_string();
     } else if (instruction.type == CInstruction) {
       // opcode
       output += "111";
@@ -49,29 +47,32 @@ string Compiler::compile(Instructions instructions) {
       auto cond = condToString(instruction);
       try {
         auto bits = Grammar::legalCond.at(cond);
-        output += bitset<7>(bits).to_string();
-      } catch (const out_of_range e) {
-        throw invalid_argument(string("Compiler error at line ") + to_string(instruction.line) + ", position " +
-                               to_string(instruction.position) + ": Invalid condition in C instruction");
+        output += std::bitset<7>(bits).to_string();
+      } catch (const std::out_of_range e) {
+        throw std::invalid_argument(std::string("Compiler error at line ") + std::to_string(instruction.line) +
+                                    ", position " + std::to_string(instruction.position) +
+                                    ": Invalid condition in C instruction");
       }
 
       // dest
-      if (instruction.dest.value.find_first_not_of(Grammar::legalDest) == string::npos) {
-        output += instruction.dest.value.find(Grammar::legalDest[0]) != string::npos ? "1" : "0";
-        output += instruction.dest.value.find(Grammar::legalDest[1]) != string::npos ? "1" : "0";
-        output += instruction.dest.value.find(Grammar::legalDest[2]) != string::npos ? "1" : "0";
+      if (instruction.dest.value.find_first_not_of(Grammar::legalDest) == std::string::npos) {
+        output += instruction.dest.value.find(Grammar::legalDest[0]) != std::string::npos ? "1" : "0";
+        output += instruction.dest.value.find(Grammar::legalDest[1]) != std::string::npos ? "1" : "0";
+        output += instruction.dest.value.find(Grammar::legalDest[2]) != std::string::npos ? "1" : "0";
       } else {
-        throw invalid_argument(string("Compiler error at line ") + to_string(instruction.line) + ", position " +
-                               to_string(instruction.position) + ": Invalid destination in C instruction");
+        throw std::invalid_argument(std::string("Compiler error at line ") + std::to_string(instruction.line) +
+                                    ", position " + std::to_string(instruction.position) +
+                                    ": Invalid destination in C instruction");
       }
 
       // jump
       try {
         auto jump = Grammar::legalJump.at(instruction.jump.value);
-        output += bitset<3>(jump).to_string();
-      } catch (const out_of_range e) {
-        throw invalid_argument(string("Compiler error at line ") + to_string(instruction.line) + ", position " +
-                               to_string(instruction.position) + ": Invalid jump in C instruction");
+        output += std::bitset<3>(jump).to_string();
+      } catch (const std::out_of_range e) {
+        throw std::invalid_argument(std::string("Compiler error at line ") + std::to_string(instruction.line) +
+                                    ", position " + std::to_string(instruction.position) +
+                                    ": Invalid jump in C instruction");
       }
     }
 

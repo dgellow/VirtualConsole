@@ -2,6 +2,12 @@
 
 #include <iostream>
 
+using Instruction6502::addressMode;
+using Instruction6502::Instruction;
+using Instruction6502::ops;
+using Instruction6502::opsgroup;
+using Instruction6502::opsnames;
+
 // Return actual data based on address mode of the operation
 uint16_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode, uint8_t lsb, uint8_t msb) {
   auto indexedLsb = memory.at(lsb + cpu.x);
@@ -10,7 +16,7 @@ uint16_t resolveData(CPU &cpu, Memory &memory, addressMode addressMode, uint8_t 
   auto indirectMsb = memory.at(lsb + 1);
 
   switch (addressMode) {
-  case addressMode::implied:
+  case Instruction6502::addressMode::implied:
     throw std::runtime_error("CPU error: instruction with addressMode::implied shouldn't call resolveData");
   case addressMode::absolute:
     return (msb * 16 * 16) + lsb;

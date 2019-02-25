@@ -6,9 +6,7 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-using SymMap = map<string, uint32_t>;
+using SymMap = std::map<std::string, uint32_t>;
 
 enum InstructionTypes {
   CInstruction,
@@ -24,7 +22,7 @@ struct Instruction {
     this->address = address;
   }
 
-  void make_C(Token dest, vector<Token> cond, Token jump) {
+  void make_C(Token dest, std::vector<Token> cond, Token jump) {
     this->type = CInstruction;
     this->dest = dest;
     this->cond = cond;
@@ -35,23 +33,23 @@ struct Instruction {
 
   uint32_t address = 0; // <- A
 
-  Token dest;         // <- C
-  vector<Token> cond; // <- C
-  Token jump;         // <- C
+  Token dest;              // <- C
+  std::vector<Token> cond; // <- C
+  Token jump;              // <- C
   uint32_t position;
   uint32_t line;
 };
 
-using Instructions = vector<Instruction>;
+using Instructions = std::vector<Instruction>;
 
 class Parser {
 public:
-  static Instructions parse(string filepath);
+  static Instructions parse(std::string filepath);
 
   SymMap makeSymbolsMap();
   SymMap collectSymbols(TokensList tokens);
 
-  Instructions parseLine(string line);
+  Instructions parseLine(std::string line);
   Instructions generateInstructions(TokensList tokens, SymMap symbols);
 
 private:

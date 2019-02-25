@@ -4,11 +4,9 @@
 #include "Instruction.hpp"
 #include <string>
 
-using namespace std;
-
 namespace Parser {
-Instruction6502::Instructions parseFile(ifstream &file);
-Instruction6502::Instructions parse(string filepath);
+Instruction6502::Instructions parseFile(std::ifstream &file);
+Instruction6502::Instructions parse(std::string filepath);
 } // namespace Parser
 
 #endif /* PARSER */

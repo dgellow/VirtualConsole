@@ -8,20 +8,17 @@
 #include <sstream>
 #include <vector>
 
-using namespace Instruction6502;
-using namespace Utils;
-
-void printInstruction(Instruction instruction) {
-  cout << opsnames[int(instruction.operation.ops)] << " " << addressModeSym[int(instruction.operation.addressMode)]
-       << " ";
+void printInstruction(Instruction6502::Instruction instruction) {
+  std::cout << Instruction6502::opsnames[int(instruction.operation.ops)] << " "
+            << Instruction6502::addressModeSym[int(instruction.operation.addressMode)] << " ";
   if (instruction.dataLength > 0) {
-    cout << sstreamHexByte(instruction.dataMsb).str() << sstreamHexByte(instruction.dataLsb).str();
+    std::cout << Utils::sstreamHexByte(instruction.dataMsb).str() << Utils::sstreamHexByte(instruction.dataLsb).str();
   }
-  cout << endl;
+  std::cout << std::endl;
 }
 
-Instructions Parser::parseFile(ifstream &file) {
-  Instructions instructions;
+Instruction6502::Instructions Parser::parseFile(std::ifstream &file) {
+  Instruction6502::Instructions instructions;
 
   // Two first bytes specify the memory location of the program
   char lsbProgramLocation;
@@ -34,21 +31,21 @@ Instructions Parser::parseFile(ifstream &file) {
   //                                    0, lsbProgramLocation, msbProgramLocation));
 
   if (RunFlags::debugParser) {
-    cout << "Program location in memory: " << sstreamHexByte(msbProgramLocation).str()
-         << sstreamHexByte(lsbProgramLocation).str() << endl;
+    std::cout << "Program location in memory: " << Utils::sstreamHexByte(msbProgramLocation).str()
+              << Utils::sstreamHexByte(lsbProgramLocation).str() << std::endl;
   }
 
   char c;
 
   while (file.get(c)) {
-    auto ic = to_uint16(c);
+    auto ic = Utils::to_uint16(c);
 
     // Get operation based on opcode
-    Operation operation;
+    Instruction6502::Operation operation;
     try {
-      operation = opscodes.at(ic);
-    } catch (out_of_range e) {
-      cerr << "Parsing error: the byte " << hex << ic << " isn't a supported opcode" << endl;
+      operation = Instruction6502::opscodes.at(ic);
+    } catch (std::out_of_range e) {
+      std::cerr << "Parsing error: the byte " << std::hex << ic << " isn't a supported opcode" << std::endl;
       continue;
     }
 
@@ -56,9 +53,9 @@ Instructions Parser::parseFile(ifstream &file) {
     int dataLength = 0;
     try {
       dataLength = Instruction6502::dataLength.at(operation.addressMode);
-    } catch (out_of_range e) {
-      cerr << "Parsing error: no data length found for addressMode " << addressModeSym[int(operation.addressMode)]
-           << endl;
+    } catch (std::out_of_range e) {
+      std::cerr << "Parsing error: no data length found for addressMode "
+                << Instruction6502::addressModeSym[int(operation.addressMode)] << std::endl;
       continue;
     }
 
@@ -72,23 +69,23 @@ Instructions Parser::parseFile(ifstream &file) {
     }
 
     // Add instruction to the vector
-    auto instruction = Instruction(operation, dataLength, lsb, msb);
+    auto instruction = Instruction6502::Instruction(operation, dataLength, lsb, msb);
     instructions.push_back(instruction);
     RunFlags::debugParser ? printInstruction(instruction) : (void)0;
   }
 
   if (RunFlags::debugParser) {
-    cout << endl;
+    std::cout << std::endl;
   }
   return instructions;
 }
 
-Instructions Parser::parse(string filepath) {
-  ifstream file;
-  file.open(filepath, ios::binary);
+Instruction6502::Instructions Parser::parse(std::string filepath) {
+  std::ifstream file;
+  file.open(filepath, std::ios::binary);
 
   if (!file.is_open()) {
-    throw runtime_error("Parsing error: cannot read input file: " + filepath);
+    throw std::runtime_error("Parsing error: cannot read input file: " + filepath);
   }
 
   auto instructions = parseFile(file);

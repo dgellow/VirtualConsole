@@ -5,13 +5,11 @@
 
 #include <vector>
 
-using namespace Instruction6502;
-
 struct ROM {
   ROM() {}
   ~ROM() {}
 
-  void load(Instructions instructions) { this->instructions = instructions; }
+  void load(Instruction6502::Instructions instructions) { this->instructions = instructions; }
 
   uint16_t size() {
     auto i = 0;
@@ -22,7 +20,7 @@ struct ROM {
     return i;
   }
 
-  Instruction at(uint16_t pc) {
+  Instruction6502::Instruction at(uint16_t pc) {
     auto i = 0;
     for (auto instruction : instructions) {
       if (i == pc) {
@@ -33,10 +31,10 @@ struct ROM {
       // ... then based on data length
       i += instruction.dataLength;
     }
-    throw std::runtime_error("ROM error: instruction not found " + to_string(pc));
+    throw std::runtime_error("ROM error: instruction not found " + std::to_string(pc));
   }
 
-  Instructions instructions;
+  Instruction6502::Instructions instructions;
 };
 
 #endif /* ROM_ */

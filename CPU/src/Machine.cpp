@@ -4,44 +4,43 @@
 #include "Utils.hpp"
 #include <iostream>
 
-using namespace std;
-using namespace Utils;
-
 void printHeader() {
-  cout << "  pc  |"
-       << "  a |"
-       << "  x |"
-       << "  y |"
-       << " c |"
-       << " z |"
-       << " i |"
-       << " d |"
-       << " b |"
-       << " v |"
-       << " n |" << endl;
+  std::cout << "  pc  |"
+            << "  a |"
+            << "  x |"
+            << "  y |"
+            << " c |"
+            << " z |"
+            << " i |"
+            << " d |"
+            << " b |"
+            << " v |"
+            << " n |" << std::endl;
 }
 
-string boolToStr(bool b) { return b ? "✓" : " "; }
+std::string boolToStr(bool b) { return b ? "✓" : " "; }
 
 void Machine::printState() {
-  cout << " " << sstreamHexByte(cpu.pc, 4).str() << " |"
-       << " " << sstreamHexByte(cpu.a).str() << " |"
-       << " " << sstreamHexByte(cpu.x).str() << " |"
-       << " " << sstreamHexByte(cpu.y).str() << " |"
-       << " " << boolToStr(cpu.c) << " |"
-       << " " << boolToStr(cpu.z) << " |"
-       << " " << boolToStr(cpu.i) << " |"
-       << " " << boolToStr(cpu.d) << " |"
-       << " " << boolToStr(cpu.b) << " |"
-       << " " << boolToStr(cpu.v) << " |"
-       << " " << boolToStr(cpu.n) << " |" << endl;
+  std::cout << " " << Utils::sstreamHexByte(cpu.pc, 4).str() << " |"
+            << " " << Utils::sstreamHexByte(cpu.a).str() << " |"
+            << " " << Utils::sstreamHexByte(cpu.x).str() << " |"
+            << " " << Utils::sstreamHexByte(cpu.y).str() << " |"
+            << " " << boolToStr(cpu.c) << " |"
+            << " " << boolToStr(cpu.z) << " |"
+            << " " << boolToStr(cpu.i) << " |"
+            << " " << boolToStr(cpu.d) << " |"
+            << " " << boolToStr(cpu.b) << " |"
+            << " " << boolToStr(cpu.v) << " |"
+            << " " << boolToStr(cpu.n) << " |" << std::endl;
 }
 
 void Machine::printExit() {
-  cout << endl << "End of the rom reached" << endl << cpu.ostream().str() << memory.ostream().str() << endl;
+  std::cout << std::endl
+            << "End of the rom reached" << std::endl
+            << cpu.ostream().str() << memory.ostream().str() << std::endl;
 }
 
-void Machine::run(Instructions instructions) {
+void Machine::run(Instruction6502::Instructions instructions) {
   auto machine = Machine();
   machine.rom.load(instructions);
   machine.run();

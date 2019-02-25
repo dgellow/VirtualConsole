@@ -3,10 +3,8 @@
 #include <fstream>
 #include <map>
 
-using namespace std;
-
-Instructions Parser::parse(string filepath) {
-  ifstream file;
+Instructions Parser::parse(std::string filepath) {
+  std::ifstream file;
   file.open(filepath);
   auto tokens = Lexer::lex(file);
   file.close();
@@ -24,13 +22,13 @@ SymMap Parser::collectSymbols(TokensList tokensList) {
   // First pass for labels declaration, to handle forward declaration
   auto i = 0;
   for (auto tokens : tokensList) {
-    if (tokens.front().token == LABEL) {
+    if (tokens.front().token == Grammar::LABEL) {
       if (symbols.count(tokens.front().value) == 0) {
         symbols.emplace(tokens.front().value, i);
       } else {
-        throw std::invalid_argument(string("Parsing error at line ") + to_string(tokens.front().line) + ", position " +
-                                    to_string(tokens.front().position) + ": The label " + tokens.front().value +
-                                    " already exists");
+        throw std::invalid_argument(std::string("Parsing error at line ") + std::to_string(tokens.front().line) +
+                                    ", position " + std::to_string(tokens.front().position) + ": The label " +
+                                    tokens.front().value + " already exists");
       }
     } else {
       i++;
@@ -40,7 +38,7 @@ SymMap Parser::collectSymbols(TokensList tokensList) {
   // Second pass for variables declaration
   for (auto tokens : tokensList) {
     for (auto token : tokens) {
-      if (token.token == VARIABLE) {
+      if (token.token == Grammar::VARIABLE) {
         if (!std::all_of(token.value.begin(), token.value.end(), ::isdigit)) {
           if (symbols.find(token.value) == symbols.end()) {
             symbols.emplace(token.value, nextFreeAddress());
@@ -56,7 +54,7 @@ SymMap Parser::collectSymbols(TokensList tokensList) {
 SymMap Parser::makeSymbolsMap() {
   SymMap symbols;
   for (auto i = 0; i <= 15; i++) {
-    symbols.emplace("R" + to_string(i), i);
+    symbols.emplace("R" + std::to_string(i), i);
   }
   symbols.emplace("SP", 0);
   symbols.emplace("LCL", 1);
@@ -72,11 +70,11 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
   auto instructions = Instructions();
   for (auto tokens : tokensList) {
     // A instruction
-    if (tokens.front().token == LABEL) {
+    if (tokens.front().token == Grammar::LABEL) {
       continue;
     }
 
-    if (tokens.front().token == VARIABLE) {
+    if (tokens.front().token == Grammar::VARIABLE) {
       auto ainstr = Instruction(tokens.front().position, tokens.front().line);
       try {
         ainstr.make_A(symbols.at(tokens.front().value));
@@ -90,17 +88,19 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
     // C instruction
     auto cinstr = Instruction(tokens.front().position, tokens.front().line);
     cinstr.type = CInstruction;
-    auto eqpos = find_if(tokens.begin(), tokens.end(), [](const Token &t) -> bool { return t.token == EQ_SYM; });
+    auto eqpos =
+        find_if(tokens.begin(), tokens.end(), [](const Token &t) -> bool { return t.token == Grammar::EQ_SYM; });
     auto semicolonpos =
-        find_if(tokens.begin(), tokens.end(), [](const Token &t) -> bool { return t.token == SEMICOLON_SYM; });
+        find_if(tokens.begin(), tokens.end(), [](const Token &t) -> bool { return t.token == Grammar::SEMICOLON_SYM; });
 
     // dest
     if (eqpos == tokens.begin() + 1) {
       auto token = tokens.front();
       cinstr.dest = token;
     } else if (eqpos != tokens.end()) {
-      throw invalid_argument(
-          string("Parsing error at line ") + to_string(eqpos->line) + ", position " + to_string(eqpos->position) +
+      throw std::invalid_argument(
+          std::string("Parsing error at line ") + std::to_string(eqpos->line) + ", position " +
+          std::to_string(eqpos->position) +
           ": '=' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
 
@@ -109,15 +109,15 @@ Instructions Parser::generateInstructions(TokensList tokensList, SymMap symbols)
       auto token = tokens.back();
       cinstr.jump = token;
     } else if (semicolonpos != tokens.end()) {
-      throw invalid_argument(
-          string("Parsing error at line ") + to_string(semicolonpos->line) + " position " +
-          to_string(semicolonpos->position) +
+      throw std::invalid_argument(
+          std::string("Parsing error at line ") + std::to_string(semicolonpos->line) + " position " +
+          std::to_string(semicolonpos->position) +
           ": ';' is at an invalid position. A valid C instruction should be formatted as 'dest=cond;jump'");
     }
 
     // cond
-    vector<Token> cond(eqpos != tokens.end() ? tokens.begin() + 2 : tokens.begin(),
-                       semicolonpos != tokens.end() ? tokens.end() - 2 : tokens.end());
+    std::vector<Token> cond(eqpos != tokens.end() ? tokens.begin() + 2 : tokens.begin(),
+                            semicolonpos != tokens.end() ? tokens.end() - 2 : tokens.end());
     cinstr.cond = cond;
     instructions.push_back(cinstr);
   }

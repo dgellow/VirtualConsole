@@ -8,8 +8,6 @@
 
 #include <sstream>
 
-using namespace Instruction6502;
-
 struct Machine {
   Machine() {
     cpu = CPU();
@@ -17,7 +15,7 @@ struct Machine {
   }
   ~Machine() {}
 
-  static void run(Instructions instructions);
+  static void run(Instruction6502::Instructions instructions);
   void run(unsigned int steps = 0);
   std::ostringstream ostream();
 

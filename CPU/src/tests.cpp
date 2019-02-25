@@ -53,7 +53,7 @@ int main() {
   {
     auto t = Tests("Load");
 
-    string file = "tests/CPU/tests_load.out";
+    std::string file = "tests/CPU/tests_load.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -231,7 +231,7 @@ int main() {
   {
     auto t = Tests("Store");
 
-    string file = "tests/CPU/tests_store.out";
+    std::string file = "tests/CPU/tests_store.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -364,7 +364,7 @@ int main() {
   {
     auto t = Tests("Arithmetic");
 
-    string file = "tests/CPU/tests_arithmetic.out";
+    std::string file = "tests/CPU/tests_arithmetic.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -566,7 +566,7 @@ int main() {
   {
     auto t = Tests("Jumps and subroutines");
 
-    string file = "tests/CPU/tests_jumps_subroutines.out";
+    std::string file = "tests/CPU/tests_jumps_subroutines.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -589,7 +589,7 @@ int main() {
   {
     auto t = Tests("Set and clear");
 
-    string file = "tests/CPU/tests_set_clear.out";
+    std::string file = "tests/CPU/tests_set_clear.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -624,7 +624,7 @@ int main() {
   {
     auto t = Tests("Other");
 
-    string file = "tests/CPU/tests_other.out";
+    std::string file = "tests/CPU/tests_other.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 

@@ -57,7 +57,7 @@ LexemesList Lexer::scan(std::ifstream &file) {
       }
     } else {
       if (inDigit) {
-        lexemes.back().push_back(Lexeme(position, line, DIGIT, digit));
+        lexemes.back().push_back(Lexeme(position, line, Grammar::DIGIT, digit));
       }
       inDigit = false;
     }
@@ -71,7 +71,7 @@ LexemesList Lexer::scan(std::ifstream &file) {
       }
     } else {
       if (inAlpha) {
-        lexemes.back().push_back(Lexeme(position, line, ALPHA, alpha));
+        lexemes.back().push_back(Lexeme(position, line, Grammar::ALPHA, alpha));
       }
       inAlpha = false;
     }
@@ -83,56 +83,56 @@ LexemesList Lexer::scan(std::ifstream &file) {
     }
 
     if (c == '@') {
-      lexemes.back().push_back(Lexeme(position, line, AT_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::AT_SYM));
       continue;
     }
 
     if (c == '=') {
-      lexemes.back().push_back(Lexeme(position, line, EQ_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::EQ_SYM));
       continue;
     }
 
     if (c == ':') {
-      lexemes.back().push_back(Lexeme(position, line, COLON_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::COLON_SYM));
       continue;
     }
 
     if (c == ';') {
-      lexemes.back().push_back(Lexeme(position, line, SEMICOLON_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::SEMICOLON_SYM));
       continue;
     }
 
     if (c == '&') {
-      lexemes.back().push_back(Lexeme(position, line, AND_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::AND_SYM));
       continue;
     }
 
     if (c == '|') {
-      lexemes.back().push_back(Lexeme(position, line, OR_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::OR_SYM));
       continue;
     }
 
     if (c == '+') {
-      lexemes.back().push_back(Lexeme(position, line, PLUS_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::PLUS_SYM));
       continue;
     }
 
     if (c == '-') {
-      lexemes.back().push_back(Lexeme(position, line, MINUS_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::MINUS_SYM));
       continue;
     }
 
     if (c == '!') {
-      lexemes.back().push_back(Lexeme(position, line, BANG_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::BANG_SYM));
     }
 
     if (c == '(') {
-      lexemes.back().push_back(Lexeme(position, line, PARENTOPEN_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::PARENTOPEN_SYM));
       continue;
     }
 
     if (c == ')') {
-      lexemes.back().push_back(Lexeme(position, line, PARENTCLOSE_SYM));
+      lexemes.back().push_back(Lexeme(position, line, Grammar::PARENTCLOSE_SYM));
       continue;
     }
 
@@ -159,24 +159,24 @@ TokensList Lexer::eval(LexemesList lexemesList) {
     for (size_t i = 0; i < lexemes.size(); i++) {
       auto lexeme = lexemes[i];
 
-      if (lexeme.token == AT_SYM) {
+      if (lexeme.token == Grammar::AT_SYM) {
         variable = true;
         continue;
       } else if (variable) {
-        if (lexeme.token == DIGIT || lexeme.token == ALPHA) {
+        if (lexeme.token == Grammar::DIGIT || lexeme.token == Grammar::ALPHA) {
           value += lexeme.value;
         } else {
           auto msg = "Lexing error at position " + std::to_string(lexeme.position) + " , line " +
                      std::to_string(lexeme.line) + " : A variable can only use alphanumeric";
           throw std::invalid_argument(msg);
         }
-      } else if (lexeme.token == PARENTOPEN_SYM) {
+      } else if (lexeme.token == Grammar::PARENTOPEN_SYM) {
         label = true;
         continue;
       } else if (label) {
-        if (lexeme.token == DIGIT || lexeme.token == ALPHA) {
+        if (lexeme.token == Grammar::DIGIT || lexeme.token == Grammar::ALPHA) {
           value += lexeme.value;
-        } else if (lexeme.token == PARENTCLOSE_SYM) {
+        } else if (lexeme.token == Grammar::PARENTCLOSE_SYM) {
           if (i != lexemes.size() - 1) {
             auto l = lexemes[i + 1];
             auto msg = "Lexing error at position " + std::to_string(l.position) + " , line " + std::to_string(l.line) +
@@ -193,9 +193,9 @@ TokensList Lexer::eval(LexemesList lexemesList) {
 
     auto v = std::vector<Token>();
     if (label) {
-      v.push_back(Token(lexemes.front().position, lexemes.front().line, LABEL, value));
+      v.push_back(Token(lexemes.front().position, lexemes.front().line, Grammar::LABEL, value));
     } else if (variable) {
-      v.push_back(Token(lexemes.front().position, lexemes.front().line, VARIABLE, value));
+      v.push_back(Token(lexemes.front().position, lexemes.front().line, Grammar::VARIABLE, value));
     } else {
       for (auto lexeme : lexemes) {
         v.push_back(Token(lexeme.position, lexeme.line, lexeme.token, lexeme.value));
