@@ -29,9 +29,12 @@ LexemesList Lexer::scan(std::ifstream &file) {
     position++;
 
     if (c == '\n') {
+      beginComment = false;
       inComment = false;
+      inDigit = false;
+      inAlpha = false;
       line++;
-      position = 1;
+      position = 0;
     }
 
     if (inComment) {
@@ -180,7 +183,7 @@ TokensList Lexer::eval(LexemesList lexemesList) {
           if (i != lexemes.size() - 1) {
             auto l = lexemes[i + 1];
             auto msg = "Lexing error at position " + std::to_string(l.position) + " , line " + std::to_string(l.line) +
-                       " : Unexpected character after label declaration";
+                       " : Unexpected character '" + l.value + "' after label declaration";
             throw std::invalid_argument(msg);
           }
         } else {
