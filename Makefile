@@ -97,5 +97,6 @@ help:
 	@echo " run-editor		compile then run editor.app"
 	@echo " debug-assembler 	compile samvirtassembler then launch a debugger (lldb)"
 	@echo " debug-cpu		compile samvirtcpu then launch a debugger (lldb)"
+	@echo " format		format C++ source files"
 	@echo " help			show this help message"
 	@echo ""
