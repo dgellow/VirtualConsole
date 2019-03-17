@@ -1,6 +1,6 @@
-#include "CPU.hpp"
-
 #include <iostream>
+
+#include "virtualcpu/CPU.hpp"
 
 using Instruction6502::addressMode;
 using Instruction6502::Instruction;

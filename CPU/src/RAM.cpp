@@ -1,4 +1,4 @@
-#include "RAM.hpp"
+#include "virtualcpu/RAM.hpp"
 
 uint8_t RAM::at(uint16_t address) {
   if (address > max) {

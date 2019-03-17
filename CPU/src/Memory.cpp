@@ -1,8 +1,8 @@
-#include "Memory.hpp"
-#include "Utils.hpp"
-
 #include <iostream>
 #include <math.h>
+
+#include "virtualcpu/Memory.hpp"
+#include "virtualcpu/Utils.hpp"
 
 uint8_t Memory::at(uint16_t address) {
   if (address <= ramLastAddress) {

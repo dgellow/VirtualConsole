@@ -1,12 +1,12 @@
-#include "Parser.hpp"
-
-#include "RunFlags.hpp"
-#include "Utils.hpp"
 #include <bitset>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <vector>
+
+#include "virtualcpu/Parser.hpp"
+#include "virtualcpu/RunFlags.hpp"
+#include "virtualcpu/Utils.hpp"
 
 void printInstruction(Instruction6502::Instruction instruction) {
   std::cout << Instruction6502::opsnames[int(instruction.operation.ops)] << " "

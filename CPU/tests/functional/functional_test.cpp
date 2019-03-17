@@ -1,9 +1,10 @@
-#include "Machine.hpp"
-#include "Parser.hpp"
-#include "RunFlags.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
+
+#include "virtualcpu/Machine.hpp"
+#include "virtualcpu/Parser.hpp"
+#include "virtualcpu/RunFlags.hpp"
 
 bool globalWasSuccess = true;
 
@@ -53,7 +54,7 @@ int main() {
   {
     auto t = Tests("Load");
 
-    std::string file = "tests/CPU/tests_load.out";
+    std::string file = "../tests/functional/testdata/tests_load.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -231,7 +232,7 @@ int main() {
   {
     auto t = Tests("Store");
 
-    std::string file = "tests/CPU/tests_store.out";
+    std::string file = "../tests/functional/testdata/tests_store.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -364,7 +365,7 @@ int main() {
   {
     auto t = Tests("Arithmetic");
 
-    std::string file = "tests/CPU/tests_arithmetic.out";
+    std::string file = "../tests/functional/testdata/tests_arithmetic.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -566,7 +567,7 @@ int main() {
   {
     auto t = Tests("Jumps and subroutines");
 
-    std::string file = "tests/CPU/tests_jumps_subroutines.out";
+    std::string file = "../tests/functional/testdata/tests_jumps_subroutines.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -589,7 +590,7 @@ int main() {
   {
     auto t = Tests("Set and clear");
 
-    std::string file = "tests/CPU/tests_set_clear.out";
+    std::string file = "../tests/functional/testdata/tests_set_clear.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 
@@ -624,7 +625,7 @@ int main() {
   {
     auto t = Tests("Other");
 
-    std::string file = "tests/CPU/tests_other.out";
+    std::string file = "../tests/functional/testdata/tests_other.out";
     auto instructions = Parser::parse(file);
     auto machine = Machine();
 

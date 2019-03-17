@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "Machine.hpp"
-#include "Parser.hpp"
-#include "RunFlags.hpp"
+#include "virtualcpu/Machine.hpp"
+#include "virtualcpu/Parser.hpp"
+#include "virtualcpu/RunFlags.hpp"
 
 const std::string appName("samvirtcpu");
 

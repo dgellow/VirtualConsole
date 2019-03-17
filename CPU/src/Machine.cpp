@@ -1,8 +1,8 @@
-#include "Machine.hpp"
-
-#include "RunFlags.hpp"
-#include "Utils.hpp"
 #include <iostream>
+
+#include "virtualcpu/Machine.hpp"
+#include "virtualcpu/RunFlags.hpp"
+#include "virtualcpu/Utils.hpp"
 
 void printHeader() {
   std::cout << "  pc  |"
