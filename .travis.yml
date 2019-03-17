@@ -4,6 +4,7 @@ addons:
   homebrew:
     packages:
       - dasm
+      - qt
 
 matrix:
   include:
