@@ -1,4 +1,4 @@
-# Sam's Virtual Console 🕹
+# Sam's Virtual Console 🕹 [![Build Status](https://travis-ci.org/dgellow/VirtualConsole.svg?branch=master)](https://travis-ci.org/dgellow/VirtualConsole)
 
 Virtual console with integrated development editor.
 
