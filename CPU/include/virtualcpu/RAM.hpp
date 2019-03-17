@@ -1,5 +1,4 @@
-#ifndef RAM_
-#define RAM_
+#pragma once
 
 #include <cstdint>
 #include <limits>
@@ -20,5 +19,3 @@ struct RAM {
 	unsigned int max;
 	std::vector<uint16_t> state;
 };
-
-#endif /* RAM_ */

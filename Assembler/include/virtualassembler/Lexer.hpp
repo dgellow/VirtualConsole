@@ -1,9 +1,9 @@
-#ifndef LEXER
-#define LEXER
+#pragma once
 
-#include "Grammar.hpp"
 #include <string>
 #include <vector>
+
+#include "Grammar.hpp"
 
 struct Lexeme {
 	Lexeme(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
@@ -45,4 +45,3 @@ LexemesList scan(std::ifstream &file);
 TokensList eval(LexemesList tokens);
 } // namespace Lexer
 
-#endif /* LEXER */

@@ -1,9 +1,6 @@
-#ifndef RUNFLAGS
-#define RUNFLAGS
+#pragma once
 
 namespace RunFlags {
 extern bool testOutput;
 extern bool debugParser;
 } // namespace RunFlags
-
-#endif /* RUNFLAGS */

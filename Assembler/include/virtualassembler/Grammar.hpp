@@ -1,5 +1,4 @@
-#ifndef GRAMMAR
-#define GRAMMAR
+#pragma once
 
 #include <array>
 #include <map>
@@ -70,4 +69,3 @@ const std::map<std::string, uint16_t> legalCond = {
     {"D|M", 0b1010101}};
 } // namespace Grammar
 
-#endif /* GRAMMAR */

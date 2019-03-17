@@ -1,12 +1,11 @@
-#ifndef MACHINE
-#define MACHINE
+#pragma once
+
+#include <sstream>
 
 #include "CPU.hpp"
 #include "Instruction.hpp"
 #include "Memory.hpp"
 #include "ROM.hpp"
-
-#include <sstream>
 
 struct Machine {
 	Machine() {
@@ -27,5 +26,3 @@ private:
 	void printState();
 	void printExit();
 };
-
-#endif /* MACHINE */

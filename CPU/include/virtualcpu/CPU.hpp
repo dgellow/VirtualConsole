@@ -1,10 +1,9 @@
-#ifndef CPU_
-#define CPU_
+#pragma once
+
+#include <sstream>
 
 #include "Instruction.hpp"
 #include "Memory.hpp"
-
-#include <sstream>
 
 struct CPU {
 	CPU() {}
@@ -27,5 +26,3 @@ struct CPU {
 	bool v = false; // Overflow
 	bool n = false; // Negative
 };
-
-#endif /* CPU_ */

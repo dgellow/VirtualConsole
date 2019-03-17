@@ -1,9 +1,8 @@
-#ifndef ROM_
-#define ROM_
-
-#include "Instruction.hpp"
+#pragma once
 
 #include <vector>
+
+#include "Instruction.hpp"
 
 struct ROM {
 	ROM() {}
@@ -37,4 +36,3 @@ struct ROM {
 	Instruction6502::Instructions instructions;
 };
 
-#endif /* ROM_ */

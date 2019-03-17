@@ -1,9 +1,8 @@
-#ifndef SCREEN
-#define SCREEN
-
-#include "RAM.hpp"
+#pragma once
 
 #include <sstream>
+
+#include "RAM.hpp"
 
 struct Screen : RAM {
 	Screen(unsigned int registerWidth, unsigned int registers) : RAM(registerWidth, registers) {}
@@ -12,5 +11,3 @@ struct Screen : RAM {
 
 	std::ostringstream ostream();
 };
-
-#endif /* SCREEN */

@@ -1,10 +1,9 @@
-#ifndef MEMORY
-#define MEMORY
+#pragma once
+
+#include <sstream>
 
 #include "RAM.hpp"
 #include "Screen.hpp"
-
-#include <sstream>
 
 struct Memory {
 	Memory() : ram(8, 32), screen(8, 32) {}
@@ -25,5 +24,3 @@ struct Memory {
 	RAM ram;
 	Screen screen;
 };
-
-#endif /* MEMORY */

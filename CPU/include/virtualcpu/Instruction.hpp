@@ -1,12 +1,11 @@
-#ifndef INSTRUCTION
-#define INSTRUCTION
-
-#include "Utils.hpp"
+#pragma once
 
 #include <map>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "Utils.hpp"
 
 namespace Instruction6502 {
 enum class ops {
@@ -402,5 +401,3 @@ struct Instruction {
 
 using Instructions = std::vector<Instruction>;
 } // namespace Instruction6502
-
-#endif /* INSTRUCTION */

@@ -1,10 +1,10 @@
-#ifndef PARSER
-#define PARSER
+#pragma once
 
-#include "Lexer.hpp"
 #include <map>
 #include <string>
 #include <vector>
+
+#include "Lexer.hpp"
 
 using SymMap = std::map<std::string, uint32_t>;
 
@@ -64,4 +64,3 @@ private:
 	uint32_t freeAddress = 15;
 };
 
-#endif /* PARSER */
