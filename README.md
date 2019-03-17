@@ -2,7 +2,7 @@
 
 Virtual console with integrated development editor.
 
-☠️ Things in this repository are a work in progress and exist mainly to satisfy my curiosity, don't expect something stable ☠️.
+⚠️ Things in this repository are a work in progress and exist mainly to satisfy my curiosity, don't expect something stable.
 
 ## Goal
 
