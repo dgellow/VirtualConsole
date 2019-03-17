@@ -22,16 +22,17 @@ Dependencies:
 Available tasks (default is marked by *):
 *all			clean then build everything
  clean			remove files and directories generated during compilation
- samvirtassembler	compile samvirtassembler
- samvirtcpu		compile samvirtcpu
- samvirteditor		compile editor.app
- run-assembler		compile then run the samvirtassembler
- run-cpu 		compile then run the samvirtcpu
- run-editor		compile then run editor.app
- debug-assembler 	compile samvirtassembler then launch a debugger (lldb)
- debug-cpu		compile samvirtcpu then launch a debugger (lldb)
+ virtualassembler	compile the Virtual Assembler
+ virtualcpu		compile the Virtual CPU
+ virtualeditor		compile the Virtual Editor (GUI)
+ run-assembler		compile then run the Virtual Assembler
+ run-cpu 		compile then run the Virtual CPU
+ run-editor		compile then run the Virtual Editor
+ debug-assembler 	compile the Virtual Assembler then launch a debugger (lldb)
+ debug-cpu		compile the Virtual CPU then launch a debugger (lldb)
  format			format C++ source files
  help			show this help message
+
 ```
 
 ### Projects
