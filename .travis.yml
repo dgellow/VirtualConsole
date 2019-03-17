@@ -1,0 +1,17 @@
+language: cpp
+
+addons:
+  homebrew:
+    packages:
+      - dasm
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      env:
+        - COMPILER="clang++" SANITIZE=false
+
+script:
+  - make all
