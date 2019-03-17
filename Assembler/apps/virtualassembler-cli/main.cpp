@@ -3,9 +3,9 @@
 #include <iostream>
 #include <string>
 
-#include "Compiler.hpp"
-#include "Lexer.hpp"
-#include "Parser.hpp"
+#include "virtualassembler/Compiler.hpp"
+#include "virtualassembler/Lexer.hpp"
+#include "virtualassembler/Parser.hpp"
 
 const std::string appName("samvirtassembler");
 

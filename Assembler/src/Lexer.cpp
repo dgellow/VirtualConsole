@@ -1,7 +1,7 @@
-#include "Lexer.hpp"
-
 #include <fstream>
 #include <regex>
+
+#include "virtualassembler/Lexer.hpp"
 
 TokensList Lexer::lex(std::ifstream &file) {
   auto lexemes = scan(file);

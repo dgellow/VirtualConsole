@@ -1,8 +1,8 @@
-#include "Compiler.hpp"
-
-#include "Grammar.hpp"
 #include <bitset>
 #include <iostream>
+
+#include "virtualassembler/Compiler.hpp"
+#include "virtualassembler/Grammar.hpp"
 
 std::string condToString(Instruction instruction) {
   std::string cond = "";

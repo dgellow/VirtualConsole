@@ -1,7 +1,8 @@
-#include "Parser.hpp"
-#include "Lexer.hpp"
 #include <fstream>
 #include <map>
+
+#include "virtualassembler/Lexer.hpp"
+#include "virtualassembler/Parser.hpp"
 
 Instructions Parser::parse(std::string filepath) {
   std::ifstream file;
