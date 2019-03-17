@@ -73,6 +73,20 @@ target_link_libraries(virtualcpu virtualcpu_lib)
 target_compile_features(virtualcpu PRIVATE cxx_std_17)
 target_compile_options(virtualcpu PRIVATE -Werror)
 
+# ————————————————————————————
+# create target for unit tests
+# ————————————————————————————
+add_executable(virtualcpu_unit_test
+	tests/unit/CPU_test.cpp
+)
+
+target_link_libraries(virtualcpu_unit_test virtualcpu_lib gtest_main)
+target_compile_features(virtualcpu_unit_test PRIVATE cxx_std_17)
+target_compile_options(virtualcpu_unit_test PRIVATE -Werror)
+
+enable_testing()
+add_test(unit_test virtualcpu_unit_test)
+
 # ——————————————————————————————————
 # create target for functional tests
 # ——————————————————————————————————
@@ -83,4 +97,4 @@ target_compile_features(virtualcpu_functional_test PRIVATE cxx_std_17)
 target_compile_options(virtualcpu_functional_test PRIVATE -Werror)
 
 enable_testing()
-add_test(test virtualcpu_functional_test)
+add_test(functional_test virtualcpu_functional_test)
