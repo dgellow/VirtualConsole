@@ -1,81 +1,43 @@
-CFLAGS = -g -std=c++14
-CC = clang++
-dependencies =
-
-buildDir = `pwd`/build
-assemblerSourceDir = `pwd`/Assembler/src
-CPUSourceDir = `pwd`/CPU/src
-editorSourceDir = `pwd`/Editor/src
-
-testDir = `pwd`/tests
-assemblerTestDir = $testDir/Assembler
-CPUTestDir = $testDir/CPU
-editorTestDir = $testDir/Editor
-
-editorAppName = editor.app
+buildDir = build
+assemblerBuildDir = `pwd`/Assembler/$(buildDir)
+cpuBuildDir = `pwd`/CPU/$(buildDir)
+editorBuildDir = `pwd`/Editor/$(buildDir)
 
 .DEFAULT_GOAL := help
 
-samvirtassembler: build-directory
-	$(CC) $(CFLAGS) \
-	$(dependencies) \
-        $(assemblerSourceDir)/Lexer.cpp \
-        $(assemblerSourceDir)/Parser.cpp \
-        $(assemblerSourceDir)/Compiler.cpp \
-        $(assemblerSourceDir)/main.cpp \
-	-o $(buildDir)/samvirtassembler
+samvirtassembler: build-directories
+	pushd $(assemblerBuildDir) && cmake .. && make && popd
 
-samvirtcpu: build-directory
-	$(CC) $(CFLAGS) \
-	$(dependencies) \
-        $(CPUSourceDir)/RunFlags.cpp \
-        $(CPUSourceDir)/Utils.cpp \
-        $(CPUSourceDir)/Parser.cpp \
-        $(CPUSourceDir)/Machine.cpp \
-        $(CPUSourceDir)/CPU.cpp \
-        $(CPUSourceDir)/Memory.cpp \
-        $(CPUSourceDir)/RAM.cpp \
-        $(CPUSourceDir)/main.cpp \
-	-o $(buildDir)/samvirtcpu
+samvirtcpu: build-directories
+	pushd $(cpuBuildDir) && cmake .. && make && make test ARGS="-V" && popd
 
-samvirteditor: build-directory
+samvirteditor: build-directories
 	pushd $(editorSourceDir) && qmake && make && popd
-	rm -rf $(buildDir)/$(editorAppName)
-	mv $(editorSourceDir)/$(editorAppName) $(buildDir)/
 
 clean:
-	rm -rf $(buildDir)/*
+	rm -rf $(assemblerBuildDir)/*
+	rm -rf $(cpuBuildDir)/*
+	rm -rf $(editorBuildDir)/*
 
-build-directory:
-	@mkdir -p $(buildDir)
+build-directories:
+	@mkdir -p $(assemblerBuildDir)
+	@mkdir -p $(cpuBuildDir)
+	@mkdir -p $(editorBuildDir)
 
 run-assembler: samvirtassembler
-	$(buildDir)/samvirtassembler
+	$(assemblerBuildDir)/virtualassembler
 
 run-cpu: samvirtcpu
-	$(buildDir)/samvirtcpu
+	$(cpuBuildDir)/virtualcpu
 
 run-editor: samvirteditor
-	open $(buildDir)/editor.app
-
-test-cpu: build-directory
-	$(CC) $(CFLAGS) \
-	$(dependencies) \
-        $(CPUSourceDir)/RunFlags.cpp \
-        $(CPUSourceDir)/Utils.cpp \
-        $(CPUSourceDir)/Parser.cpp \
-        $(CPUSourceDir)/Machine.cpp \
-        $(CPUSourceDir)/CPU.cpp \
-        $(CPUSourceDir)/Memory.cpp \
-        $(CPUSourceDir)/RAM.cpp \
-        $(CPUSourceDir)/tests.cpp \
-	-o $(buildDir)/testcpu
+	open $(editorBuildDir)/editor.app
 
 debug-assembler: samvirtassembler
-	lldb $(buildDir)/samvirtassembler
+	lldb $(assemblerBuildDir)/virtualassembler
 
 debug-cpu: samvirtcpu
-	lldb $(buildDir)/samvirtcpu
+	lldb $(cpuBuildDir)/virtualcpu
 
 format:
 	find . \( -iname '*.cpp' -or -iname '*.hpp' \) -exec clang-format -style=file -i --verbose {} \;
@@ -83,10 +45,14 @@ format:
 all: clean samvirtassembler samvirtcpu samvirteditor
 
 help:
-	@echo ".—————————————————————————————————————."
-	@echo "| Sam's Virtual Console: build system |"
-	@echo "°—————————————————————————————————————°"
-	@echo "Available tasks (default is marked with *):"
+	@echo ".———————————————————————————————————————."
+	@echo "| Sam's Virtual Console: build commands |"
+	@echo "°———————————————————————————————————————°"
+	@echo "Dependencies:"
+	@echo " - cmake"
+	@echo " - qmake (if building the editor)"
+	@echo ""
+	@echo "Available tasks (default is marked by *):"
 	@echo "*all			clean then build everything"
 	@echo " clean			remove files and directories generated during compilation"
 	@echo " samvirtassembler	compile samvirtassembler"
@@ -97,6 +63,6 @@ help:
 	@echo " run-editor		compile then run editor.app"
 	@echo " debug-assembler 	compile samvirtassembler then launch a debugger (lldb)"
 	@echo " debug-cpu		compile samvirtcpu then launch a debugger (lldb)"
-	@echo " format		format C++ source files"
+	@echo " format			format C++ source files"
 	@echo " help			show this help message"
 	@echo ""
