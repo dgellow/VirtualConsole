@@ -40,7 +40,7 @@ debug-cpu: samvirtcpu
 	lldb $(cpuBuildDir)/virtualcpu
 
 format:
-	find . \( -iname '*.cpp' -or -iname '*.hpp' \) -exec clang-format -style=file -i --verbose {} \;
+	find . -not -path "*/\.*" -not -path "*/build/*" \( -iname '*.cpp' -or -iname '*.hpp' \) -exec clang-format -style=file -i --verbose {} \;
 
 all: clean samvirtassembler samvirtcpu samvirteditor
 

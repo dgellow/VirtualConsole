@@ -6,11 +6,11 @@
 #include <sstream>
 
 struct Screen : RAM {
-  Screen(unsigned int registerWidth, unsigned int registers) : RAM(registerWidth, registers) {}
+	Screen(unsigned int registerWidth, unsigned int registers) : RAM(registerWidth, registers) {}
 
-  ~Screen() {}
+	~Screen() {}
 
-  std::ostringstream ostream();
+	std::ostringstream ostream();
 };
 
 #endif /* SCREEN */

@@ -1,2 +1,7 @@
 BasedOnStyle: LLVM
 ColumnLimit: 120
+IndentWidth: 4
+TabWidth: 4
+UseTab: ForIndentation
+AllowShortFunctionsOnASingleLine: Inline
+AccessModifierOffset: -4

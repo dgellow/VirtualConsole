@@ -7,22 +7,22 @@
 
 namespace Grammar {
 enum Tokens {
-  UNASSIGNED,
-  AT_SYM,
-  EQ_SYM,
-  COLON_SYM,
-  SEMICOLON_SYM,
-  PLUS_SYM,
-  MINUS_SYM,
-  BANG_SYM,
-  AND_SYM,
-  OR_SYM,
-  PARENTOPEN_SYM,
-  PARENTCLOSE_SYM,
-  ALPHA,
-  DIGIT,
-  VARIABLE,
-  LABEL,
+	UNASSIGNED,
+	AT_SYM,
+	EQ_SYM,
+	COLON_SYM,
+	SEMICOLON_SYM,
+	PLUS_SYM,
+	MINUS_SYM,
+	BANG_SYM,
+	AND_SYM,
+	OR_SYM,
+	PARENTOPEN_SYM,
+	PARENTCLOSE_SYM,
+	ALPHA,
+	DIGIT,
+	VARIABLE,
+	LABEL,
 };
 
 const std::map<Tokens, std::string> legalKeyword = {

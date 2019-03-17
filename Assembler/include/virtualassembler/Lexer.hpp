@@ -6,34 +6,34 @@
 #include <vector>
 
 struct Lexeme {
-  Lexeme(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
-      : token(token), value(value), position(position), line(line) {}
+	Lexeme(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
+	    : token(token), value(value), position(position), line(line) {}
 
-  ~Lexeme() {}
+	~Lexeme() {}
 
-  Grammar::Tokens token;
-  std::string value;
-  uint32_t position;
-  uint32_t line;
+	Grammar::Tokens token;
+	std::string value;
+	uint32_t position;
+	uint32_t line;
 };
 
 struct Token {
-  Token() {
-    token = Grammar::UNASSIGNED;
-    value = "";
-    position = -1;
-    line = -1;
-  }
+	Token() {
+		token = Grammar::UNASSIGNED;
+		value = "";
+		position = -1;
+		line = -1;
+	}
 
-  Token(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
-      : token(token), value(value), position(position), line(line) {}
+	Token(uint32_t position, uint32_t line, Grammar::Tokens token, std::string value = "")
+	    : token(token), value(value), position(position), line(line) {}
 
-  ~Token() {}
+	~Token() {}
 
-  Grammar::Tokens token;
-  std::string value;
-  uint32_t position;
-  uint32_t line;
+	Grammar::Tokens token;
+	std::string value;
+	uint32_t position;
+	uint32_t line;
 };
 
 using LexemesList = std::vector<std::vector<Lexeme>>;

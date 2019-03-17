@@ -9,23 +9,23 @@
 #include <sstream>
 
 struct Machine {
-  Machine() {
-    cpu = CPU();
-    memory = Memory();
-  }
-  ~Machine() {}
+	Machine() {
+		cpu = CPU();
+		memory = Memory();
+	}
+	~Machine() {}
 
-  static void run(Instruction6502::Instructions instructions);
-  void run(unsigned int steps = 0);
-  std::ostringstream ostream();
+	static void run(Instruction6502::Instructions instructions);
+	void run(unsigned int steps = 0);
+	std::ostringstream ostream();
 
-  CPU cpu;
-  ROM rom;
-  Memory memory;
+	CPU cpu;
+	ROM rom;
+	Memory memory;
 
 private:
-  void printState();
-  void printExit();
+	void printState();
+	void printExit();
 };
 
 #endif /* MACHINE */
